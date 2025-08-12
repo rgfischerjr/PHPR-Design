@@ -2469,7 +2469,10 @@
 								"simple_grid_field1",
 								"simple_grid_field2",
 								"simple_grid_field3",
-								"simple_grid_field6"
+								"simple_grid_field6",
+								"simple_grid_field",
+								"simple_grid_field4",
+								"simple_grid_field5"
 							]
 						}
 					},
@@ -2498,6 +2501,18 @@
 				},
 				"simple_grid_field6": {
 					"field": "notes",
+					"type": "simple_grid_field"
+				},
+				"simple_grid_field": {
+					"field": "project_id",
+					"type": "simple_grid_field"
+				},
+				"simple_grid_field4": {
+					"field": "created_by",
+					"type": "simple_grid_field"
+				},
+				"simple_grid_field5": {
+					"field": "created_at",
 					"type": "simple_grid_field"
 				}
 			},
@@ -2603,7 +2618,10 @@
 								"simple_grid_field1",
 								"simple_grid_field2",
 								"simple_grid_field3",
-								"simple_grid_field6"
+								"simple_grid_field6",
+								"simple_grid_field",
+								"simple_grid_field4",
+								"simple_grid_field5"
 							]
 						}
 					},
@@ -2629,6 +2647,18 @@
 				},
 				"simple_grid_field6": {
 					"field": "notes",
+					"type": "simple_grid_field"
+				},
+				"simple_grid_field": {
+					"field": "project_id",
+					"type": "simple_grid_field"
+				},
+				"simple_grid_field4": {
+					"field": "created_by",
+					"type": "simple_grid_field"
+				},
+				"simple_grid_field5": {
+					"field": "created_at",
 					"type": "simple_grid_field"
 				}
 			},

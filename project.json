@@ -1,7 +1,7 @@
 {
 	"programVersion": 2,
 	"versionName": "11.1",
-	"name": "design v7",
+	"name": "design v8",
 	"mainDiagram": {
 		"tables": [
 			{
@@ -391,23 +391,6 @@
 						}
 					},
 					{
-						"id": "7",
-						"data": {
-							"name": {
-								"table": "phases",
-								"type": 6
-							},
-							"pageId": "list",
-							"itemType": 2,
-							"linkType": 0,
-							"iconType": 2,
-							"iconName": "glyphicon-heart-empty",
-							"showIconType": 2,
-							"table": 386492901,
-							"pageType": "list"
-						}
-					},
-					{
 						"id": "8",
 						"data": {
 							"name": {
@@ -459,12 +442,14 @@
 						"id": "11",
 						"data": {
 							"name": {
-								"table": "projects view",
-								"type": 6
+								"text": "Project Dashboard",
+								"type": 0
 							},
 							"pageId": "list",
 							"itemType": 2,
 							"linkType": 0,
+							"iconType": 2,
+							"iconName": "glyphicon-folder-close",
 							"table": 3143721048,
 							"pageType": "list"
 						}

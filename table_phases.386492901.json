@@ -815,7 +815,7 @@
 			"id": "edit",
 			"type": "edit",
 			"layoutId": "nomenu",
-			"disabled": true,
+			"disabled": false,
 			"default": 0,
 			"forms": {
 				"above-grid": {
@@ -1394,12 +1394,17 @@
 				},
 				"hamburger": {
 					"type": "hamburger",
-					"items": []
+					"items": [
+						"view_edit"
+					]
 				},
 				"integrated_edit_field9": {
 					"field": "completed_date",
 					"type": "integrated_edit_field",
 					"orientation": 0
+				},
+				"view_edit": {
+					"type": "view_edit"
 				}
 			},
 			"dbProps": {},
@@ -1816,6 +1821,7 @@
 						"cell_icons": {
 							"model": "cell_icons",
 							"items": [
+								"grid_edit",
 								"grid_inline_edit",
 								"grid_inline_save",
 								"grid_inline_cancel"
@@ -1925,7 +1931,7 @@
 					"type": "list_options",
 					"items": [
 						"edit_selected",
-						"-3",
+						"-4",
 						"show_search_panel",
 						"hide_search_panel"
 					]
@@ -2031,24 +2037,6 @@
 					"hideIfNone": false,
 					"showCount": true
 				},
-				"edit_selected": {
-					"type": "edit_selected"
-				},
-				"grid_inline_edit": {
-					"type": "grid_inline_edit"
-				},
-				"grid_inline_save": {
-					"type": "grid_inline_save"
-				},
-				"grid_inline_cancel": {
-					"type": "grid_inline_cancel"
-				},
-				"inline_save_all": {
-					"type": "inline_save_all"
-				},
-				"inline_cancel_all": {
-					"type": "inline_cancel_all"
-				},
 				"grid_field": {
 					"field": "notes",
 					"type": "grid_field",
@@ -2091,6 +2079,30 @@
 				},
 				"details_found_unknown": {
 					"type": "details_found_unknown"
+				},
+				"edit_selected": {
+					"type": "edit_selected"
+				},
+				"-4": {
+					"type": "-"
+				},
+				"grid_inline_edit": {
+					"type": "grid_inline_edit"
+				},
+				"grid_inline_save": {
+					"type": "grid_inline_save"
+				},
+				"grid_inline_cancel": {
+					"type": "grid_inline_cancel"
+				},
+				"inline_save_all": {
+					"type": "inline_save_all"
+				},
+				"inline_cancel_all": {
+					"type": "inline_cancel_all"
+				},
+				"grid_edit": {
+					"type": "grid_edit"
 				}
 			},
 			"dbProps": {},

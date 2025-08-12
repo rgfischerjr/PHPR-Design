@@ -81,15 +81,15 @@ function create_project_scaffold($projectId, $contractDate, $dur = null)
         ORDER BY ph.phase_id, ds.sort_order
     ");
 
-    // Create missing subphase_status
-    CustomQuery("
-        INSERT INTO subphase_status (subphase_id)
-        SELECT sp.subphase_id
-        FROM subphases sp
-        LEFT JOIN subphase_status ss ON ss.subphase_id = sp.subphase_id
-        WHERE sp.project_id = ".$projectId."
-          AND ss.subphase_id IS NULL
-    ");
+    // // Create missing subphase_status
+    // CustomQuery("
+    //     INSERT INTO subphase_status (subphase_id)
+    //     SELECT sp.subphase_id
+    //     FROM subphases sp
+    //     LEFT JOIN subphase_status ss ON ss.subphase_id = sp.subphase_id
+    //     WHERE sp.project_id = ".$projectId."
+    //       AND ss.subphase_id IS NULL
+    // ");
 }
 
 
