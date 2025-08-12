@@ -1,0 +1,2620 @@
+{
+	"sql": "SELECT\r\n\tphase_id,\r\n\tproject_id,\r\n\tphase_code,\r\n\t`sequence`,\r\n\tlong_duration,\r\n\tdue_date,\r\n\tcompleted_date,\r\n\tnotes\r\nFROM\r\n\tphases",
+	"connId": "conn",
+	"originalTable": "phases",
+	"name": "phases",
+	"shortTableName": "phases",
+	"dbType": 0,
+	"keyFields": [
+		"phase_id"
+	],
+	"masterTables": [
+		{
+			"table": 1553183652,
+			"masterKeys": [
+				"project_id"
+			],
+			"detailsKeys": [
+				"project_id"
+			]
+		},
+		{
+			"table": 3143721048,
+			"masterKeys": [
+				"project_id"
+			],
+			"detailsKeys": [
+				"project_id"
+			]
+		}
+	],
+	"detailsBadgeColor": "71e414",
+	"detailsTables": [
+		1903550912
+	],
+	"fields": [
+		{
+			"name": "phase_id",
+			"sqlExpression": "phase_id",
+			"index": 1,
+			"strField": "phase_id",
+			"type": 3,
+			"autoinc": true,
+			"viewFormats": [
+				{}
+			],
+			"editFormats": [
+				{}
+			],
+			"label": {
+				"English": "Phase Id"
+			},
+			"tableName": "phases"
+		},
+		{
+			"name": "project_id",
+			"sqlExpression": "project_id",
+			"index": 2,
+			"strField": "project_id",
+			"type": 3,
+			"viewFormats": [
+				{}
+			],
+			"editFormats": [
+				{
+					"format": "Lookup wizard",
+					"lookupTable": "projects",
+					"lookupTableConnection": "conn",
+					"lookupLinkField": "project_id",
+					"lookupDisplayField": "project_name"
+				}
+			],
+			"label": {
+				"English": "Project Id"
+			},
+			"tableName": "phases"
+		},
+		{
+			"name": "phase_code",
+			"sqlExpression": "phase_code",
+			"index": 3,
+			"strField": "phase_code",
+			"type": 129,
+			"viewFormats": [
+				{}
+			],
+			"editFormats": [
+				{
+					"format": "Lookup wizard",
+					"lookupType": 0,
+					"lookupValues": [
+						"TF",
+						"SD",
+						"QA_QC1",
+						"DD",
+						"QA_QC2",
+						"PP"
+					]
+				}
+			],
+			"label": {
+				"English": "Short Name"
+			},
+			"tableName": "phases"
+		},
+		{
+			"name": "sequence",
+			"sqlExpression": "`sequence`",
+			"index": 4,
+			"strField": "sequence",
+			"type": 2,
+			"viewFormats": [
+				{}
+			],
+			"editFormats": [
+				{}
+			],
+			"label": {
+				"English": "Sequence"
+			},
+			"tableName": "phases"
+		},
+		{
+			"name": "long_duration",
+			"sqlExpression": "long_duration",
+			"index": 5,
+			"strField": "long_duration",
+			"type": 3,
+			"viewFormats": [
+				{}
+			],
+			"editFormats": [
+				{}
+			],
+			"label": {
+				"English": "Days"
+			},
+			"tableName": "phases"
+		},
+		{
+			"name": "due_date",
+			"sqlExpression": "due_date",
+			"index": 6,
+			"strField": "due_date",
+			"type": 7,
+			"viewFormats": [
+				{
+					"format": "Short Date"
+				}
+			],
+			"editFormats": [
+				{
+					"format": "Date",
+					"dateEditType": 11
+				}
+			],
+			"label": {
+				"English": "Due Date"
+			},
+			"tableName": "phases"
+		},
+		{
+			"name": "completed_date",
+			"sqlExpression": "completed_date",
+			"index": 7,
+			"strField": "completed_date",
+			"type": 7,
+			"viewFormats": [
+				{
+					"format": "Short Date"
+				}
+			],
+			"editFormats": [
+				{
+					"format": "Date",
+					"dateEditType": 11
+				}
+			],
+			"label": {
+				"English": "Completed Date"
+			},
+			"tableName": "phases"
+		},
+		{
+			"name": "notes",
+			"sqlExpression": "notes",
+			"index": 8,
+			"strField": "notes",
+			"type": 200,
+			"viewFormats": [
+				{}
+			],
+			"editFormats": [
+				{}
+			],
+			"label": {
+				"English": "Notes"
+			},
+			"tableName": "phases"
+		}
+	],
+	"afterEditAction": 0,
+	"eventHandlers": [
+		{
+			"eventId": "EVENT_BEFOREEDIT",
+			"pageType": "edit",
+			"code": "/** PHASES — Before record updated (drop-in)\r\n *  Rules:\r\n *   - Admins: no restrictions\r\n *   - Non-admins (inline edit only): may edit ONLY the Started and Completed checkboxes and Notes\r\n *   - Blocks any other field change by non-admins on inline save\r\n *   - (Optional) auto-set phase status when completed_date is set/cleared (guarded)\r\n */\r\n\r\n// ====== CONFIG: adjust to your schema ======\r\n$completedField = \"completed_date\";  // the only field non-admins may change inline\r\n$notesField    = \"notes\";          // optional; set only if this field exists in your table\r\n// ===========================================\r\n\r\n// Quick helpers\r\n$isAdmin  = Security::isAdmin();\r\n$isInline = $inline ? true : false;\r\n\r\n// ----- 1) Enforce permissions for non-admins on inline edit -----\r\nif (Security::isLoggedIn() && !$isAdmin && $isInline) {\r\n\r\n    // Only allow the one whitelisted field to change.\r\n    foreach ($values as $field => $newVal) {\r\n\r\n        // Always allow the whitelisted field\r\n        if ($field === $completedField || $field === $notesField) {\r\n            continue;\r\n        }\r\n\r\n        // Compare to original value; block if anything else changes\r\n        $oldVal = array_key_exists($field, $oldvalues) ? $oldvalues[$field] : null;\r\n\r\n        // PHPR passes only posted fields in $values; treat missing same as unchanged\r\n        if ($newVal !== $oldVal) {\r\n            $message = \"You may only update the Completed Date on this page.\";\r\n            return false; // cancel the update\r\n        }\r\n    }\r\n}\r\n\r\n// ----- 2) (Optional) normalize status when completed date changes -----\r\n$completedWasProvided = array_key_exists($completedField, $values);\r\n$completedOld         = $oldvalues[$completedField] ?? null;\r\n$completedNew         = $completedWasProvided ? $values[$completedField] : $completedOld;\r\n$completedChanged     = $completedWasProvided && ($completedNew !== $completedOld);\r\n\r\n// If you have a status field, you can auto-tune it. Guard with array_key_exists so we don’t touch unknown schemas.\r\nif ($completedChanged && array_key_exists($statusField, $values)) {\r\n\r\n    // If a date is set, mark as Done; if cleared, mark as In Progress (adjust to your wording)\r\n    if (!empty($completedNew)) {\r\n        $values[$statusField] = \"Done\";\r\n    } else {\r\n        $values[$statusField] = \"In Progress\";\r\n    }\r\n}\r\n\r\n// Return true to proceed with the update\r\nreturn true;\r\n"
+		},
+		{
+			"eventId": "EVENT_JS_ONLOAD",
+			"pageType": "edit",
+			"code": "// Place event code here.\n// Use \"Add Action\" button to add code snippets.\n\n(function(){\n  // Grab current phase code from a read-only field on the form\n  var codeEl = document.querySelector('[data-field=\"phase_code\"] input, [data-field=\"phase_code\"] span');\n  var code = codeEl ? (codeEl.value || codeEl.textContent || \"\").trim() : \"\";\n\n  function show(fieldName, show){\n    var holder = document.querySelector('[data-field=\"'+fieldName+'\"]');\n    if(holder){ holder.style.display = show ? \"\" : \"none\"; }\n  }\n\n  // Approval phases: TF, SD, QA_QC1, QA_QC2\n  var isApproval = [\"TF\",\"SD\",\"QA_QC1\",\"QA_QC2\"].indexOf(code) >= 0;\n  // Submission phases: DD, PP\n  var isSubmission = [\"DD\",\"PP\"].indexOf(code) >= 0;\n\n  // Due date is calculated; keep visible (read-only) if you prefer\n  // Toggle approval/submission fields\n  show(\"approval_date\", isApproval);\n  show(\"submission_date\", isSubmission);\n\n  // Optional helper text\n  var ap = document.querySelector('[data-field=\"approval_date\"] .rnr-label');\n  if(ap && isApproval){ ap.title = \"Enter the approval/completion date for this phase\"; }\n  var sb = document.querySelector('[data-field=\"submission_date\"] .rnr-label');\n  if(sb && isSubmission){ sb.title = \"Enter the date this phase was submitted\"; }\n})();\n"
+		},
+		{
+			"eventId": "EVENT_AFTEREDIT",
+			"pageType": "edit",
+			"code": "/** PHASES — After record updated (debug + force recalc once)\r\n *  - Logs what happened to PHP error_log\r\n *  - Resolves project_id robustly\r\n *  - Tries to call your recalc function (forced once for test)\r\n *  - Optional: auto-completes open subphases when a phase completes\r\n */\r\n\r\n// ====== CONFIG: adjust if your field names differ ======\r\n$phasePkField        = \"phase_id\";\r\n$projectFkField      = \"project_id\";\r\n$completedDateField  = \"completed_date\";\r\n$dueDateField        = \"due_date\"; // kept as a possible trigger, not required\r\n$recalcTriggerFields = [ \"completed_date\", \"due_date\" ];\r\n$autoCompleteSubs    = true;\r\n$DEBUG               = true;   // <-- turn ON for now; we’ll turn it off after it works\r\n// =======================================================\r\n\r\n// --- logger\r\n$log = function($msg) use ($DEBUG) {\r\n    if ($DEBUG) error_log(\"[PHASES AfterUpdate] \".$msg);\r\n};\r\n\r\n// --- include user functions where recalc_* should live\r\n$uc = getabspath(\"include/usercode.php\");\r\nif (file_exists($uc)) { require_once($uc); $log(\"usercode.php included\"); }\r\nelse { $log(\"usercode.php NOT found at \".$uc); }\r\n\r\n// --- connection (best-effort)\r\n$conn = null;\r\nif (isset($pageObject) && method_exists($pageObject, 'getConnection')) {\r\n    $conn = $pageObject->getConnection();\r\n}\r\nif (!$conn && class_exists(\"DB\")) {\r\n    // Fallback to table-bound connection if available\r\n    if (method_exists(\"DB\",\"ConnectionByTable\")) {\r\n        $conn = DB::ConnectionByTable(\"phases\");\r\n        $log(\"ConnectionByTable used\");\r\n    } else {\r\n        $log(\"No connection helper; SQL will use DB::* static\");\r\n    }\r\n}\r\n$log(\"conn=\".($conn ? \"OK\" : \"NULL\"));\r\n\r\n// --- helper: did a field change in this update?\r\n$fieldChanged = function($field) use ($values, $oldvalues) {\r\n    if (!$field) return false;\r\n    if (!array_key_exists($field, $values)) return false;\r\n    $old = $oldvalues[$field] ?? null;\r\n    $new = $values[$field];\r\n    return $new !== $old;\r\n};\r\n\r\n// 1) trigger detection (for info)\r\n$shouldRecalc = false;\r\nforeach ($recalcTriggerFields as $f) {\r\n    if ($fieldChanged($f)) { $shouldRecalc = true; $log(\"trigger changed: \".$f); break; }\r\n}\r\n\r\n// 2) resolve ids\r\n$phaseId = (int)(\r\n    $keys[$phasePkField]      ?? \r\n    $values[$phasePkField]    ?? \r\n    $oldvalues[$phasePkField] ?? 0\r\n);\r\n$log(\"phaseId=\".$phaseId);\r\n\r\n$projectId = (int)(\r\n    $values[$projectFkField]    ?? \r\n    $oldvalues[$projectFkField] ?? 0\r\n);\r\nif (!$projectId && $phaseId) {\r\n    $sql = \"SELECT \".$projectFkField.\" AS pid FROM phases WHERE \".$phasePkField.\"=\".$phaseId;\r\n    $log(\"lookup projectId: \".$sql);\r\n    // Try via $conn first; fallback to DB::Query\r\n    $rs = $conn ? $conn->query($sql) : DB::Query($sql);\r\n    if ($rs) {\r\n        $row = method_exists($rs,'fetchAssoc') ? $rs->fetchAssoc() : db_fetch_array($rs);\r\n        if ($row && isset($row[\"pid\"])) $projectId = (int)$row[\"pid\"];\r\n    }\r\n}\r\n$log(\"projectId=\".$projectId);\r\n\r\n// 3) if phase just completed, optionally close any open subphases in this phase\r\nif ($autoCompleteSubs && $fieldChanged($completedDateField)) {\r\n    $newCompleted = $values[$completedDateField] ?? null;\r\n    $log(\"completed_date changed to \".(string)$newCompleted);\r\n    if (!empty($newCompleted) && $phaseId > 0) {\r\n        $escapedDate = $conn ? $conn->prepareString($newCompleted) : db_prepare_string($newCompleted);\r\n        $sql = \"\r\n            UPDATE subphase_status st\r\n            JOIN subphases s ON s.subphase_id = st.subphase_id\r\n            SET\r\n                st.complete_checked = 1,\r\n                st.complete_date    = COALESCE(st.complete_date, \".$escapedDate.\")\r\n            WHERE s.phase_id = \".$phaseId.\"\r\n              AND (st.complete_checked IS NULL OR st.complete_checked = 0)\r\n        \";\r\n        $log(\"auto-complete subphases SQL: \".$sql);\r\n        DB::Exec($sql);\r\n    }\r\n}\r\n\r\n// 4) choose a recalc function and call it (FORCE once for test)\r\n$recalcFns = [\r\n    'recalc_phase_due_dates',\r\n    'recalc_project_schedule',\r\n    'recalc_design_schedule'\r\n];\r\n\r\n$foundFn = null;\r\nforeach ($recalcFns as $fn) {\r\n    if (function_exists($fn)) { $foundFn = $fn; break; }\r\n}\r\n$log(\"recalc fn found: \".($foundFn ?: \"NONE\"));\r\n\r\nif ($projectId > 0 && $foundFn) {\r\n    // For test: force-call once so we can see if the function works at all\r\n    $log(\"FORCE calling \".$foundFn.\"(\".$projectId.\")\");\r\n    $foundFn($projectId);\r\n} else {\r\n    $log(\"SKIP force-call: projectId=\".$projectId.\" foundFn=\".($foundFn?1:0));\r\n}\r\n\r\n// Also log whether the trigger logic *would* have called it normally\r\n$log(\"shouldRecalc=\".($shouldRecalc?1:0));\r\n\r\n// DONE\r\nreturn;\r\n"
+		},
+		{
+			"eventId": "EVENT_BEFORESHOW_LIST",
+			"pageType": "list",
+			"code": "// Place event code here.\n// Use \"Add Action\" button to add code snippets.\n\n// If NOT an admin, hide full edit/add/delete, keep inline edit\nif ( Security::isLoggedIn() && !Security::isAdmin() ) {\n    $xt->assign(\"edit_link\", false);        // hides full Edit icon\n    $xt->assign(\"add_link\", false);         // hides Add button (optional)\n    $xt->assign(\"inlineadd_link\", false);   // hides Inline Add (optional)\n    $xt->assign(\"delete_link\", false);      // hides Delete (optional)\n    $xt->assign(\"inlineedit_link\", true);   // keep inline edit available\n}\n"
+		},
+		{
+			"eventId": "EVENT_JS_ONLOAD",
+			"pageType": "list",
+			"code": "// Place event code here.\n// Use \"Add Action\" button to add code snippets.\n\n(function(){\n  function todayYMD(){\n    var d=new Date(), y=d.getFullYear(), m=('0'+(d.getMonth()+1)).slice(-2), dd=('0'+d.getDate()).slice(-2);\n    return y+'-'+m+'-'+dd; // DATE column format\n  }\n\n  // Get record id (recId) for the row that contains `el`\n  function getRecId(el){\n    try { if (window.Runner && Runner.getRecId){ var r=Runner.getRecId(el); if (r) return r; } } catch(e){}\n    var $tr = $(el).closest(\"tr\");\n    return $tr.data(\"recordId\") || $tr.attr(\"data-record-id\") || (function(){\n      var id = (el.id||\"\"); var m=id.match(/_(\\d+)$/); return m?m[1]:\"\";\n    })();\n  }\n\n  // Set a date value using PHPR API if possible; otherwise force both hidden+visible inputs\n  function setDate(field, recId, ymd){\n    // 1) Preferred: control API (keeps widget + hidden in sync)\n    try{\n      if (window.pageObj && pageObj.getControl){\n        var c = pageObj.getControl(field, recId);\n        if (c && c.setValue){ c.setValue(ymd || \"\"); return true; }\n      }\n    }catch(e){}\n\n    // 2) Fallback: set hidden post value + visible text input in that row/cell\n    var $cell = $(\"tr[data-record-id='\"+recId+\"'] td[data-field='\"+field+\"']\");\n    if (!$cell.length) { // try without data-record-id\n      $cell = $(\"#value_\"+field+\"_\"+recId).closest(\"td[data-field='\"+field+\"']\");\n    }\n    var $hid = $cell.find(\"input[type='hidden'][name='value_\"+field+\"_\"+recId+\"'], input[name='value_\"+field+\"_\"+recId+\"']\");\n    var $txt = $cell.find(\"input[type='text']\");\n\n    if ($hid.length) $hid.val(ymd || \"\");\n    if ($txt.length) { $txt.val(ymd || \"\").trigger(\"change\").trigger(\"blur\"); }\n\n    return ($hid.length || $txt.length) > 0;\n  }\n\n  // START checkbox handler\n  $(document).on(\"change\", \"td[data-field='start_checked'] input[type=checkbox], input[id^='value_start_checked_']\", function(){\n    var recId = getRecId(this);\n    if (this.checked) setDate(\"start_date\", recId, todayYMD());\n    else              setDate(\"start_date\", recId, \"\");\n  });\n\n  // COMPLETED checkbox handler\n  $(document).on(\"change\", \"td[data-field='completed_checked'] input[type=checkbox], input[id^='value_completed_checked_']\", function(){\n    var recId = getRecId(this);\n    if (this.checked) setDate(\"completed_date\", recId, todayYMD());\n    else              setDate(\"completed_date\", recId, \"\");\n  });\n\n  // Sync any already-open inline rows on load or after row (re)creation\n  function initialSync(){\n    $(\"td[data-field='start_checked'] input[type=checkbox], input[id^='value_start_checked_']\").each(function(){\n      var recId = getRecId(this);\n      var $hid = $(\"input[name='value_start_date_\"+recId+\"']\");\n      if (this.checked && (!$hid.val())) setDate(\"start_date\", recId, todayYMD());\n    });\n    $(\"td[data-field='completed_checked'] input[type=checkbox], input[id^='value_completed_checked_']\").each(function(){\n      var recId = getRecId(this);\n      var $hid = $(\"input[name='value_completed_date_\"+recId+\"']\");\n      if (this.checked && (!$hid.val())) setDate(\"completed_date\", recId, todayYMD());\n    });\n  }\n  initialSync();\n  $(document).on(\"click\", \".rnr-inlinestart, .rnr-inlineedit, .rnr-inlineadd, .rnr-inlinecancel\", function(){\n    setTimeout(initialSync, 80);\n  });\n})();\n"
+		}
+	],
+	"resizeColumns": true,
+	"dbTableInfo": {
+		"type": 0,
+		"foreignKeys": [
+			{
+				"name": "fk_phases_project",
+				"refTable": "projects",
+				"refSchema": "",
+				"columns": [
+					{
+						"column": "project_id",
+						"ref_column": "project_id"
+					}
+				]
+			}
+		],
+		"fields": [
+			{
+				"name": "phase_id",
+				"type": 3,
+				"size": 0,
+				"scale": 0,
+				"typeName": "int",
+				"nullable": false,
+				"autoinc": true,
+				"defaultValueSQL": null,
+				"defaultValue": ""
+			},
+			{
+				"name": "project_id",
+				"type": 3,
+				"size": 0,
+				"scale": 0,
+				"typeName": "int",
+				"nullable": false,
+				"autoinc": false,
+				"defaultValueSQL": null,
+				"defaultValue": ""
+			},
+			{
+				"name": "phase_code",
+				"type": 129,
+				"size": 0,
+				"scale": 0,
+				"typeName": "enum('TF','SD','QA_QC1','DD','QA_QC2','PP')",
+				"enumValues": [
+					"TF",
+					"SD",
+					"QA_QC1",
+					"DD",
+					"QA_QC2",
+					"PP"
+				],
+				"nullable": false,
+				"autoinc": false,
+				"defaultValueSQL": null,
+				"defaultValue": ""
+			},
+			{
+				"name": "sequence",
+				"type": 16,
+				"size": 0,
+				"scale": 0,
+				"typeName": "tinyint",
+				"nullable": false,
+				"autoinc": false,
+				"defaultValueSQL": null,
+				"defaultValue": ""
+			},
+			{
+				"name": "long_duration",
+				"type": 3,
+				"size": 0,
+				"scale": 0,
+				"typeName": "int",
+				"nullable": false,
+				"autoinc": false,
+				"defaultValueSQL": null,
+				"defaultValue": ""
+			},
+			{
+				"name": "due_date",
+				"type": 7,
+				"size": 0,
+				"scale": 0,
+				"typeName": "date",
+				"nullable": false,
+				"autoinc": false,
+				"defaultValueSQL": null,
+				"defaultValue": ""
+			},
+			{
+				"name": "completed_date",
+				"type": 7,
+				"size": 0,
+				"scale": 0,
+				"typeName": "date",
+				"nullable": true,
+				"autoinc": false,
+				"defaultValueSQL": null,
+				"defaultValue": ""
+			},
+			{
+				"name": "notes",
+				"type": 200,
+				"size": 250,
+				"scale": 0,
+				"typeName": "varchar(250)",
+				"nullable": true,
+				"autoinc": false,
+				"defaultValueSQL": null,
+				"defaultValue": ""
+			}
+		],
+		"primaryKeys": [
+			"phase_id"
+		],
+		"uniqueFields": [],
+		"name": "phases"
+	},
+	"pages": [
+		{
+			"id": "add",
+			"type": "add",
+			"layoutId": "nomenu",
+			"disabled": true,
+			"default": 0,
+			"forms": {
+				"above-grid": {
+					"modelId": "add-above-grid",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": [
+								"add_message"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"below-grid": {
+					"modelId": "add-below-grid",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": [
+								"add_save",
+								"add_reset",
+								"add_back_list",
+								"add_cancel"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"top": {
+					"modelId": "add-header",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": [
+								"add_header"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"grid": {
+					"modelId": "simple-edit",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c3"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c3": {
+							"model": "c3",
+							"items": [
+								"integrated_edit_field",
+								"integrated_edit_field1",
+								"integrated_edit_field2",
+								"integrated_edit_field4",
+								"integrated_edit_field5",
+								"integrated_edit_field8"
+							]
+						}
+					},
+					"deferredItems": [],
+					"columnCount": 1,
+					"inlineLabels": false,
+					"separateLabels": false
+				}
+			},
+			"items": {
+				"add_header": {
+					"type": "add_header"
+				},
+				"add_back_list": {
+					"type": "add_back_list"
+				},
+				"add_cancel": {
+					"type": "add_cancel"
+				},
+				"add_message": {
+					"type": "add_message"
+				},
+				"add_save": {
+					"type": "add_save"
+				},
+				"add_reset": {
+					"type": "add_reset"
+				},
+				"integrated_edit_field": {
+					"field": "project_id",
+					"type": "integrated_edit_field",
+					"orientation": 0
+				},
+				"integrated_edit_field1": {
+					"field": "phase_code",
+					"type": "integrated_edit_field",
+					"orientation": 0
+				},
+				"integrated_edit_field2": {
+					"field": "sequence",
+					"type": "integrated_edit_field",
+					"orientation": 0
+				},
+				"integrated_edit_field4": {
+					"field": "long_duration",
+					"type": "integrated_edit_field",
+					"orientation": 0
+				},
+				"integrated_edit_field5": {
+					"field": "due_date",
+					"type": "integrated_edit_field",
+					"orientation": 0
+				},
+				"integrated_edit_field8": {
+					"field": "completed_date",
+					"type": "integrated_edit_field",
+					"orientation": 0
+				}
+			},
+			"dbProps": {},
+			"version": 13,
+			"imageItem": {
+				"type": "page_image"
+			},
+			"imageBgColor": "#f2f2f2",
+			"controlsBgColor": "white",
+			"imagePosition": "right",
+			"listTotals": 1,
+			"title": {}
+		},
+		{
+			"id": "export",
+			"type": "export",
+			"layoutId": "first",
+			"disabled": true,
+			"default": 0,
+			"forms": {
+				"supertop": {
+					"modelId": "panel-top",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": []
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"top": {
+					"modelId": "export-header",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": [
+								"export_header"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"grid": {
+					"modelId": "export-grid",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": [
+								"export_field",
+								"export_field1",
+								"export_field2",
+								"export_field3",
+								"export_field5",
+								"export_field6",
+								"export_field9"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"footer": {
+					"modelId": "export-footer",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								},
+								{
+									"cell": "c2"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": []
+						},
+						"c2": {
+							"model": "c2",
+							"items": [
+								"export_export",
+								"export_cancel"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				}
+			},
+			"items": {
+				"export_header": {
+					"type": "export_header"
+				},
+				"export_export": {
+					"type": "export_export"
+				},
+				"export_cancel": {
+					"type": "export_cancel"
+				},
+				"export_field": {
+					"field": "phase_id",
+					"type": "export_field"
+				},
+				"export_field1": {
+					"field": "project_id",
+					"type": "export_field"
+				},
+				"export_field2": {
+					"field": "phase_code",
+					"type": "export_field"
+				},
+				"export_field3": {
+					"field": "sequence",
+					"type": "export_field"
+				},
+				"export_field5": {
+					"field": "long_duration",
+					"type": "export_field"
+				},
+				"export_field6": {
+					"field": "due_date",
+					"type": "export_field"
+				},
+				"export_field9": {
+					"field": "completed_date",
+					"type": "export_field"
+				}
+			},
+			"dbProps": {},
+			"version": 13,
+			"imageItem": {
+				"type": "page_image"
+			},
+			"imageBgColor": "#f2f2f2",
+			"controlsBgColor": "white",
+			"imagePosition": "right",
+			"listTotals": 1,
+			"title": {},
+			"exportFormat": 2,
+			"exportDelimiter": ",",
+			"exportSelectDelimiter": false,
+			"exportSelectFields": false
+		},
+		{
+			"id": "import",
+			"type": "import",
+			"layoutId": "first",
+			"disabled": true,
+			"default": 0,
+			"forms": {
+				"supertop": {
+					"modelId": "panel-top",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": []
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"top": {
+					"modelId": "import-header",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": [
+								"import_header"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"grid": {
+					"modelId": "import-grid",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": [
+								"import_field",
+								"import_field1",
+								"import_field2",
+								"import_field3",
+								"import_field5",
+								"import_field6",
+								"import_field9"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				}
+			},
+			"items": {
+				"import_header": {
+					"type": "import_header"
+				},
+				"import_field": {
+					"field": "phase_id",
+					"type": "import_field"
+				},
+				"import_field1": {
+					"field": "project_id",
+					"type": "import_field"
+				},
+				"import_field2": {
+					"field": "phase_code",
+					"type": "import_field"
+				},
+				"import_field3": {
+					"field": "sequence",
+					"type": "import_field"
+				},
+				"import_field5": {
+					"field": "long_duration",
+					"type": "import_field"
+				},
+				"import_field6": {
+					"field": "due_date",
+					"type": "import_field"
+				},
+				"import_field9": {
+					"field": "completed_date",
+					"type": "import_field"
+				}
+			},
+			"dbProps": {},
+			"version": 13,
+			"imageItem": {
+				"type": "page_image"
+			},
+			"imageBgColor": "#f2f2f2",
+			"controlsBgColor": "white",
+			"imagePosition": "right",
+			"listTotals": 1,
+			"title": {}
+		},
+		{
+			"id": "edit",
+			"type": "edit",
+			"layoutId": "nomenu",
+			"disabled": true,
+			"default": 0,
+			"forms": {
+				"above-grid": {
+					"modelId": "edit-above-grid",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": [
+								"edit_message"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"below-grid": {
+					"modelId": "edit-below-grid",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								},
+								{
+									"cell": "c2"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": [
+								"edit_save",
+								"edit_back_list",
+								"edit_close"
+							]
+						},
+						"c2": {
+							"model": "c2",
+							"items": [
+								"hamburger"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"top": {
+					"modelId": "edit-header",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": [
+								"edit_header"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"grid": {
+					"modelId": "simple-edit",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c4"
+								},
+								{
+									"cell": "c2"
+								},
+								{
+									"cell": "c"
+								}
+							],
+							"section": ""
+						},
+						{
+							"cells": [
+								{
+									"cell": "c5"
+								},
+								{
+									"cell": "c3"
+								},
+								{
+									"cell": "c6"
+								}
+							],
+							"section": ""
+						},
+						{
+							"cells": [
+								{
+									"cell": "c7"
+								},
+								{
+									"cell": "c8"
+								},
+								{
+									"cell": "c9"
+								}
+							],
+							"section": ""
+						},
+						{
+							"cells": [
+								{
+									"cell": "c13"
+								},
+								{
+									"cell": "c14"
+								},
+								{
+									"cell": "c15"
+								}
+							],
+							"section": ""
+						},
+						{
+							"cells": [
+								{
+									"cell": "c16"
+								},
+								{
+									"cell": "c17"
+								},
+								{
+									"cell": "c18"
+								}
+							],
+							"section": ""
+						},
+						{
+							"cells": [
+								{
+									"cell": "c25"
+								},
+								{
+									"cell": "c26"
+								},
+								{
+									"cell": "c27"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c4": {
+							"model": "c4",
+							"items": [
+								"integrated_edit_field8"
+							],
+							"field": "project_id"
+						},
+						"c2": {
+							"model": "c2",
+							"items": [
+								"integrated_edit_field"
+							],
+							"field": "project_id"
+						},
+						"c": {
+							"model": "c2",
+							"items": [
+								"integrated_edit_field9"
+							],
+							"field": "project_id"
+						},
+						"c5": {
+							"model": "c4",
+							"items": [
+								"integrated_edit_field10"
+							],
+							"field": "phase_code"
+						},
+						"c3": {
+							"model": "c2",
+							"items": [
+								"integrated_edit_field1"
+							],
+							"field": "phase_code"
+						},
+						"c6": {
+							"model": "c2",
+							"items": [
+								"integrated_edit_field11"
+							],
+							"field": "phase_code"
+						},
+						"c7": {
+							"model": "c4",
+							"items": [
+								"integrated_edit_field12"
+							],
+							"field": "sequence"
+						},
+						"c8": {
+							"model": "c2",
+							"items": [
+								"integrated_edit_field2"
+							],
+							"field": "sequence"
+						},
+						"c9": {
+							"model": "c2",
+							"items": [
+								"integrated_edit_field13"
+							],
+							"field": "sequence"
+						},
+						"c13": {
+							"model": "c4",
+							"items": [
+								"integrated_edit_field16"
+							],
+							"field": "long_duration"
+						},
+						"c14": {
+							"model": "c2",
+							"items": [
+								"integrated_edit_field4"
+							],
+							"field": "long_duration"
+						},
+						"c15": {
+							"model": "c2",
+							"items": [
+								"integrated_edit_field17"
+							],
+							"field": "long_duration"
+						},
+						"c16": {
+							"model": "c4",
+							"items": [
+								"integrated_edit_field18"
+							],
+							"field": "due_date"
+						},
+						"c17": {
+							"model": "c2",
+							"items": [
+								"integrated_edit_field5"
+							],
+							"field": "due_date"
+						},
+						"c18": {
+							"model": "c2",
+							"items": [
+								"integrated_edit_field19"
+							],
+							"field": "due_date"
+						},
+						"c25": {
+							"model": "c4",
+							"items": [
+								"edit_field_label"
+							],
+							"field": "completed_date"
+						},
+						"c26": {
+							"model": "c2",
+							"items": [
+								"edit_field"
+							],
+							"field": "completed_date"
+						},
+						"c27": {
+							"model": "c2",
+							"items": [
+								"edit_field_tooltip"
+							],
+							"field": "completed_date"
+						}
+					},
+					"deferredItems": [],
+					"columnCount": 1,
+					"inlineLabels": true,
+					"separateLabels": true
+				}
+			},
+			"items": {
+				"edit_header": {
+					"type": "edit_header"
+				},
+				"hamburger": {
+					"type": "hamburger",
+					"items": [
+						"edit_reset"
+					]
+				},
+				"edit_reset": {
+					"type": "edit_reset"
+				},
+				"edit_message": {
+					"type": "edit_message"
+				},
+				"edit_save": {
+					"type": "edit_save"
+				},
+				"edit_back_list": {
+					"type": "edit_back_list"
+				},
+				"edit_close": {
+					"type": "edit_close"
+				},
+				"integrated_edit_field": {
+					"field": "project_id",
+					"type": "edit_field",
+					"updateOnEdit": false
+				},
+				"integrated_edit_field8": {
+					"type": "edit_field_label",
+					"field": "project_id"
+				},
+				"integrated_edit_field9": {
+					"type": "edit_field_tooltip",
+					"field": "project_id"
+				},
+				"integrated_edit_field1": {
+					"field": "phase_code",
+					"type": "edit_field",
+					"updateOnEdit": false
+				},
+				"integrated_edit_field10": {
+					"type": "edit_field_label",
+					"field": "phase_code"
+				},
+				"integrated_edit_field11": {
+					"type": "edit_field_tooltip",
+					"field": "phase_code"
+				},
+				"integrated_edit_field2": {
+					"field": "sequence",
+					"type": "edit_field",
+					"updateOnEdit": false
+				},
+				"integrated_edit_field12": {
+					"type": "edit_field_label",
+					"field": "sequence"
+				},
+				"integrated_edit_field13": {
+					"type": "edit_field_tooltip",
+					"field": "sequence"
+				},
+				"integrated_edit_field4": {
+					"field": "long_duration",
+					"type": "edit_field",
+					"updateOnEdit": false
+				},
+				"integrated_edit_field16": {
+					"type": "edit_field_label",
+					"field": "long_duration"
+				},
+				"integrated_edit_field17": {
+					"type": "edit_field_tooltip",
+					"field": "long_duration"
+				},
+				"integrated_edit_field5": {
+					"field": "due_date",
+					"type": "edit_field",
+					"updateOnEdit": false
+				},
+				"integrated_edit_field18": {
+					"type": "edit_field_label",
+					"field": "due_date"
+				},
+				"integrated_edit_field19": {
+					"type": "edit_field_tooltip",
+					"field": "due_date"
+				},
+				"edit_field": {
+					"field": "completed_date",
+					"type": "edit_field",
+					"updateOnEdit": false
+				},
+				"edit_field_label": {
+					"type": "edit_field_label",
+					"field": "completed_date"
+				},
+				"edit_field_tooltip": {
+					"type": "edit_field_tooltip",
+					"field": "completed_date"
+				}
+			},
+			"dbProps": {},
+			"version": 13,
+			"imageItem": {
+				"type": "page_image"
+			},
+			"imageBgColor": "#f2f2f2",
+			"controlsBgColor": "white",
+			"imagePosition": "right",
+			"listTotals": 1,
+			"title": {}
+		},
+		{
+			"id": "view",
+			"type": "view",
+			"layoutId": "nomenu",
+			"disabled": true,
+			"default": 0,
+			"forms": {
+				"above-grid": {
+					"modelId": "view-above-grid",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1",
+									"colspan": 2
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": []
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"below-grid": {
+					"modelId": "view-below-grid",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								},
+								{
+									"cell": "c2"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": [
+								"view_back_list",
+								"view_close"
+							]
+						},
+						"c2": {
+							"model": "c2",
+							"items": [
+								"hamburger"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"top": {
+					"modelId": "view-header",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": [
+								"view_header"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"grid": {
+					"modelId": "simple-edit",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c3"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c3": {
+							"model": "c3",
+							"items": [
+								"integrated_edit_field",
+								"integrated_edit_field1",
+								"integrated_edit_field2",
+								"integrated_edit_field3",
+								"integrated_edit_field5",
+								"integrated_edit_field6",
+								"integrated_edit_field9"
+							]
+						}
+					},
+					"deferredItems": [],
+					"columnCount": 1,
+					"inlineLabels": false,
+					"separateLabels": false
+				}
+			},
+			"items": {
+				"view_header": {
+					"type": "view_header"
+				},
+				"view_back_list": {
+					"type": "view_back_list"
+				},
+				"view_close": {
+					"type": "view_close"
+				},
+				"integrated_edit_field": {
+					"field": "phase_id",
+					"type": "integrated_edit_field",
+					"orientation": 0
+				},
+				"integrated_edit_field1": {
+					"field": "project_id",
+					"type": "integrated_edit_field",
+					"orientation": 0
+				},
+				"integrated_edit_field2": {
+					"field": "phase_code",
+					"type": "integrated_edit_field",
+					"orientation": 0
+				},
+				"integrated_edit_field3": {
+					"field": "sequence",
+					"type": "integrated_edit_field",
+					"orientation": 0
+				},
+				"integrated_edit_field5": {
+					"field": "long_duration",
+					"type": "integrated_edit_field",
+					"orientation": 0
+				},
+				"integrated_edit_field6": {
+					"field": "due_date",
+					"type": "integrated_edit_field",
+					"orientation": 0
+				},
+				"hamburger": {
+					"type": "hamburger",
+					"items": []
+				},
+				"integrated_edit_field9": {
+					"field": "completed_date",
+					"type": "integrated_edit_field",
+					"orientation": 0
+				}
+			},
+			"dbProps": {},
+			"version": 13,
+			"imageItem": {
+				"type": "page_image"
+			},
+			"imageBgColor": "#f2f2f2",
+			"controlsBgColor": "white",
+			"imagePosition": "right",
+			"listTotals": 1,
+			"title": {}
+		},
+		{
+			"id": "list",
+			"type": "list",
+			"layoutId": "topbar",
+			"disabled": false,
+			"default": 1,
+			"forms": {
+				"above-grid": {
+					"modelId": "list-above-grid",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								},
+								{
+									"cell": "c2"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": [
+								"inline_save_all",
+								"inline_cancel_all"
+							]
+						},
+						"c2": {
+							"model": "c2",
+							"items": [
+								"details_found_unknown",
+								"page_size",
+								"print_panel"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"below-grid": {
+					"modelId": "list-below-grid",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": [
+								"pagination",
+								"next_page"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"supertop": {
+					"modelId": "topbar-menu",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								},
+								{
+									"cell": "c2"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": [
+								"logo",
+								"menu"
+							]
+						},
+						"c2": {
+							"model": "c2",
+							"items": [
+								"simple_search",
+								"list_options",
+								"loginform_login",
+								"username_button"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"left": {
+					"modelId": "list-vbar",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						},
+						{
+							"cells": [
+								{
+									"cell": "c2"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c2": {
+							"model": "c2",
+							"items": [
+								"filter_panel"
+							]
+						},
+						"c1": {
+							"model": "c1",
+							"items": [
+								"search_panel"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"top": {
+					"modelId": "list-top",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						},
+						{
+							"cells": [
+								{
+									"cell": "c3"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": [
+								"breadcrumb"
+							]
+						},
+						"c3": {
+							"model": "c3",
+							"items": [
+								"master_info"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"grid": {
+					"modelId": "horizontal-grid",
+					"grid": [
+						{
+							"section": "head",
+							"cells": [
+								{
+									"cell": "headcell_icons"
+								},
+								{
+									"cell": "headcell_checkbox"
+								},
+								{
+									"cell": "headcell_details"
+								},
+								{
+									"cell": "headcell_field2"
+								},
+								{
+									"cell": "headcell_field5"
+								},
+								{
+									"cell": "headcell_field6"
+								},
+								{
+									"cell": "headcell_field7"
+								},
+								{
+									"cell": "headcell_field"
+								}
+							]
+						},
+						{
+							"section": "body",
+							"cells": [
+								{
+									"cell": "cell_icons"
+								},
+								{
+									"cell": "cell_checkbox"
+								},
+								{
+									"cell": "cell_details"
+								},
+								{
+									"cell": "cell_field2"
+								},
+								{
+									"cell": "cell_field5"
+								},
+								{
+									"cell": "cell_field6"
+								},
+								{
+									"cell": "cell_field7"
+								},
+								{
+									"cell": "cell_field"
+								}
+							]
+						},
+						{
+							"cells": [
+								{
+									"cell": "cell_dpreview",
+									"colspan": 8
+								}
+							],
+							"section": "body"
+						},
+						{
+							"section": "foot",
+							"cells": [
+								{
+									"cell": "footcell_icons"
+								},
+								{
+									"cell": "footcell_checkbox"
+								},
+								{
+									"cell": "footcell_details"
+								},
+								{
+									"cell": "footcell_field2"
+								},
+								{
+									"cell": "footcell_field5"
+								},
+								{
+									"cell": "footcell_field6"
+								},
+								{
+									"cell": "footcell_field7"
+								},
+								{
+									"cell": "footcell_field"
+								}
+							]
+						}
+					],
+					"cells": {
+						"headcell_field2": {
+							"model": "headcell_field",
+							"items": [
+								"simple_grid_field10"
+							],
+							"field": "phase_code",
+							"columnName": "field"
+						},
+						"cell_field2": {
+							"model": "cell_field",
+							"items": [
+								"simple_grid_field2"
+							],
+							"field": "phase_code",
+							"columnName": "field"
+						},
+						"footcell_field2": {
+							"model": "footcell_field",
+							"items": [],
+							"field": "phase_code",
+							"columnName": "field"
+						},
+						"headcell_field5": {
+							"model": "headcell_field",
+							"items": [
+								"simple_grid_field13"
+							],
+							"field": "long_duration",
+							"columnName": "field"
+						},
+						"cell_field5": {
+							"model": "cell_field",
+							"items": [
+								"simple_grid_field5"
+							],
+							"field": "long_duration",
+							"columnName": "field"
+						},
+						"footcell_field5": {
+							"model": "footcell_field",
+							"items": [],
+							"field": "long_duration",
+							"columnName": "field"
+						},
+						"headcell_field6": {
+							"model": "headcell_field",
+							"items": [
+								"simple_grid_field14"
+							],
+							"field": "due_date",
+							"columnName": "field"
+						},
+						"cell_field6": {
+							"model": "cell_field",
+							"items": [
+								"simple_grid_field6"
+							],
+							"field": "due_date",
+							"columnName": "field"
+						},
+						"footcell_field6": {
+							"model": "footcell_field",
+							"items": [],
+							"field": "due_date",
+							"columnName": "field"
+						},
+						"headcell_field7": {
+							"model": "headcell_field",
+							"items": [
+								"simple_grid_field15"
+							],
+							"field": "completed_date",
+							"columnName": "field"
+						},
+						"cell_field7": {
+							"model": "cell_field",
+							"items": [
+								"simple_grid_field9"
+							],
+							"field": "completed_date",
+							"columnName": "field"
+						},
+						"footcell_field7": {
+							"model": "footcell_field",
+							"items": [],
+							"field": "completed_date",
+							"columnName": "field"
+						},
+						"cell_dpreview": {
+							"model": "cell_dpreview",
+							"items": [
+								"details_preview"
+							],
+							"columnName": "field",
+							"field": "completed_date"
+						},
+						"headcell_details": {
+							"model": "headcell_details",
+							"items": [],
+							"columnName": "details",
+							"field": ""
+						},
+						"cell_details": {
+							"model": "cell_details",
+							"items": [
+								"grid_alldetails_link",
+								"grid_details_link"
+							],
+							"columnName": "details",
+							"field": ""
+						},
+						"footcell_details": {
+							"model": "footcell_details",
+							"items": [],
+							"columnName": "details",
+							"field": ""
+						},
+						"headcell_icons": {
+							"model": "headcell_icons",
+							"items": [],
+							"columnName": "inline-edit",
+							"field": ""
+						},
+						"cell_icons": {
+							"model": "cell_icons",
+							"items": [
+								"grid_inline_edit",
+								"grid_inline_save",
+								"grid_inline_cancel"
+							],
+							"columnName": "inline-edit",
+							"field": ""
+						},
+						"footcell_icons": {
+							"model": "footcell_icons",
+							"items": [],
+							"columnName": "inline-edit",
+							"field": ""
+						},
+						"headcell_field": {
+							"model": "headcell_field",
+							"items": [
+								"grid_field_label"
+							],
+							"field": "notes"
+						},
+						"cell_field": {
+							"model": "cell_field",
+							"items": [
+								"grid_field"
+							],
+							"field": "notes"
+						},
+						"footcell_field": {
+							"model": "footcell_field",
+							"items": [],
+							"field": "notes"
+						},
+						"headcell_checkbox": {
+							"model": "headcell_checkbox",
+							"items": [
+								"grid_checkbox_head"
+							]
+						},
+						"cell_checkbox": {
+							"model": "cell_checkbox",
+							"items": [
+								"grid_checkbox"
+							]
+						},
+						"footcell_checkbox": {
+							"model": "footcell_checkbox",
+							"items": []
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				}
+			},
+			"items": {
+				"page_size": {
+					"type": "page_size"
+				},
+				"print_panel": {
+					"type": "print_panel",
+					"items": [
+						"print_scope",
+						"print_details",
+						"print_records",
+						"print_button"
+					]
+				},
+				"print_scope": {
+					"type": "print_scope"
+				},
+				"print_details": {
+					"type": "print_details",
+					"tables": {
+						"1903550912": true
+					}
+				},
+				"print_records": {
+					"type": "print_records"
+				},
+				"print_button": {
+					"type": "print_button"
+				},
+				"pagination": {
+					"type": "pagination"
+				},
+				"-1": {
+					"type": "-"
+				},
+				"-": {
+					"type": "-"
+				},
+				"-2": {
+					"type": "-"
+				},
+				"breadcrumb": {
+					"type": "breadcrumb"
+				},
+				"logo": {
+					"type": "logo"
+				},
+				"menu": {
+					"type": "menu"
+				},
+				"simple_search": {
+					"type": "simple_search"
+				},
+				"list_options": {
+					"type": "list_options",
+					"items": [
+						"edit_selected",
+						"-3",
+						"show_search_panel",
+						"hide_search_panel"
+					]
+				},
+				"master_info": {
+					"type": "master_info",
+					"tables": {
+						"1553183652": "true",
+						"3143721048": "true"
+					}
+				},
+				"filter_panel": {
+					"type": "filter_panel",
+					"items": []
+				},
+				"username_button": {
+					"type": "username_button",
+					"items": [
+						"userinfo_link",
+						"logout_link"
+					]
+				},
+				"loginform_login": {
+					"type": "loginform_login",
+					"popup": false
+				},
+				"userinfo_link": {
+					"type": "userinfo_link"
+				},
+				"logout_link": {
+					"type": "logout_link"
+				},
+				"simple_grid_field2": {
+					"field": "phase_code",
+					"type": "grid_field",
+					"inlineAdd": false,
+					"inlineEdit": false
+				},
+				"simple_grid_field10": {
+					"type": "grid_field_label",
+					"field": "phase_code",
+					"clickSort": true
+				},
+				"simple_grid_field5": {
+					"field": "long_duration",
+					"type": "grid_field",
+					"inlineAdd": false,
+					"inlineEdit": false
+				},
+				"simple_grid_field13": {
+					"type": "grid_field_label",
+					"field": "long_duration",
+					"label": {
+						"field": "long_duration",
+						"table": "phases",
+						"type": 3
+					},
+					"clickSort": true
+				},
+				"simple_grid_field6": {
+					"field": "due_date",
+					"type": "grid_field",
+					"inlineAdd": false,
+					"inlineEdit": false
+				},
+				"simple_grid_field14": {
+					"type": "grid_field_label",
+					"field": "due_date",
+					"clickSort": true
+				},
+				"simple_grid_field9": {
+					"field": "completed_date",
+					"type": "grid_field",
+					"inlineAdd": false,
+					"inlineEdit": true
+				},
+				"simple_grid_field15": {
+					"type": "grid_field_label",
+					"field": "completed_date",
+					"clickSort": true
+				},
+				"details_preview": {
+					"type": "details_preview",
+					"table": 1903550912,
+					"items": [],
+					"proceedLink": true,
+					"popup": false,
+					"pageId": "list",
+					"hideEmptyPreview": false
+				},
+				"grid_alldetails_link": {
+					"type": "grid_alldetails_link"
+				},
+				"grid_details_link": {
+					"type": "grid_details_link",
+					"table": 1903550912,
+					"badge": true,
+					"hideIfNone": false,
+					"showCount": true
+				},
+				"edit_selected": {
+					"type": "edit_selected"
+				},
+				"grid_inline_edit": {
+					"type": "grid_inline_edit"
+				},
+				"grid_inline_save": {
+					"type": "grid_inline_save"
+				},
+				"grid_inline_cancel": {
+					"type": "grid_inline_cancel"
+				},
+				"inline_save_all": {
+					"type": "inline_save_all"
+				},
+				"inline_cancel_all": {
+					"type": "inline_cancel_all"
+				},
+				"grid_field": {
+					"field": "notes",
+					"type": "grid_field",
+					"inlineEdit": true,
+					"inlineAdd": false
+				},
+				"grid_field_label": {
+					"type": "grid_field_label",
+					"field": "notes",
+					"clickSort": true
+				},
+				"search_panel": {
+					"type": "search_panel",
+					"items": [
+						"search_panel_field"
+					]
+				},
+				"show_search_panel": {
+					"type": "show_search_panel"
+				},
+				"-3": {
+					"type": "-"
+				},
+				"hide_search_panel": {
+					"type": "hide_search_panel"
+				},
+				"search_panel_field": {
+					"field": "notes",
+					"type": "search_panel_field"
+				},
+				"grid_checkbox_head": {
+					"type": "grid_checkbox_head"
+				},
+				"grid_checkbox": {
+					"type": "grid_checkbox"
+				},
+				"next_page": {
+					"type": "next_page"
+				},
+				"details_found_unknown": {
+					"type": "details_found_unknown"
+				}
+			},
+			"dbProps": {},
+			"version": 13,
+			"pageWidth": "standard",
+			"pageAlign": "center",
+			"reorderRows": false,
+			"reorderRowsField": "",
+			"addToBottom": true,
+			"imageItem": {
+				"type": "page_image"
+			},
+			"imageBgColor": "#f2f2f2",
+			"controlsBgColor": "white",
+			"imagePosition": "right",
+			"listTotals": 1,
+			"title": {}
+		},
+		{
+			"id": "print",
+			"type": "print",
+			"layoutId": "basic",
+			"disabled": false,
+			"default": 0,
+			"forms": {
+				"above-grid": {
+					"modelId": "print-above-grid",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": [
+								"print_pages"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"below-grid": {
+					"modelId": "print-below-grid",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": []
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"top": {
+					"modelId": "print-header",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c2"
+								}
+							],
+							"section": ""
+						},
+						{
+							"cells": [
+								{
+									"cell": "c4"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c2": {
+							"model": "c2",
+							"items": [
+								"print_header",
+								"print_subheader"
+							]
+						},
+						"c4": {
+							"model": "c4",
+							"items": [
+								"master_info"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"grid": {
+					"modelId": "simple-grid",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						},
+						{
+							"cells": [
+								{
+									"cell": "c2"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": [
+								"simple_grid_field",
+								"simple_grid_field1",
+								"simple_grid_field2",
+								"simple_grid_field3",
+								"simple_grid_field5",
+								"simple_grid_field6",
+								"simple_grid_field9",
+								"simple_grid_field4"
+							]
+						},
+						"c2": {
+							"model": "c2",
+							"items": [
+								"details_preview"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				}
+			},
+			"items": {
+				"print_header": {
+					"type": "print_header"
+				},
+				"print_subheader": {
+					"type": "print_subheader"
+				},
+				"print_pages": {
+					"type": "print_pages"
+				},
+				"simple_grid_field": {
+					"field": "phase_id",
+					"type": "simple_grid_field"
+				},
+				"simple_grid_field1": {
+					"field": "project_id",
+					"type": "simple_grid_field"
+				},
+				"simple_grid_field2": {
+					"field": "phase_code",
+					"type": "simple_grid_field"
+				},
+				"simple_grid_field3": {
+					"field": "sequence",
+					"type": "simple_grid_field"
+				},
+				"simple_grid_field5": {
+					"field": "long_duration",
+					"type": "simple_grid_field"
+				},
+				"simple_grid_field6": {
+					"field": "due_date",
+					"type": "simple_grid_field"
+				},
+				"details_preview": {
+					"type": "details_preview",
+					"table": 1903550912,
+					"items": [],
+					"popup": false
+				},
+				"simple_grid_field9": {
+					"field": "completed_date",
+					"type": "simple_grid_field"
+				},
+				"simple_grid_field4": {
+					"field": "notes",
+					"type": "simple_grid_field"
+				},
+				"master_info": {
+					"type": "master_info",
+					"tables": {
+						"3143721048": "true"
+					}
+				}
+			},
+			"dbProps": {},
+			"version": 13,
+			"imageItem": {
+				"type": "page_image"
+			},
+			"imageBgColor": "#f2f2f2",
+			"controlsBgColor": "white",
+			"imagePosition": "right",
+			"listTotals": 1,
+			"title": {}
+		},
+		{
+			"id": "masterlist",
+			"type": "masterlist",
+			"layoutId": "masterlist",
+			"disabled": false,
+			"default": 0,
+			"forms": {
+				"above-grid": {
+					"modelId": "empty-above-grid",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": []
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"below-grid": {
+					"modelId": "empty-above-grid",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": []
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"top": {
+					"modelId": "masterlist-top",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": [
+								"back_master",
+								"masterlist_header"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"grid": {
+					"modelId": "simple-grid",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": [
+								"simple_grid_field2",
+								"simple_grid_field5",
+								"simple_grid_field6",
+								"simple_grid_field9",
+								"simple_grid_field",
+								"simple_grid_field1",
+								"simple_grid_field3",
+								"simple_grid_field4"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				}
+			},
+			"items": {
+				"masterlist_header": {
+					"type": "masterlist_header"
+				},
+				"back_master": {
+					"type": "back_master"
+				},
+				"simple_grid_field2": {
+					"field": "phase_code",
+					"type": "simple_grid_field"
+				},
+				"simple_grid_field5": {
+					"field": "long_duration",
+					"type": "simple_grid_field"
+				},
+				"simple_grid_field6": {
+					"field": "due_date",
+					"type": "simple_grid_field"
+				},
+				"simple_grid_field9": {
+					"field": "completed_date",
+					"type": "simple_grid_field"
+				},
+				"simple_grid_field": {
+					"field": "notes",
+					"type": "simple_grid_field"
+				},
+				"simple_grid_field1": {
+					"field": "phase_id",
+					"type": "simple_grid_field"
+				},
+				"simple_grid_field3": {
+					"field": "project_id",
+					"type": "simple_grid_field"
+				},
+				"simple_grid_field4": {
+					"field": "sequence",
+					"type": "simple_grid_field"
+				}
+			},
+			"dbProps": {},
+			"version": 13,
+			"imageItem": {
+				"type": "page_image"
+			},
+			"imageBgColor": "#f2f2f2",
+			"controlsBgColor": "white",
+			"imagePosition": "right",
+			"listTotals": 1,
+			"title": {}
+		},
+		{
+			"id": "masterprint",
+			"type": "masterprint",
+			"layoutId": "masterprint",
+			"disabled": false,
+			"default": 0,
+			"forms": {
+				"above-grid": {
+					"modelId": "empty-above-grid",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": []
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"below-grid": {
+					"modelId": "empty-above-grid",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": []
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"top": {
+					"modelId": "masterlist-top",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": [
+								"masterprint_header"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"grid": {
+					"modelId": "simple-grid",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": [
+								"simple_grid_field",
+								"simple_grid_field1",
+								"simple_grid_field2",
+								"simple_grid_field3",
+								"simple_grid_field5",
+								"simple_grid_field6",
+								"simple_grid_field9",
+								"simple_grid_field4"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				}
+			},
+			"items": {
+				"masterprint_header": {
+					"type": "masterprint_header"
+				},
+				"simple_grid_field": {
+					"field": "phase_id",
+					"type": "simple_grid_field"
+				},
+				"simple_grid_field1": {
+					"field": "project_id",
+					"type": "simple_grid_field"
+				},
+				"simple_grid_field2": {
+					"field": "phase_code",
+					"type": "simple_grid_field"
+				},
+				"simple_grid_field3": {
+					"field": "sequence",
+					"type": "simple_grid_field"
+				},
+				"simple_grid_field5": {
+					"field": "long_duration",
+					"type": "simple_grid_field"
+				},
+				"simple_grid_field6": {
+					"field": "due_date",
+					"type": "simple_grid_field"
+				},
+				"simple_grid_field9": {
+					"field": "completed_date",
+					"type": "simple_grid_field"
+				},
+				"simple_grid_field4": {
+					"field": "notes",
+					"type": "simple_grid_field"
+				}
+			},
+			"dbProps": {},
+			"version": 13,
+			"imageItem": {
+				"type": "page_image"
+			},
+			"imageBgColor": "#f2f2f2",
+			"controlsBgColor": "white",
+			"imagePosition": "right",
+			"listTotals": 1,
+			"title": {}
+		}
+	],
+	"geoCoding": {
+		"enabled": false,
+		"latField": "",
+		"lonField": "",
+		"addressFields": []
+	},
+	"caption": {
+		"English": "Phases"
+	}
+}

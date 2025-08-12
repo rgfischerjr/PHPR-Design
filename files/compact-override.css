@@ -1,0 +1,23 @@
+/* Compact width override (loads after theme) */
+@media (min-width: 768px) {
+  /* Standard/small layout: match Cerulean's own selector but be explicit about children */
+  .r-small-page[data-body-width="compact"] > .container,
+  .r-small-page[data-body-width="compact"] > .r-body,
+  .r-small-page[data-body-width="compact"] > .r-content,
+  .r-small-page[data-body-width="compact"] > .r-data-block,
+  .r-small-page[data-body-width="compact"] .container {
+    max-width: 1200px;
+    width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* If the page uses Topbar layout, this is the width gate */
+  .r-topbar-page .r-body .r-content .r-data-block[data-body-width="compact"] {
+    width: 1200px;
+    max-width: 1200px;
+    flex: 0 0 1200px; /* keeps it from shrinking in flex */
+    margin-left: auto;
+    margin-right: auto;
+  }
+}

@@ -1,0 +1,7 @@
+{
+	"type": "EVENT_FIELD",
+	"name": "completed_date_checked",
+	"serverCode": "\n// Sample:\n$result[\"upper\"] = strtoupper( $params[\"value\"] );\n",
+	"beforeJsCode": "(function(ctrl, pageObj){\r\n  function todayParts(){\r\n    var d = new Date();\r\n    return {year: d.getFullYear(), month: d.getMonth()+1, day: d.getDate()};\r\n  }\r\n\r\n  var recId  = ctrl.getId();\r\n  var pageid = pageObj.pageid || pageObj.id;\r\n  var dateCtrl = Runner.getControl(pageid, 'completed_date', recId);\r\n  if(!dateCtrl) return;\r\n\r\n  var v = ctrl.getValue();\r\n  var isChecked = (v===1 || v==='1' || v===true || v==='on' || v==='ON');\r\n\r\n  if(isChecked){\r\n    dateCtrl.setValue( todayParts() );\r\n  } else {\r\n    dateCtrl.setValue('');\r\n  }\r\n})(this, pageObj);\r\n",
+	"afterJsCode": "\n\n// Smaple:\nctrl.setValue( result[\"upper\"] );\n"
+}

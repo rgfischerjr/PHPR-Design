@@ -1,0 +1,2429 @@
+{
+	"orderInfo": [
+		{
+			"index": 4,
+			"field": "designer_name",
+			"expr": "u.full_name",
+			"asc": true
+		},
+		{
+			"index": 8,
+			"field": "due_date",
+			"expr": "ph.due_date",
+			"asc": true
+		}
+	],
+	"sql": "SELECT\n\tp.project_id,\n\tp.project_name,\n\tu.user_id AS designer_id,\n\tu.full_name AS designer_name,\n\tph.phase_id,\n\tph.phase_code,\n\tCASE ph.phase_code\r\n    WHEN 'TF'     THEN 'Test Fit'\r\n    WHEN 'SD'     THEN 'Schematic Design'\r\n    WHEN 'QA_QC1' THEN 'QA/QC1'\r\n    WHEN 'DD'     THEN 'Design Development'\r\n    WHEN 'QA_QC2' THEN 'QA/QC2'\r\n    WHEN 'PP'     THEN 'P&P'\r\n  END AS phase_label,\n\tph.due_date,\n\tDATEDIFF(ph.due_date, CURDATE()) AS days_until_due\nFROM\n\tphases AS ph\n\tINNER JOIN projects AS p ON p.project_id = ph.project_id\n\tINNER JOIN users AS u ON u.user_id = p.designer_id\nWHERE\nph.due_date <= DATE_ADD(\r\n  CURDATE(),\r\n  INTERVAL (SELECT CAST(setting_value AS SIGNED)\r\n            FROM settings WHERE setting_key='dashboard_days_ahead') DAY\r\n)\nORDER BY\n\tu.full_name,\n\tph.due_date\n",
+	"type": 1,
+	"connId": "conn",
+	"originalTable": "projects",
+	"name": "projects view",
+	"shortTableName": "projects1",
+	"dbType": 0,
+	"keyFields": [
+		"project_id"
+	],
+	"detailsBadgeColor": "3cb371",
+	"detailsTables": [
+		386492901
+	],
+	"fields": [
+		{
+			"name": "project_id",
+			"sqlExpression": "p.project_id",
+			"index": 1,
+			"strField": "project_id",
+			"type": 3,
+			"autoinc": true,
+			"viewFormats": [
+				{}
+			],
+			"editFormats": [
+				{}
+			],
+			"label": {
+				"English": "Project Id"
+			},
+			"tableName": "projects"
+		},
+		{
+			"name": "project_name",
+			"sqlExpression": "p.project_name",
+			"index": 2,
+			"strField": "project_name",
+			"type": 200,
+			"viewFormats": [
+				{
+					"format": "Custom",
+					"customExpression": "$link = GetTableLink(\"projects\",\"view\",\"?editid1=\".$data[\"project_id\"]);\r\necho \"<span class='ds-project'><a href=\\\"\".$link.\"\\\">\".runner_htmlspecialchars($data[\"project_name\"]).\"</a></span>\";\r\n"
+				}
+			],
+			"editFormats": [
+				{}
+			],
+			"label": {
+				"English": "Project Name"
+			},
+			"tableName": "projects"
+		},
+		{
+			"name": "designer_id",
+			"sqlExpression": "u.user_id",
+			"index": 3,
+			"strField": "user_id",
+			"type": 3,
+			"viewFormats": [
+				{}
+			],
+			"editFormats": [
+				{
+					"format": "Lookup wizard",
+					"lookupTable": "users",
+					"lookupTableConnection": "conn",
+					"lookupLinkField": "user_id",
+					"lookupDisplayField": "username"
+				}
+			],
+			"label": {
+				"English": "Designer Id"
+			},
+			"tableName": "users"
+		},
+		{
+			"name": "designer_name",
+			"sqlExpression": "u.full_name",
+			"index": 4,
+			"strField": "full_name",
+			"type": 200,
+			"viewFormats": [
+				{
+					"format": "Custom",
+					"customExpression": "echo \"<span class='ds-designer'>\".runner_htmlspecialchars($data[\"designer_name\"]).\"</span>\";"
+				}
+			],
+			"editFormats": [
+				{}
+			],
+			"label": {
+				"English": "Designer"
+			},
+			"tableName": "users"
+		},
+		{
+			"name": "phase_id",
+			"sqlExpression": "ph.phase_id",
+			"index": 5,
+			"strField": "phase_id",
+			"type": 3,
+			"viewFormats": [
+				{}
+			],
+			"editFormats": [
+				{}
+			],
+			"label": {
+				"English": "Phase Id"
+			},
+			"tableName": "phases"
+		},
+		{
+			"name": "phase_code",
+			"sqlExpression": "ph.phase_code",
+			"index": 6,
+			"strField": "phase_code",
+			"type": 129,
+			"viewFormats": [
+				{}
+			],
+			"editFormats": [
+				{}
+			],
+			"label": {
+				"English": "Phase"
+			},
+			"tableName": "phases"
+		},
+		{
+			"name": "phase_label",
+			"sqlExpression": "CASE ph.phase_code\r\n    WHEN 'TF'     THEN 'Test Fit'\r\n    WHEN 'SD'     THEN 'Schematic Design'\r\n    WHEN 'QA_QC1' THEN 'QA/QC1'\r\n    WHEN 'DD'     THEN 'Design Development'\r\n    WHEN 'QA_QC2' THEN 'QA/QC2'\r\n    WHEN 'PP'     THEN 'P&P'\r\n  END",
+			"index": 7,
+			"strField": "phase_label",
+			"type": 200,
+			"viewFormats": [
+				{
+					"format": "Custom",
+					"customExpression": "$code  = $data[\"phase_code\"];  // TF, SD, QA_QC1, DD, QA_QC2, PP\r\n$label = $data[\"phase_label\"]; // already in your query\r\necho \"<span class='ds-badge badge-\".runner_htmlspecialchars($code).\"'>\".runner_htmlspecialchars($label).\"</span>\";\r\n"
+				}
+			],
+			"editFormats": [
+				{}
+			],
+			"label": {
+				"English": "Label"
+			},
+			"tableName": ""
+		},
+		{
+			"name": "due_date",
+			"sqlExpression": "ph.due_date",
+			"index": 8,
+			"strField": "due_date",
+			"type": 7,
+			"viewFormats": [
+				{
+					"format": "Custom",
+					"customExpression": "$due  = $data[\"due_date\"];\r\n$days = intval($data[\"days_until_due\"]); // negative = overdue; 0 = today; >0 = upcoming\r\n\r\n// Pretty date (e.g., Mon 08/11/2025)\r\n$pretty = date(\"D m/d/Y\", strtotime($due));\r\n\r\nif (strtotime($due) < strtotime(date(\"Y-m-d\"))) {\r\n    $pillClass = \"overdue\"; $pillText = \"Overdue \".abs($days);\r\n} elseif ($days === 0) {\r\n    $pillClass = \"today\";   $pillText = \"Today\";\r\n} else {\r\n    $pillClass = \"soon\";    $pillText = $days.\" days\";\r\n}\r\n\r\necho \"<span class='ds-date' title='\".runner_htmlspecialchars($due).\"'>\".$pretty.\"</span>\";\r\necho \" <span class='ds-pill \".$pillClass.\"'>\".$pillText.\"</span>\";\r\n"
+				}
+			],
+			"editFormats": [
+				{
+					"format": "Date",
+					"dateEditType": 11
+				}
+			],
+			"label": {
+				"English": "Due Date"
+			},
+			"tableName": "phases"
+		},
+		{
+			"name": "days_until_due",
+			"sqlExpression": "DATEDIFF(ph.due_date, CURDATE())",
+			"index": 9,
+			"strField": "days_until_due",
+			"type": 3,
+			"viewFormats": [
+				{
+					"format": "Custom",
+					"customExpression": "echo \"\";\r\n"
+				}
+			],
+			"editFormats": [
+				{}
+			],
+			"label": {
+				"English": "Days Until Due"
+			},
+			"tableName": ""
+		}
+	],
+	"afterEditAction": 0,
+	"eventHandlers": [
+		{
+			"eventId": "EVENT_AFTERADD",
+			"pageType": "add",
+			"code": "@require_once(getabspath(\"include/usercode.php\"));\r\n\r\ncreate_project_scaffold($keys[\"project_id\"], $values[\"contract_date\"]);\r\nrecalc_phase_due_dates($keys[\"project_id\"]);  // uses the cleaned, calendar-based function we set up\r\n"
+		},
+		{
+			"eventId": "EVENT_BEFOREQUERY_LIST",
+			"pageType": "list",
+			"code": "// Place event code here.\n// Use \"Add Action\" button to add code snippets.\n\n// Restrict by current user if they’re a designer\n// --- Role & scope handling ---\n// Restrict by current user if they’re a designer, or when scope=mine.\n// Persist choice in session.\n\nreturn true;\n\n//require_once(getabspath(\"include/usercode.php\"));\n\nif (!function_exists('db_lookup')) {\n    function db_lookup($sql) {\n        $rs = CustomQuery($sql);\n        if (!$rs) return null;\n        $row = db_fetch_array($rs);\n        if ($row === false) return null;\n        foreach ($row as $v) return $v; // first column\n        return null;\n    }\n}\n\n\n\n// --- Role, scope, and designer filter handling ---\nglobal $cUserName;\n\n// Lookup current user's role\n$role = db_lookup(\"SELECT role FROM users WHERE username = \".db_prepare_string($cUserName));\n\n// Read scope from URL (?scope=mine|all) or session; default: designers->mine, admins->all\n$scope = postvalue(\"scope\");\nif ($scope !== \"mine\" && $scope !== \"all\") {\n    $scope = @$_SESSION[\"dash_scope\"];\n}\nif ($scope !== \"mine\" && $scope !== \"all\") {\n    $scope = ($role === \"designer\") ? \"mine\" : \"all\";\n}\n$_SESSION[\"dash_scope\"] = $scope;\n\n// Designer filter (admin only): ?designer_id=#\n$designerId = postvalue(\"designer_id\");\nif ($designerId === null || $designerId === \"\") {\n    $designerId = @$_SESSION[\"dash_designer_id\"];\n}\n\n// Apply restrictions\nif ($role === \"designer\") {\n    // Designers always see only their own, regardless of scope/designer_id\n    $strWhereClause = whereAdd($strWhereClause, \"u.username = \".db_prepare_string($cUserName));\n    // Clear any admin-only selection so it doesn't persist for designers\n    $_SESSION[\"dash_designer_id\"] = null;\n} else {\n    // Admin path\n    if ($scope === \"mine\") {\n        // Mine = current admin's own projects (if they also design); otherwise this may be empty\n        $strWhereClause = whereAdd($strWhereClause, \"u.username = \".db_prepare_string($cUserName));\n        // When in \"mine\", ignore designer_id\n        $_SESSION[\"dash_designer_id\"] = null;\n    } else {\n        // scope=all: optionally filter by specific designer if provided\n        if (is_numeric($designerId) && intval($designerId) > 0) {\n            $strWhereClause = whereAdd($strWhereClause, \"u.user_id = \".intval($designerId));\n            $_SESSION[\"dash_designer_id\"] = intval($designerId);\n        } else {\n            $_SESSION[\"dash_designer_id\"] = null;\n        }\n    }\n}\n\n// Keep sort stable\n$strOrderBy = \"ORDER BY u.full_name, ph.due_date\";\n"
+		},
+		{
+			"eventId": "EVENT_JS_ONLOAD",
+			"pageType": "list",
+			"code": "(function(){\r\n  // --- Read state from hidden spans (set in Before display) or URL ---\r\n  var params = new URL(location.href).searchParams;\r\n  var roleEl  = document.getElementById('dash-role');\r\n  var scopeEl = document.getElementById('dash-scope');\r\n  var selEl   = document.getElementById('dash-designer');\r\n\r\n  var role  = (roleEl  && roleEl.textContent)  ? roleEl.textContent.trim()  : '';\r\n  var scope = params.get('scope') || (scopeEl && scopeEl.textContent ? scopeEl.textContent.trim() : '');\r\n  var selId = params.get('designer_id') || (selEl && selEl.textContent ? selEl.textContent.trim() : '');\r\n\r\n  // --- Helpers ---\r\n  function nav(next){\r\n    var url = new URL(location.href);\r\n    Object.keys(next).forEach(function(k){\r\n      if (next[k] === null || next[k] === '') url.searchParams.delete(k);\r\n      else url.searchParams.set(k, next[k]);\r\n    });\r\n    location.href = url.toString();\r\n  }\r\n\r\n  function makeLink(label, val, active){\r\n    var a = document.createElement('a');\r\n    a.href = 'javascript:void(0)';\r\n    a.textContent = label;\r\n    a.style.marginRight = '8px';\r\n    if (active){ a.style.fontWeight = '700'; a.style.textDecoration = 'underline'; }\r\n    a.addEventListener('click', function(){\r\n      // mine clears designer filter; all keeps current selection\r\n      nav({ scope: val, designer_id: (val === 'mine' ? null : selId) });\r\n    });\r\n    return a;\r\n  }\r\n\r\n  // --- Find a good container above the grid ---\r\n  var above = document.querySelector('[data-location=\"above-grid\"]')\r\n          || document.querySelector('.rnr-b-above-grid')\r\n          || document.querySelector('.panel-heading')\r\n          || document.body;\r\n\r\n  // --- Insert scope toggles ---\r\n  var isMine = (scope === 'mine') || (!scope && role === 'designer');\r\n  var toggleWrap = document.createElement('div');\r\n  toggleWrap.style.margin = '8px 0 10px 0';\r\n  toggleWrap.appendChild(makeLink('Show Only Mine', 'mine', isMine));\r\n  if (role !== 'designer') toggleWrap.appendChild(makeLink('Show All', 'all', !isMine));\r\n  above.insertBefore(toggleWrap, above.firstChild);\r\n\r\n  // --- Move legend to top (if present) ---\r\n  (function(){\r\n    var legend = document.getElementById('dash-legend');\r\n    if (!legend) return;\r\n    // Ensure legend is the first element above the grid\r\n    above.insertBefore(legend, above.firstChild);\r\n  })();\r\n\r\n  // --- Admin-only designer dropdown: move & wire ---\r\n  (function(){\r\n    if (role !== 'admin') return;\r\n    var src = document.getElementById('designer-filter-container');\r\n    if (!src) return;\r\n    src.style.display = '';\r\n    var wrap = document.createElement('div');\r\n    wrap.style.margin = '0 0 12px 0';\r\n    wrap.appendChild(src);\r\n    // Place after the toggles but before the grid\r\n    if (toggleWrap.nextSibling) {\r\n      above.insertBefore(wrap, toggleWrap.nextSibling);\r\n    } else {\r\n      above.appendChild(wrap);\r\n    }\r\n\r\n    var sel = document.getElementById('designer-filter');\r\n    if (sel) {\r\n      // Disable in \"mine\" scope\r\n      if (isMine) {\r\n        sel.disabled = true;\r\n        sel.title = \"Switch to 'Show All' to choose a specific designer\";\r\n      }\r\n      // Ensure selected option matches current filter\r\n      if (selId) sel.value = selId;\r\n      sel.addEventListener('change', function(){\r\n        // Selecting a designer forces scope=all\r\n        nav({ scope: 'all', designer_id: sel.value });\r\n      });\r\n    }\r\n  })();\r\n\r\n  // --- Compact rows: add class to the grid table (no !important in CSS) ---\r\n  (function(){\r\n    var t = document.querySelector('table.rnr-gridtable');\r\n    if (t && !t.classList.contains('ds-compact')) t.classList.add('ds-compact');\r\n  })();\r\n})();\r\n\r\n(function() {\r\n  var W = 800; // <-- set your compact width once\r\n\r\n  var css = [\r\n    '@media (min-width:768px){',\r\n      /* Standard/small layout */\r\n      '.r-small-page[data-body-width=\"compact\"] > .container,',\r\n      '.r-small-page[data-body-width=\"compact\"] > .r-body,',\r\n      '.r-small-page[data-body-width=\"compact\"] > .r-content,',\r\n      '.r-small-page[data-body-width=\"compact\"] > .r-data-block,',\r\n      '.r-small-page[data-body-width=\"compact\"] .container{',\r\n        'max-width:' + W + 'px;',\r\n        'width:' + W + 'px;',\r\n        'margin-left:auto;',\r\n        'margin-right:auto;',\r\n      '}',\r\n\r\n      /* Topbar layout */\r\n      '.r-topbar-page .r-body .r-content .r-data-block[data-body-width=\"compact\"]{',\r\n        'width:' + W + 'px;',\r\n        'max-width:' + W + 'px;',\r\n        'flex:0 0 ' + W + 'px;',\r\n        'margin-left:auto;',\r\n        'margin-right:auto;',\r\n      '}',\r\n\r\n      /* Ensure grid fills your fixed container */\r\n      '.r-topbar-page .r-body .r-content .r-data-block[data-body-width=\"compact\"] > .r-grid,',\r\n      '.r-small-page[data-body-width=\"compact\"] .r-grid{',\r\n        'width:100%;',\r\n        'max-width:100%;',\r\n      '}',\r\n    '}'\r\n  ].join('');\r\n\r\n  var style = document.createElement('style');\r\n  style.type = 'text/css';\r\n  style.appendChild(document.createTextNode(css));\r\n  document.head.appendChild(style);\r\n\r\n  // Optional: quick visual confirmation (remove after verifying)\r\n  // document.body.matches('.r-small-page[data-body-width=\"compact\"], .r-topbar-page *[data-body-width=\"compact\"]')\r\n  //   && document.body.insertAdjacentHTML('beforeend','<div style=\"position:fixed;inset:auto 10px 10px auto;padding:4px 8px;background:#000;color:#fff;font:12px system-ui;border-radius:4px;opacity:.7;z-index:99999\">Compact=' + W + 'px</div>');\r\n})();\r\n\r\n"
+		},
+		{
+			"eventId": "EVENT_BEFOREMOVENEXT_LIST",
+			"pageType": "list",
+			"code": "// Persist row state on initial render (and every refresh)\r\n$started   = ($data[\"start_checked\"] == 1 || $data[\"start_checked\"] === '1');\r\n$completed = ($data[\"completed_checked\"] == 1 || $data[\"completed_checked\"] === '1');\r\n\r\n// 1) Add data-attrs the JS can read later\r\n$attrs = 'data-started=\"'.($started?1:0).'\" data-completed=\"'.($completed?1:0).'\"';\r\nif (!isset($record[\"rowattrs\"]) || $record[\"rowattrs\"] === '') {\r\n    $record[\"rowattrs\"] = $attrs;\r\n} elseif (strpos($record[\"rowattrs\"], 'class=\"') !== false) {\r\n    // append attrs safely\r\n    $record[\"rowattrs\"] = preg_replace('/class=\"([^\"]*)\"/', 'class=\"$1\" '.$attrs, $record[\"rowattrs\"], 1);\r\n} else {\r\n    $record[\"rowattrs\"] .= ' '.$attrs;\r\n}\r\n\r\n// 2) Inline color so it wins over zebra on first paint\r\nif ($completed) {\r\n    $record[\"css\"] = \"background-color:#c8e6c9 !important;\";\r\n} elseif ($started) {\r\n    $record[\"css\"] = \"background-color:#e8f5e9 !important;\";\r\n} else {\r\n    $record[\"css\"] = \"\";\r\n}\r\n"
+		},
+		{
+			"eventId": "EVENT_BEFORESHOW_LIST",
+			"pageType": "list",
+			"code": "// Clear anything that was echoed earlier (outside the grid)\r\nif (defined(\"DASH_OB\")) {\r\n    ob_end_clean();\r\n}\r\n\r\n\r\nglobal $cUserName;\r\n\r\n$role        = db_lookup(\"SELECT role FROM users WHERE username=\".db_prepare_string($cUserName));\r\n$scope       = $_SESSION[\"dash_scope\"] ?? \"\";\r\n$selDesigner = isset($_SESSION[\"dash_designer_id\"]) ? (int)$_SESSION[\"dash_designer_id\"] : 0;\r\n$daysAhead   = get_dashboard_days_ahead();\r\n\r\n// Build WHERE parts to match filters (no row loops / no echoes per row)\r\n$whereParts = [];\r\nif ($role === \"designer\" || $scope === \"mine\") {\r\n    $whereParts[] = \"u.username = \".db_prepare_string($cUserName);\r\n} elseif ($selDesigner > 0) {\r\n    $whereParts[] = \"u.user_id = \".$selDesigner;\r\n}\r\n$from  = \" FROM phases ph\r\n           JOIN projects p ON p.project_id = ph.project_id\r\n           JOIN users    u ON u.user_id    = p.designer_id \";\r\n$where = $whereParts ? (\" WHERE \".implode(\" AND \", $whereParts)) : \"\";\r\n\r\n// Counts for legend\r\n$overdue  = db_lookup(\"SELECT COUNT(*)\".$from.$where.\" AND ph.due_date < CURDATE()\");\r\n$today    = db_lookup(\"SELECT COUNT(*)\".$from.$where.\" AND ph.due_date = CURDATE()\");\r\n$upcoming = db_lookup(\"SELECT COUNT(*)\".$from.$where.\"\r\n                       AND ph.due_date > CURDATE()\r\n                       AND ph.due_date <= DATE_ADD(CURDATE(), INTERVAL \".$daysAhead.\" DAY)\");\r\n\r\n// Hidden state for JS\r\necho \"<span id='dash-role'     style='display:none'>\".runner_htmlspecialchars($role).\"</span>\";\r\necho \"<span id='dash-scope'    style='display:none'>\".runner_htmlspecialchars($scope).\"</span>\";\r\necho \"<span id='dash-designer' style='display:none'>\".$selDesigner.\"</span>\";\r\n\r\n// Legend\r\necho \"\r\n<div id='dash-legend' style='font-size:13px;margin:8px 0 12px 0;'>\r\n  <span style='display:inline-block;padding:6px 10px;border-radius:6px;background:#ffcccc;margin-right:8px;'>\r\n    <strong>Overdue:</strong> \".(int)$overdue.\"\r\n  </span>\r\n  <span style='display:inline-block;padding:6px 10px;border-radius:6px;background:#fff3cd;margin-right:8px;'>\r\n    <strong>Today:</strong> \".(int)$today.\"\r\n  </span>\r\n  <span style='display:inline-block;padding:6px 10px;border-radius:6px;background:#ffe8c6;'>\r\n    <strong>Next \".$daysAhead.\" days:</strong> \".(int)$upcoming.\"\r\n  </span>\r\n</div>\r\n\";\r\n\r\nreturn true;\r\n"
+		},
+		{
+			"eventId": "EVENT_BEFOREPROCESS_LIST",
+			"pageType": "list",
+			"code": "// Start output buffering to swallow any stray echo/print before display\r\nif (!defined(\"DASH_OB\")) {\r\n    define(\"DASH_OB\", 1);\r\n    ob_start();\r\n}\r\nreturn true;"
+		},
+		{
+			"eventId": "EVENT_AFTEREDIT",
+			"pageType": "edit",
+			"code": "// Place event code here.\n// Use \"Add Action\" button to add code snippets.\n\n@require_once(getabspath(\"include/usercode.php\"));\nrecalc_phase_due_dates((int)$keys[\"project_id\"]);\n"
+		}
+	],
+	"resizeColumns": true,
+	"dbTableInfo": {
+		"type": 0,
+		"foreignKeys": [
+			{
+				"name": "fk_projects_creator",
+				"refTable": "users",
+				"refSchema": "",
+				"columns": [
+					{
+						"column": "created_by",
+						"ref_column": "user_id"
+					}
+				]
+			},
+			{
+				"name": "fk_projects_designer",
+				"refTable": "users",
+				"refSchema": "",
+				"columns": [
+					{
+						"column": "designer_id",
+						"ref_column": "user_id"
+					}
+				]
+			}
+		],
+		"fields": [
+			{
+				"name": "project_id",
+				"type": 3,
+				"size": 0,
+				"scale": 0,
+				"typeName": "int",
+				"nullable": false,
+				"autoinc": true,
+				"defaultValueSQL": null,
+				"defaultValue": ""
+			},
+			{
+				"name": "project_name",
+				"type": 200,
+				"size": 150,
+				"scale": 0,
+				"typeName": "varchar(150)",
+				"nullable": false,
+				"autoinc": false,
+				"defaultValueSQL": null,
+				"defaultValue": ""
+			},
+			{
+				"name": "contract_date",
+				"type": 7,
+				"size": 0,
+				"scale": 0,
+				"typeName": "date",
+				"nullable": false,
+				"autoinc": false,
+				"defaultValueSQL": null,
+				"defaultValue": ""
+			},
+			{
+				"name": "designer_id",
+				"type": 3,
+				"size": 0,
+				"scale": 0,
+				"typeName": "int",
+				"nullable": false,
+				"autoinc": false,
+				"defaultValueSQL": null,
+				"defaultValue": ""
+			},
+			{
+				"name": "created_by",
+				"type": 3,
+				"size": 0,
+				"scale": 0,
+				"typeName": "int",
+				"nullable": false,
+				"autoinc": false,
+				"defaultValueSQL": null,
+				"defaultValue": ""
+			},
+			{
+				"name": "created_at",
+				"type": 135,
+				"size": 0,
+				"scale": 0,
+				"typeName": "datetime",
+				"nullable": false,
+				"autoinc": false,
+				"defaultValueSQL": "CURRENT_TIMESTAMP",
+				"defaultValue": "CURRENT_TIMESTAMP"
+			},
+			{
+				"name": "notes",
+				"type": 200,
+				"size": 500,
+				"scale": 0,
+				"typeName": "varchar(500)",
+				"nullable": true,
+				"autoinc": false,
+				"defaultValueSQL": null,
+				"defaultValue": ""
+			}
+		],
+		"primaryKeys": [
+			"project_id"
+		],
+		"uniqueFields": [],
+		"name": "projects"
+	},
+	"pages": [
+		{
+			"id": "add",
+			"type": "add",
+			"layoutId": "nomenu",
+			"disabled": false,
+			"default": 0,
+			"forms": {
+				"above-grid": {
+					"modelId": "add-above-grid",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": [
+								"add_message"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"below-grid": {
+					"modelId": "add-below-grid",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": [
+								"add_save",
+								"add_reset",
+								"add_back_list",
+								"add_cancel"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"top": {
+					"modelId": "add-header",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": [
+								"add_header"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"grid": {
+					"modelId": "simple-edit",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c3"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c3": {
+							"model": "c3",
+							"items": [
+								"integrated_edit_field",
+								"integrated_edit_field2"
+							]
+						}
+					},
+					"deferredItems": [],
+					"columnCount": 1,
+					"inlineLabels": false,
+					"separateLabels": false
+				}
+			},
+			"items": {
+				"add_header": {
+					"type": "add_header"
+				},
+				"add_back_list": {
+					"type": "add_back_list"
+				},
+				"add_cancel": {
+					"type": "add_cancel"
+				},
+				"add_message": {
+					"type": "add_message"
+				},
+				"add_save": {
+					"type": "add_save"
+				},
+				"add_reset": {
+					"type": "add_reset"
+				},
+				"integrated_edit_field": {
+					"field": "project_name",
+					"type": "integrated_edit_field",
+					"orientation": 0
+				},
+				"integrated_edit_field2": {
+					"field": "designer_id",
+					"type": "integrated_edit_field",
+					"orientation": 0
+				}
+			},
+			"dbProps": {},
+			"version": 13,
+			"imageItem": {
+				"type": "page_image"
+			},
+			"imageBgColor": "#f2f2f2",
+			"controlsBgColor": "white",
+			"imagePosition": "right",
+			"listTotals": 1,
+			"title": {}
+		},
+		{
+			"id": "export",
+			"type": "export",
+			"layoutId": "first",
+			"disabled": false,
+			"default": 0,
+			"forms": {
+				"supertop": {
+					"modelId": "panel-top",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": []
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"top": {
+					"modelId": "export-header",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": [
+								"export_header"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"grid": {
+					"modelId": "export-grid",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": [
+								"export_field",
+								"export_field1",
+								"export_field3",
+								"export_field2",
+								"export_field4",
+								"export_field5",
+								"export_field6",
+								"export_field7",
+								"export_field8"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"footer": {
+					"modelId": "export-footer",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								},
+								{
+									"cell": "c2"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": []
+						},
+						"c2": {
+							"model": "c2",
+							"items": [
+								"export_export",
+								"export_cancel"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				}
+			},
+			"items": {
+				"export_header": {
+					"type": "export_header"
+				},
+				"export_export": {
+					"type": "export_export"
+				},
+				"export_cancel": {
+					"type": "export_cancel"
+				},
+				"export_field": {
+					"field": "project_id",
+					"type": "export_field"
+				},
+				"export_field1": {
+					"field": "project_name",
+					"type": "export_field"
+				},
+				"export_field3": {
+					"field": "designer_id",
+					"type": "export_field"
+				},
+				"export_field2": {
+					"field": "designer_name",
+					"type": "export_field"
+				},
+				"export_field4": {
+					"field": "phase_id",
+					"type": "export_field"
+				},
+				"export_field5": {
+					"field": "phase_code",
+					"type": "export_field"
+				},
+				"export_field6": {
+					"field": "phase_label",
+					"type": "export_field"
+				},
+				"export_field7": {
+					"field": "due_date",
+					"type": "export_field"
+				},
+				"export_field8": {
+					"field": "days_until_due",
+					"type": "export_field"
+				}
+			},
+			"dbProps": {},
+			"version": 13,
+			"imageItem": {
+				"type": "page_image"
+			},
+			"imageBgColor": "#f2f2f2",
+			"controlsBgColor": "white",
+			"imagePosition": "right",
+			"listTotals": 1,
+			"title": {},
+			"exportFormat": 2,
+			"exportDelimiter": ",",
+			"exportSelectDelimiter": false,
+			"exportSelectFields": false
+		},
+		{
+			"id": "import",
+			"type": "import",
+			"layoutId": "first",
+			"disabled": false,
+			"default": 0,
+			"forms": {
+				"supertop": {
+					"modelId": "panel-top",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": []
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"top": {
+					"modelId": "import-header",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": [
+								"import_header"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"grid": {
+					"modelId": "import-grid",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": [
+								"import_field",
+								"import_field1",
+								"import_field3"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				}
+			},
+			"items": {
+				"import_header": {
+					"type": "import_header"
+				},
+				"import_field": {
+					"field": "project_id",
+					"type": "import_field"
+				},
+				"import_field1": {
+					"field": "project_name",
+					"type": "import_field"
+				},
+				"import_field3": {
+					"field": "designer_id",
+					"type": "import_field"
+				}
+			},
+			"dbProps": {},
+			"version": 13,
+			"imageItem": {
+				"type": "page_image"
+			},
+			"imageBgColor": "#f2f2f2",
+			"controlsBgColor": "white",
+			"imagePosition": "right",
+			"listTotals": 1,
+			"title": {}
+		},
+		{
+			"id": "edit",
+			"type": "edit",
+			"layoutId": "nomenu",
+			"disabled": true,
+			"default": 0,
+			"forms": {
+				"above-grid": {
+					"modelId": "edit-above-grid",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": [
+								"edit_message"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"below-grid": {
+					"modelId": "edit-below-grid",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								},
+								{
+									"cell": "c2"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": [
+								"edit_save",
+								"edit_back_list",
+								"edit_close"
+							]
+						},
+						"c2": {
+							"model": "c2",
+							"items": [
+								"hamburger"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"top": {
+					"modelId": "edit-header",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": [
+								"edit_header"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"grid": {
+					"modelId": "simple-edit",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c3"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c3": {
+							"model": "c3",
+							"items": [
+								"integrated_edit_field",
+								"integrated_edit_field2"
+							]
+						}
+					},
+					"deferredItems": [],
+					"columnCount": 1,
+					"inlineLabels": false,
+					"separateLabels": false
+				}
+			},
+			"items": {
+				"edit_header": {
+					"type": "edit_header",
+					"title": {
+						"page": "edit",
+						"table": "projects view",
+						"type": 7
+					}
+				},
+				"hamburger": {
+					"type": "hamburger",
+					"items": [
+						"edit_reset",
+						"edit_view"
+					]
+				},
+				"edit_reset": {
+					"type": "edit_reset"
+				},
+				"edit_message": {
+					"type": "edit_message"
+				},
+				"edit_save": {
+					"type": "edit_save"
+				},
+				"edit_back_list": {
+					"type": "edit_back_list"
+				},
+				"edit_close": {
+					"type": "edit_close"
+				},
+				"integrated_edit_field": {
+					"field": "project_name",
+					"type": "integrated_edit_field",
+					"orientation": 0
+				},
+				"integrated_edit_field2": {
+					"field": "designer_id",
+					"type": "integrated_edit_field",
+					"orientation": 0
+				},
+				"edit_view": {
+					"type": "edit_view"
+				}
+			},
+			"dbProps": {},
+			"version": 13,
+			"imageItem": {
+				"type": "page_image"
+			},
+			"imageBgColor": "#f2f2f2",
+			"controlsBgColor": "white",
+			"imagePosition": "right",
+			"listTotals": 1,
+			"title": {
+				"English": "Admin Edit - Contract Date"
+			}
+		},
+		{
+			"id": "view",
+			"type": "view",
+			"layoutId": "nomenu",
+			"disabled": false,
+			"default": 0,
+			"forms": {
+				"above-grid": {
+					"modelId": "view-above-grid",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1",
+									"colspan": 2
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": []
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"below-grid": {
+					"modelId": "view-below-grid",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								},
+								{
+									"cell": "c2"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": [
+								"view_back_list",
+								"view_close"
+							]
+						},
+						"c2": {
+							"model": "c2",
+							"items": [
+								"hamburger"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"top": {
+					"modelId": "view-header",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": [
+								"view_header"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"grid": {
+					"modelId": "simple-edit",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c3"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c3": {
+							"model": "c3",
+							"items": [
+								"integrated_edit_field",
+								"integrated_edit_field1",
+								"integrated_edit_field3",
+								"integrated_edit_field2",
+								"integrated_edit_field4",
+								"integrated_edit_field5",
+								"integrated_edit_field6",
+								"integrated_edit_field7",
+								"integrated_edit_field8"
+							]
+						}
+					},
+					"deferredItems": [],
+					"columnCount": 1,
+					"inlineLabels": false,
+					"separateLabels": false
+				}
+			},
+			"items": {
+				"view_header": {
+					"type": "view_header"
+				},
+				"view_back_list": {
+					"type": "view_back_list"
+				},
+				"view_close": {
+					"type": "view_close"
+				},
+				"integrated_edit_field": {
+					"field": "project_id",
+					"type": "integrated_edit_field",
+					"orientation": 0
+				},
+				"integrated_edit_field1": {
+					"field": "project_name",
+					"type": "integrated_edit_field",
+					"orientation": 0
+				},
+				"integrated_edit_field3": {
+					"field": "designer_id",
+					"type": "integrated_edit_field",
+					"orientation": 0
+				},
+				"hamburger": {
+					"type": "hamburger",
+					"items": []
+				},
+				"integrated_edit_field2": {
+					"field": "designer_name",
+					"type": "integrated_edit_field",
+					"orientation": 0
+				},
+				"integrated_edit_field4": {
+					"field": "phase_id",
+					"type": "integrated_edit_field",
+					"orientation": 0
+				},
+				"integrated_edit_field5": {
+					"field": "phase_code",
+					"type": "integrated_edit_field",
+					"orientation": 0
+				},
+				"integrated_edit_field6": {
+					"field": "phase_label",
+					"type": "integrated_edit_field",
+					"orientation": 0
+				},
+				"integrated_edit_field7": {
+					"field": "due_date",
+					"type": "integrated_edit_field",
+					"orientation": 0
+				},
+				"integrated_edit_field8": {
+					"field": "days_until_due",
+					"type": "integrated_edit_field",
+					"orientation": 0
+				}
+			},
+			"dbProps": {},
+			"version": 13,
+			"imageItem": {
+				"type": "page_image"
+			},
+			"imageBgColor": "#f2f2f2",
+			"controlsBgColor": "white",
+			"imagePosition": "right",
+			"listTotals": 1,
+			"title": {}
+		},
+		{
+			"id": "list",
+			"type": "list",
+			"layoutId": "topbar",
+			"disabled": false,
+			"default": 0,
+			"forms": {
+				"above-grid": {
+					"modelId": "list-above-grid",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								},
+								{
+									"cell": "c2"
+								}
+							],
+							"section": ""
+						},
+						{
+							"cells": [
+								{
+									"cell": "c3"
+								},
+								{
+									"cell": "c4"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": [
+								"add"
+							]
+						},
+						"c2": {
+							"model": "c2",
+							"items": [
+								"details_found_unknown",
+								"page_size",
+								"print_panel"
+							]
+						},
+						"c3": {
+							"model": "c3",
+							"items": [
+								"details_preview1"
+							]
+						},
+						"c4": {
+							"model": "c4",
+							"items": []
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"below-grid": {
+					"modelId": "list-below-grid",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": [
+								"pagination",
+								"next_page"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"supertop": {
+					"modelId": "topbar-menu",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								},
+								{
+									"cell": "c2"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": [
+								"logo",
+								"menu"
+							]
+						},
+						"c2": {
+							"model": "c2",
+							"items": [
+								"simple_search",
+								"list_options",
+								"loginform_login1",
+								"username_button1",
+								"loginform_login",
+								"username_button"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"left": {
+					"modelId": "list-vbar",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": [
+								"search_panel"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"top": {
+					"modelId": "list-top",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						},
+						{
+							"cells": [
+								{
+									"cell": "c3"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": [
+								"breadcrumb"
+							]
+						},
+						"c3": {
+							"model": "c3",
+							"items": [
+								"master_info"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"grid": {
+					"modelId": "horizontal-grid",
+					"grid": [
+						{
+							"section": "head",
+							"cells": [
+								{
+									"cell": "headcell_checkbox"
+								},
+								{
+									"cell": "headcell_details"
+								},
+								{
+									"cell": "headcell_field1"
+								},
+								{
+									"cell": "headcell_field3"
+								},
+								{
+									"cell": "headcell_field5"
+								},
+								{
+									"cell": "headcell_field7"
+								},
+								{
+									"cell": "headcell_field8"
+								}
+							]
+						},
+						{
+							"section": "body",
+							"cells": [
+								{
+									"cell": "cell_checkbox"
+								},
+								{
+									"cell": "cell_details"
+								},
+								{
+									"cell": "cell_field1"
+								},
+								{
+									"cell": "cell_field3"
+								},
+								{
+									"cell": "cell_field5"
+								},
+								{
+									"cell": "cell_field7"
+								},
+								{
+									"cell": "cell_field8"
+								}
+							]
+						},
+						{
+							"cells": [
+								{
+									"cell": "cell_dpreview",
+									"colspan": 7
+								}
+							],
+							"section": "body"
+						},
+						{
+							"section": "foot",
+							"cells": [
+								{
+									"cell": "footcell_checkbox"
+								},
+								{
+									"cell": "footcell_details"
+								},
+								{
+									"cell": "footcell_field1"
+								},
+								{
+									"cell": "footcell_field3"
+								},
+								{
+									"cell": "footcell_field5"
+								},
+								{
+									"cell": "footcell_field7"
+								},
+								{
+									"cell": "footcell_field8"
+								}
+							]
+						}
+					],
+					"cells": {
+						"headcell_field1": {
+							"model": "headcell_field",
+							"items": [
+								"simple_grid_field10"
+							],
+							"field": "project_name",
+							"columnName": "field"
+						},
+						"cell_field1": {
+							"model": "cell_field",
+							"items": [
+								"simple_grid_field1"
+							],
+							"field": "project_name",
+							"columnName": "field"
+						},
+						"footcell_field1": {
+							"model": "footcell_field",
+							"items": [],
+							"field": "project_name",
+							"columnName": "field"
+						},
+						"headcell_field3": {
+							"model": "headcell_field",
+							"items": [
+								"simple_grid_field12"
+							],
+							"field": "designer_name",
+							"columnName": "field"
+						},
+						"cell_field3": {
+							"model": "cell_field",
+							"items": [
+								"simple_grid_field2"
+							],
+							"field": "designer_name",
+							"columnName": "field"
+						},
+						"footcell_field3": {
+							"model": "footcell_field",
+							"items": [],
+							"field": "designer_name",
+							"columnName": "field"
+						},
+						"headcell_field5": {
+							"model": "headcell_field",
+							"items": [
+								"simple_grid_field14"
+							],
+							"field": "phase_code",
+							"columnName": "field"
+						},
+						"cell_field5": {
+							"model": "cell_field",
+							"items": [
+								"simple_grid_field5"
+							],
+							"field": "phase_code",
+							"columnName": "field"
+						},
+						"footcell_field5": {
+							"model": "footcell_field",
+							"items": [],
+							"field": "phase_code",
+							"columnName": "field"
+						},
+						"headcell_field7": {
+							"model": "headcell_field",
+							"items": [
+								"simple_grid_field16"
+							],
+							"field": "due_date",
+							"columnName": "field"
+						},
+						"cell_field7": {
+							"model": "cell_field",
+							"items": [
+								"simple_grid_field7"
+							],
+							"field": "due_date",
+							"columnName": "field"
+						},
+						"footcell_field7": {
+							"model": "footcell_field",
+							"items": [],
+							"field": "due_date",
+							"columnName": "field"
+						},
+						"headcell_field8": {
+							"model": "headcell_field",
+							"items": [
+								"simple_grid_field17"
+							],
+							"field": "days_until_due",
+							"columnName": "field"
+						},
+						"cell_field8": {
+							"model": "cell_field",
+							"items": [
+								"simple_grid_field8"
+							],
+							"field": "days_until_due",
+							"columnName": "field"
+						},
+						"footcell_field8": {
+							"model": "footcell_field",
+							"items": [],
+							"field": "days_until_due",
+							"columnName": "field"
+						},
+						"cell_dpreview": {
+							"model": "cell_dpreview",
+							"items": [
+								"details_preview2",
+								"details_preview"
+							],
+							"columnName": "field",
+							"field": "days_until_due"
+						},
+						"headcell_checkbox": {
+							"model": "headcell_checkbox",
+							"items": [
+								"grid_checkbox_head"
+							],
+							"columnName": "checkbox",
+							"field": ""
+						},
+						"cell_checkbox": {
+							"model": "cell_checkbox",
+							"items": [
+								"grid_checkbox"
+							],
+							"columnName": "checkbox",
+							"field": ""
+						},
+						"footcell_checkbox": {
+							"model": "footcell_checkbox",
+							"items": [],
+							"columnName": "checkbox",
+							"field": ""
+						},
+						"headcell_details": {
+							"model": "headcell_details",
+							"items": [],
+							"columnName": "details",
+							"field": ""
+						},
+						"cell_details": {
+							"model": "cell_details",
+							"items": [
+								"grid_alldetails_link",
+								"grid_details_link",
+								"grid_details_link1"
+							],
+							"columnName": "details",
+							"field": ""
+						},
+						"footcell_details": {
+							"model": "footcell_details",
+							"items": [],
+							"columnName": "details",
+							"field": ""
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				}
+			},
+			"items": {
+				"add": {
+					"type": "add",
+					"popup": false
+				},
+				"page_size": {
+					"type": "page_size"
+				},
+				"print_panel": {
+					"type": "print_panel",
+					"items": [
+						"print_scope",
+						"print_details",
+						"print_records",
+						"print_button"
+					]
+				},
+				"print_scope": {
+					"type": "print_scope"
+				},
+				"print_details": {
+					"type": "print_details",
+					"tables": {
+						"386492901": true,
+						"1903550912": true
+					}
+				},
+				"print_records": {
+					"type": "print_records"
+				},
+				"print_button": {
+					"type": "print_button"
+				},
+				"pagination": {
+					"type": "pagination"
+				},
+				"search_panel_field": {
+					"field": "project_id",
+					"type": "search_panel_field"
+				},
+				"search_panel_field8": {
+					"field": "days_until_due",
+					"type": "search_panel_field"
+				},
+				"search_panel_field7": {
+					"field": "due_date",
+					"type": "search_panel_field"
+				},
+				"search_panel_field6": {
+					"field": "phase_label",
+					"type": "search_panel_field"
+				},
+				"search_panel_field5": {
+					"field": "phase_code",
+					"type": "search_panel_field"
+				},
+				"search_panel_field4": {
+					"field": "phase_id",
+					"type": "search_panel_field"
+				},
+				"search_panel_field2": {
+					"field": "designer_name",
+					"type": "search_panel_field"
+				},
+				"search_panel_field3": {
+					"field": "designer_id",
+					"type": "search_panel_field"
+				},
+				"search_panel_field1": {
+					"field": "project_name",
+					"type": "search_panel_field"
+				},
+				"export_selected": {
+					"type": "export_selected"
+				},
+				"-1": {
+					"type": "-"
+				},
+				"show_search_panel": {
+					"type": "show_search_panel"
+				},
+				"hide_search_panel": {
+					"type": "hide_search_panel"
+				},
+				"-": {
+					"type": "-"
+				},
+				"export": {
+					"type": "export"
+				},
+				"-2": {
+					"type": "-"
+				},
+				"import": {
+					"type": "import"
+				},
+				"breadcrumb": {
+					"type": "breadcrumb"
+				},
+				"logo": {
+					"type": "logo"
+				},
+				"menu": {
+					"type": "menu"
+				},
+				"simple_search": {
+					"type": "simple_search"
+				},
+				"search_panel": {
+					"type": "search_panel",
+					"items": [
+						"search_panel_field",
+						"search_panel_field8",
+						"search_panel_field7",
+						"search_panel_field6",
+						"search_panel_field5",
+						"search_panel_field4",
+						"search_panel_field2",
+						"search_panel_field3",
+						"search_panel_field1"
+					],
+					"_flexiblePanel": true
+				},
+				"list_options": {
+					"type": "list_options",
+					"items": [
+						"export_selected",
+						"-1",
+						"show_search_panel",
+						"hide_search_panel",
+						"-",
+						"export",
+						"-2",
+						"import"
+					]
+				},
+				"master_info": {
+					"type": "master_info",
+					"tables": {
+						"344172009": "true"
+					}
+				},
+				"simple_grid_field1": {
+					"field": "project_name",
+					"type": "grid_field",
+					"inlineAdd": false,
+					"inlineEdit": false
+				},
+				"simple_grid_field10": {
+					"type": "grid_field_label",
+					"field": "project_name",
+					"clickSort": true
+				},
+				"simple_grid_field2": {
+					"field": "designer_name",
+					"type": "grid_field",
+					"inlineAdd": false,
+					"inlineEdit": false
+				},
+				"simple_grid_field12": {
+					"type": "grid_field_label",
+					"field": "designer_name",
+					"clickSort": true
+				},
+				"simple_grid_field5": {
+					"field": "phase_code",
+					"type": "grid_field",
+					"inlineAdd": false,
+					"inlineEdit": false
+				},
+				"simple_grid_field14": {
+					"type": "grid_field_label",
+					"field": "phase_code",
+					"label": {
+						"field": "phase_code",
+						"table": "projects view",
+						"type": 3
+					},
+					"clickSort": true
+				},
+				"simple_grid_field7": {
+					"field": "due_date",
+					"type": "grid_field",
+					"inlineAdd": false,
+					"inlineEdit": true
+				},
+				"simple_grid_field16": {
+					"type": "grid_field_label",
+					"field": "due_date",
+					"clickSort": true
+				},
+				"simple_grid_field8": {
+					"field": "days_until_due",
+					"type": "grid_field",
+					"inlineAdd": false,
+					"inlineEdit": true
+				},
+				"simple_grid_field17": {
+					"type": "grid_field_label",
+					"field": "days_until_due",
+					"clickSort": true
+				},
+				"details_preview": {
+					"type": "details_preview",
+					"table": 1903550912,
+					"items": [],
+					"proceedLink": true,
+					"popup": false,
+					"pageId": "list1"
+				},
+				"details_preview1": {
+					"type": "deleted",
+					"itemId": "details_preview1"
+				},
+				"details_preview2": {
+					"type": "details_preview",
+					"table": 386492901,
+					"items": [],
+					"proceedLink": true,
+					"popup": false,
+					"pageId": "list",
+					"hideEmptyPreview": false
+				},
+				"grid_checkbox": {
+					"type": "grid_checkbox"
+				},
+				"grid_checkbox_head": {
+					"type": "grid_checkbox_head"
+				},
+				"grid_alldetails_link": {
+					"type": "grid_alldetails_link"
+				},
+				"grid_details_link": {
+					"type": "grid_details_link",
+					"table": 1903550912,
+					"badge": true,
+					"hideIfNone": false,
+					"showCount": true
+				},
+				"grid_details_link1": {
+					"type": "grid_details_link",
+					"table": 386492901,
+					"badge": true,
+					"showCount": true,
+					"hideIfNone": false
+				},
+				"loginform_login": {
+					"type": "deleted",
+					"itemId": "loginform_login"
+				},
+				"username_button": {
+					"type": "deleted",
+					"itemId": "username_button"
+				},
+				"username_button1": {
+					"type": "username_button",
+					"items": [
+						"logout_link"
+					]
+				},
+				"loginform_login1": {
+					"type": "loginform_login",
+					"popup": false
+				},
+				"logout_link": {
+					"type": "logout_link"
+				},
+				"next_page": {
+					"type": "next_page"
+				},
+				"details_found_unknown": {
+					"type": "details_found_unknown"
+				}
+			},
+			"dbProps": {},
+			"version": 13,
+			"pageWidth": "compact",
+			"pageAlign": "center",
+			"reorderRows": false,
+			"reorderRowsField": "",
+			"addToBottom": true,
+			"imageItem": {
+				"type": "page_image"
+			},
+			"imageBgColor": "#f2f2f2",
+			"controlsBgColor": "white",
+			"imagePosition": "right",
+			"pageCSS": "/* Put  your custom CSS code here */\n\n/* Compact width override (loads after theme) */\n@media (min-width: 768px) {\n  /* Standard/small layout: match Cerulean's own selector but be explicit about children */\n  .r-small-page[data-body-width=\"compact\"] > .container,\n  .r-small-page[data-body-width=\"compact\"] > .r-body,\n  .r-small-page[data-body-width=\"compact\"] > .r-content,\n  .r-small-page[data-body-width=\"compact\"] > .r-data-block,\n  .r-small-page[data-body-width=\"compact\"] .container {\n    max-width: 1200px;\n    width: 1200px;\n    margin-left: auto;\n    margin-right: auto;\n  }\n\n  /* If the page uses Topbar layout, this is the width gate */\n  .r-topbar-page .r-body .r-content .r-data-block[data-body-width=\"compact\"] {\n    width: 1200px;\n    max-width: 1200px;\n    flex: 0 0 1200px; /* keeps it from shrinking in flex */\n    margin-left: auto;\n    margin-right: auto;\n  }\n}\n",
+			"listTotals": 1,
+			"title": {}
+		},
+		{
+			"id": "print",
+			"type": "print",
+			"layoutId": "basic",
+			"disabled": false,
+			"default": 0,
+			"forms": {
+				"above-grid": {
+					"modelId": "print-above-grid",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": [
+								"print_pages"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"below-grid": {
+					"modelId": "print-below-grid",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": []
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"top": {
+					"modelId": "print-header",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c2"
+								}
+							],
+							"section": ""
+						},
+						{
+							"cells": [
+								{
+									"cell": "c4"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c2": {
+							"model": "c2",
+							"items": [
+								"print_header",
+								"print_subheader"
+							]
+						},
+						"c4": {
+							"model": "c4",
+							"items": [
+								"master_info"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"grid": {
+					"modelId": "simple-grid",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						},
+						{
+							"cells": [
+								{
+									"cell": "c2"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": [
+								"simple_grid_field",
+								"simple_grid_field1",
+								"simple_grid_field3",
+								"simple_grid_field2",
+								"simple_grid_field4",
+								"simple_grid_field5",
+								"simple_grid_field6",
+								"simple_grid_field7",
+								"simple_grid_field8"
+							]
+						},
+						"c2": {
+							"model": "c2",
+							"items": [
+								"details_preview",
+								"details_preview1",
+								"details_preview2"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				}
+			},
+			"items": {
+				"print_header": {
+					"type": "print_header"
+				},
+				"print_subheader": {
+					"type": "print_subheader"
+				},
+				"print_pages": {
+					"type": "print_pages"
+				},
+				"simple_grid_field": {
+					"field": "project_id",
+					"type": "simple_grid_field"
+				},
+				"simple_grid_field1": {
+					"field": "project_name",
+					"type": "simple_grid_field"
+				},
+				"simple_grid_field3": {
+					"field": "designer_id",
+					"type": "simple_grid_field"
+				},
+				"master_info": {
+					"type": "master_info",
+					"tables": {
+						"344172009": "true"
+					}
+				},
+				"details_preview": {
+					"type": "details_preview",
+					"table": 1903550912,
+					"items": [],
+					"popup": false
+				},
+				"details_preview1": {
+					"type": "deleted",
+					"itemId": "details_preview1"
+				},
+				"details_preview2": {
+					"type": "details_preview",
+					"table": 386492901,
+					"items": [],
+					"popup": false
+				},
+				"simple_grid_field2": {
+					"field": "designer_name",
+					"type": "simple_grid_field"
+				},
+				"simple_grid_field4": {
+					"field": "phase_id",
+					"type": "simple_grid_field"
+				},
+				"simple_grid_field5": {
+					"field": "phase_code",
+					"type": "simple_grid_field"
+				},
+				"simple_grid_field6": {
+					"field": "phase_label",
+					"type": "simple_grid_field"
+				},
+				"simple_grid_field7": {
+					"field": "due_date",
+					"type": "simple_grid_field"
+				},
+				"simple_grid_field8": {
+					"field": "days_until_due",
+					"type": "simple_grid_field"
+				}
+			},
+			"dbProps": {},
+			"version": 13,
+			"imageItem": {
+				"type": "page_image"
+			},
+			"imageBgColor": "#f2f2f2",
+			"controlsBgColor": "white",
+			"imagePosition": "right",
+			"listTotals": 1,
+			"title": {}
+		},
+		{
+			"id": "masterlist",
+			"type": "masterlist",
+			"layoutId": "masterlist",
+			"disabled": false,
+			"default": 0,
+			"forms": {
+				"above-grid": {
+					"modelId": "empty-above-grid",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": []
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"below-grid": {
+					"modelId": "empty-above-grid",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": []
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"top": {
+					"modelId": "masterlist-top",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": [
+								"back_master",
+								"masterlist_header"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"grid": {
+					"modelId": "simple-grid",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": [
+								"simple_grid_field",
+								"simple_grid_field1",
+								"simple_grid_field2",
+								"simple_grid_field3",
+								"simple_grid_field4",
+								"simple_grid_field5",
+								"simple_grid_field6",
+								"simple_grid_field7",
+								"simple_grid_field8"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				}
+			},
+			"items": {
+				"masterlist_header": {
+					"type": "masterlist_header"
+				},
+				"back_master": {
+					"type": "back_master"
+				},
+				"simple_grid_field": {
+					"field": "project_id",
+					"type": "simple_grid_field"
+				},
+				"simple_grid_field1": {
+					"field": "project_name",
+					"type": "simple_grid_field"
+				},
+				"simple_grid_field2": {
+					"field": "designer_id",
+					"type": "simple_grid_field"
+				},
+				"simple_grid_field3": {
+					"field": "designer_name",
+					"type": "simple_grid_field"
+				},
+				"simple_grid_field4": {
+					"field": "phase_id",
+					"type": "simple_grid_field"
+				},
+				"simple_grid_field5": {
+					"field": "phase_code",
+					"type": "simple_grid_field"
+				},
+				"simple_grid_field6": {
+					"field": "phase_label",
+					"type": "simple_grid_field"
+				},
+				"simple_grid_field7": {
+					"field": "due_date",
+					"type": "simple_grid_field"
+				},
+				"simple_grid_field8": {
+					"field": "days_until_due",
+					"type": "simple_grid_field"
+				}
+			},
+			"dbProps": {},
+			"version": 13,
+			"imageItem": {
+				"type": "page_image"
+			},
+			"imageBgColor": "#f2f2f2",
+			"controlsBgColor": "white",
+			"imagePosition": "right",
+			"listTotals": 1,
+			"title": {}
+		},
+		{
+			"id": "masterprint",
+			"type": "masterprint",
+			"layoutId": "masterprint",
+			"disabled": false,
+			"default": 0,
+			"forms": {
+				"above-grid": {
+					"modelId": "empty-above-grid",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": []
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"below-grid": {
+					"modelId": "empty-above-grid",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": []
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"top": {
+					"modelId": "masterlist-top",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": [
+								"masterprint_header"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"grid": {
+					"modelId": "simple-grid",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": [
+								"simple_grid_field",
+								"simple_grid_field1",
+								"simple_grid_field2",
+								"simple_grid_field3",
+								"simple_grid_field4",
+								"simple_grid_field5",
+								"simple_grid_field6",
+								"simple_grid_field7",
+								"simple_grid_field8"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				}
+			},
+			"items": {
+				"masterprint_header": {
+					"type": "masterprint_header"
+				},
+				"simple_grid_field": {
+					"field": "project_id",
+					"type": "simple_grid_field"
+				},
+				"simple_grid_field1": {
+					"field": "project_name",
+					"type": "simple_grid_field"
+				},
+				"simple_grid_field2": {
+					"field": "designer_id",
+					"type": "simple_grid_field"
+				},
+				"simple_grid_field3": {
+					"field": "designer_name",
+					"type": "simple_grid_field"
+				},
+				"simple_grid_field4": {
+					"field": "phase_id",
+					"type": "simple_grid_field"
+				},
+				"simple_grid_field5": {
+					"field": "phase_code",
+					"type": "simple_grid_field"
+				},
+				"simple_grid_field6": {
+					"field": "phase_label",
+					"type": "simple_grid_field"
+				},
+				"simple_grid_field7": {
+					"field": "due_date",
+					"type": "simple_grid_field"
+				},
+				"simple_grid_field8": {
+					"field": "days_until_due",
+					"type": "simple_grid_field"
+				}
+			},
+			"dbProps": {},
+			"version": 13,
+			"imageItem": {
+				"type": "page_image"
+			},
+			"imageBgColor": "#f2f2f2",
+			"controlsBgColor": "white",
+			"imagePosition": "right",
+			"listTotals": 1,
+			"title": {}
+		}
+	],
+	"geoCoding": {
+		"enabled": false,
+		"latField": "",
+		"lonField": "",
+		"addressFields": []
+	},
+	"caption": {
+		"English": "Projects View"
+	}
+}

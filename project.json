@@ -1,0 +1,1348 @@
+{
+	"programVersion": 2,
+	"versionName": "11.1",
+	"name": "design v7",
+	"mainDiagram": {
+		"tables": [
+			{
+				"gid": 3384939862,
+				"y": 640,
+				"x": 18,
+				"width": 153.0625,
+				"height": 264
+			},
+			{
+				"gid": 586265697,
+				"y": 658,
+				"x": 206,
+				"width": 184.96875,
+				"height": 96
+			},
+			{
+				"gid": 3759655271,
+				"y": 10,
+				"x": 1160,
+				"width": 186.546875,
+				"height": 152
+			},
+			{
+				"gid": 189308715,
+				"y": 443,
+				"x": 8,
+				"width": 160.078125,
+				"height": 180
+			},
+			{
+				"gid": 386492901,
+				"y": 372,
+				"x": 480,
+				"width": 121.390625,
+				"height": 292
+			},
+			{
+				"gid": 1553183652,
+				"y": 26,
+				"x": 195,
+				"width": 129.03125,
+				"height": 511
+			},
+			{
+				"gid": 3143721048,
+				"y": 319,
+				"x": 896,
+				"width": 160.921875,
+				"height": 448
+			},
+			{
+				"gid": 3846545605,
+				"y": 299,
+				"x": 35,
+				"width": 117.25,
+				"height": 124
+			},
+			{
+				"gid": 1903550912,
+				"y": 410,
+				"x": 682,
+				"width": 147.71875,
+				"height": 477
+			},
+			{
+				"gid": 344172009,
+				"y": 10,
+				"x": 20,
+				"width": 115.390625,
+				"height": 236
+			}
+		]
+	},
+	"securitySettings": {
+		"loginDataSource": "users",
+		"loginForm": 0,
+		"providers": [
+			{
+				"type": "%db",
+				"name": "db",
+				"active": false,
+				"label": {
+					"text": "Database",
+					"type": 0
+				},
+				"code": "00",
+				"table": {
+					"connId": "conn",
+					"table": "users"
+				},
+				"usernameField": "username",
+				"passwordField": "password_hash",
+				"emailField": null,
+				"extUserIdField": null,
+				"fullnameField": null,
+				"userpicField": null
+			},
+			{
+				"type": "%hardcoded",
+				"name": "hardcoded",
+				"active": true,
+				"label": {
+					"text": "Hardcoded",
+					"type": 0
+				},
+				"code": "01",
+				"username": "admin",
+				"password": "admin"
+			}
+		],
+		"sessionControl": {
+			"lifeTime": 15,
+			"sessionName": "Pvq0jcSHFh4S19AsrQo8",
+			"JWTSecret": "Wig3F5Q1x6xMGbxqBy7T"
+		},
+		"registration": {
+			"remindMethod": 0,
+			"hashAlgorithm": 0,
+			"passwordValidation": {
+				"strong": false,
+				"minimumLength": 8,
+				"uniqueCharacters": 4,
+				"digitsAndSymbols": 2,
+				"upperAndLowerCase": false
+			}
+		},
+		"captchaSettings": {
+			"captchaType": 0,
+			"siteKey": "",
+			"secretKey": "",
+			"passesCount": 5
+		},
+		"emailSettings": {
+			"fromEmail": "",
+			"usePHPDefinedSMTP": false,
+			"useBuiltInMailer": false,
+			"SMTPServer": "localhost",
+			"SMTPPort": 25,
+			"SMTPUser": "",
+			"SMTPPassword": "",
+			"securityProtocol": 0
+		},
+		"advancedSecurity": {
+			"allowGuestLogin": false
+		},
+		"auditAndLocking": {
+			"loggingMode": 1,
+			"loggingTable": {
+				"connId": "conn",
+				"table": "design__audit"
+			},
+			"loggingFile": "audit.log",
+			"logSecurityActions": false,
+			"lockAfterUnsuccessfulLogin": false,
+			"enableLocking": false,
+			"lockingTable": {
+				"connId": "conn",
+				"table": "˂Create new˃"
+			},
+			"tables": {
+				"189308715": {
+					"logModifications": true,
+					"logFieldValues": true
+				},
+				"344172009": {
+					"logModifications": true,
+					"logFieldValues": true
+				},
+				"386492901": {
+					"logModifications": true,
+					"logFieldValues": true
+				},
+				"586265697": {
+					"logModifications": true,
+					"logFieldValues": true
+				},
+				"1553183652": {
+					"logModifications": true,
+					"logFieldValues": true
+				},
+				"1903550912": {
+					"logModifications": true,
+					"logFieldValues": true
+				},
+				"3143721048": {
+					"logModifications": true,
+					"logFieldValues": true
+				},
+				"3384939862": {
+					"logModifications": true,
+					"logFieldValues": true
+				},
+				"3759655271": {
+					"logModifications": true,
+					"logFieldValues": true
+				},
+				"3846545605": {
+					"logModifications": true,
+					"logFieldValues": true
+				},
+				"null": {
+					"logModifications": true,
+					"logFieldValues": true
+				}
+			}
+		},
+		"twoFactorSettings": {
+			"available": false,
+			"required": false,
+			"enable": true,
+			"remember": true,
+			"types": {},
+			"twoFactorField": "",
+			"emailField": "",
+			"phoneField": "",
+			"codeField": "",
+			"projectName": ""
+		},
+		"staticPermissions": {
+			"groups": {
+				"<Default>": {
+					"permissions": {
+						"users": {
+							"mask": "ADESPI",
+							"table": "users",
+							"restrictedPages": {}
+						},
+						"subphases": {
+							"mask": "ADESPI",
+							"table": "subphases",
+							"restrictedPages": {}
+						},
+						"settings": {
+							"mask": "ADESPI",
+							"table": "settings",
+							"restrictedPages": {}
+						},
+						"subphase_status": {
+							"mask": "ADESPI",
+							"table": "subphase_status",
+							"restrictedPages": {}
+						},
+						"projects": {
+							"mask": "ADESPI",
+							"table": "projects",
+							"restrictedPages": {}
+						},
+						"phase_catalog": {
+							"mask": "ADESPI",
+							"table": "phase_catalog",
+							"restrictedPages": {}
+						},
+						"phases": {
+							"mask": "ADESPI",
+							"table": "phases",
+							"restrictedPages": {}
+						},
+						"default_subphases": {
+							"mask": "ADESPI",
+							"table": "default_subphases",
+							"restrictedPages": {}
+						},
+						"company_holidays": {
+							"mask": "ADESPI",
+							"table": "company_holidays",
+							"restrictedPages": {}
+						},
+						"calendar_dim": {
+							"mask": "ADESPI",
+							"table": "calendar_dim",
+							"restrictedPages": {}
+						},
+						"projects view": {
+							"mask": "ADESPI",
+							"table": "projects view",
+							"restrictedPages": {}
+						},
+						"<global>": {
+							"mask": "ADESPI",
+							"table": "<global>",
+							"restrictedPages": {}
+						}
+					},
+					"admin": false,
+					"username": "<Default>"
+				}
+			}
+		}
+	},
+	"dbConnections": [
+		{
+			"id": "conn",
+			"name": "design at localhost",
+			"connString": "mysql;localhost;root;root;;design;;1"
+		}
+	],
+	"defaultConnID": "conn",
+	"menus": [
+		{
+			"id": "main",
+			"root": {
+				"children": [
+					{
+						"id": "1",
+						"data": {
+							"name": {
+								"table": "users",
+								"type": 6
+							},
+							"pageId": "list",
+							"itemType": 2,
+							"linkType": 0,
+							"iconType": 2,
+							"iconName": "glyphicon-leaf",
+							"showIconType": 2,
+							"table": 344172009,
+							"pageType": "list"
+						}
+					},
+					{
+						"id": "2",
+						"data": {
+							"name": {
+								"table": "subphases",
+								"type": 6
+							},
+							"pageId": "list",
+							"itemType": 2,
+							"linkType": 0,
+							"iconType": 2,
+							"iconName": "glyphicon-headphones",
+							"showIconType": 2,
+							"table": 1903550912,
+							"pageType": "list"
+						}
+					},
+					{
+						"id": "3",
+						"data": {
+							"name": {
+								"table": "settings",
+								"type": 6
+							},
+							"pageId": "list",
+							"itemType": 2,
+							"linkType": 0,
+							"iconType": 2,
+							"iconName": "glyphicon-camera",
+							"showIconType": 2,
+							"table": 3846545605,
+							"pageType": "list"
+						}
+					},
+					{
+						"id": "5",
+						"data": {
+							"name": {
+								"table": "projects",
+								"type": 6
+							},
+							"pageId": "list",
+							"itemType": 2,
+							"linkType": 0,
+							"iconType": 2,
+							"iconName": "glyphicon-briefcase",
+							"showIconType": 2,
+							"table": 1553183652,
+							"pageType": "list"
+						}
+					},
+					{
+						"id": "6",
+						"data": {
+							"name": {
+								"table": "phase_catalog",
+								"type": 6
+							},
+							"pageId": "list",
+							"itemType": 2,
+							"linkType": 0,
+							"iconType": 2,
+							"iconName": "glyphicon-earphone",
+							"showIconType": 2,
+							"table": 189308715,
+							"pageType": "list"
+						}
+					},
+					{
+						"id": "7",
+						"data": {
+							"name": {
+								"table": "phases",
+								"type": 6
+							},
+							"pageId": "list",
+							"itemType": 2,
+							"linkType": 0,
+							"iconType": 2,
+							"iconName": "glyphicon-heart-empty",
+							"showIconType": 2,
+							"table": 386492901,
+							"pageType": "list"
+						}
+					},
+					{
+						"id": "8",
+						"data": {
+							"name": {
+								"table": "default_subphases",
+								"type": 6
+							},
+							"pageId": "list",
+							"itemType": 2,
+							"linkType": 0,
+							"iconType": 2,
+							"iconName": "glyphicon-fire",
+							"showIconType": 2,
+							"table": 3759655271,
+							"pageType": "list"
+						}
+					},
+					{
+						"id": "9",
+						"data": {
+							"name": {
+								"table": "company_holidays",
+								"type": 6
+							},
+							"pageId": "list",
+							"itemType": 2,
+							"linkType": 0,
+							"iconType": 2,
+							"iconName": "glyphicon-star",
+							"showIconType": 2,
+							"table": 586265697,
+							"pageType": "list"
+						}
+					},
+					{
+						"id": "10",
+						"data": {
+							"name": {
+								"table": "calendar_dim",
+								"type": 6
+							},
+							"pageId": "list",
+							"itemType": 2,
+							"linkType": 0,
+							"table": 3384939862,
+							"pageType": "list"
+						}
+					},
+					{
+						"id": "11",
+						"data": {
+							"name": {
+								"table": "projects view",
+								"type": 6
+							},
+							"pageId": "list",
+							"itemType": 2,
+							"linkType": 0,
+							"table": 3143721048,
+							"pageType": "list"
+						}
+					}
+				]
+			}
+		}
+	],
+	"globalPages": [
+		{
+			"id": "menu",
+			"type": "menu",
+			"layoutId": "topbar",
+			"disabled": false,
+			"default": 0,
+			"forms": {
+				"above-grid": {
+					"modelId": "empty-above-grid",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": []
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"supertop": {
+					"modelId": "menu-topbar-menu",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								},
+								{
+									"cell": "c2"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": [
+								"logo",
+								"menu"
+							]
+						},
+						"c2": {
+							"model": "c2",
+							"items": [
+								"loginform_login",
+								"username_button"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"grid": {
+					"modelId": "welcome",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": [
+								"welcome_item4",
+								"welcome_item6",
+								"welcome_item10"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				}
+			},
+			"items": {
+				"logo": {
+					"type": "logo"
+				},
+				"menu": {
+					"type": "menu"
+				},
+				"welcome_item4": {
+					"type": "welcome_item",
+					"linkUrl": "",
+					"linkTable": "projects",
+					"linkPage": "list",
+					"linkText": {
+						"table": "projects",
+						"type": 6
+					},
+					"linkIcon": {
+						"fa": "folder"
+					},
+					"linkComments": {
+						"text": "Projects description",
+						"type": 0
+					},
+					"background": "#3cb371",
+					"linkType": 0
+				},
+				"welcome_item6": {
+					"type": "welcome_item",
+					"linkUrl": "",
+					"linkTable": "phases",
+					"linkPage": "list",
+					"linkText": {
+						"table": "phases",
+						"type": 6
+					},
+					"linkIcon": {
+						"glyph": "pencil"
+					},
+					"background": "#edca00",
+					"linkType": 0
+				},
+				"welcome_item10": {
+					"type": "welcome_item",
+					"linkUrl": "",
+					"linkTable": "projects view",
+					"linkPage": "list",
+					"linkText": {
+						"table": "projects view",
+						"type": 6
+					},
+					"linkType": 0,
+					"linkIcon": {
+						"glyph": "tasks"
+					}
+				},
+				"username_button": {
+					"type": "username_button",
+					"items": [
+						"userinfo_link",
+						"logout_link"
+					]
+				},
+				"loginform_login": {
+					"type": "loginform_login",
+					"popup": false
+				},
+				"userinfo_link": {
+					"type": "userinfo_link"
+				},
+				"logout_link": {
+					"type": "logout_link"
+				}
+			},
+			"dbProps": {},
+			"version": 13,
+			"imageItem": {
+				"type": "page_image"
+			},
+			"imageBgColor": "#f2f2f2",
+			"controlsBgColor": "white",
+			"imagePosition": "right",
+			"welcomePageStay": true,
+			"listTotals": 1,
+			"title": {}
+		},
+		{
+			"id": "login",
+			"type": "login",
+			"layoutId": "pretty1",
+			"disabled": false,
+			"default": 0,
+			"forms": {
+				"above-grid": {
+					"modelId": "login-above-grid",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c2"
+								}
+							],
+							"section": ""
+						},
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c2": {
+							"model": "c2",
+							"items": []
+						},
+						"c1": {
+							"model": "c1",
+							"items": [
+								"login_message"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"top": {
+					"modelId": "plogin-header",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								},
+								{
+									"cell": "c2"
+								}
+							],
+							"section": ""
+						},
+						{
+							"cells": [
+								{
+									"cell": "c3",
+									"colspan": 2
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": [
+								"login-logo"
+							]
+						},
+						"c2": {
+							"model": "c2",
+							"items": []
+						},
+						"c3": {
+							"model": "c3",
+							"items": [
+								"login_welcome"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"grid": {
+					"modelId": "plogin-grid",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1",
+									"colspan": 2
+								}
+							],
+							"section": ""
+						},
+						{
+							"cells": [
+								{
+									"cell": "c2",
+									"colspan": 2
+								}
+							],
+							"section": ""
+						},
+						{
+							"cells": [
+								{
+									"cell": "c4"
+								},
+								{
+									"cell": "c6"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c4": {
+							"model": "c4",
+							"items": [
+								"remember_password"
+							]
+						},
+						"c6": {
+							"model": "c6",
+							"items": [
+								"guest_login"
+							]
+						},
+						"c1": {
+							"model": "c1",
+							"items": [
+								"username_label",
+								"username"
+							]
+						},
+						"c2": {
+							"model": "c2",
+							"items": [
+								"password_label",
+								"password"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"footer": {
+					"modelId": "plogin-footer",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								},
+								{
+									"cell": "c2"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": [
+								"login_button"
+							]
+						},
+						"c2": {
+							"model": "c2",
+							"items": []
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"superbottom": {
+					"modelId": "plogin-superbottom",
+					"grid": [],
+					"cells": {},
+					"deferredItems": [],
+					"recsPerRow": 1
+				}
+			},
+			"items": {
+				"login_message": {
+					"type": "login_message"
+				},
+				"guest_login": {
+					"type": "guest_login"
+				},
+				"login-logo": {
+					"type": "login-logo",
+					"font-size": "24px"
+				},
+				"login_welcome": {
+					"type": "login_welcome"
+				},
+				"username_label": {
+					"type": "username_label"
+				},
+				"username": {
+					"type": "username"
+				},
+				"password_label": {
+					"type": "password_label"
+				},
+				"password": {
+					"type": "password"
+				},
+				"remember_password": {
+					"type": "remember_password"
+				},
+				"login_button": {
+					"type": "login_button"
+				}
+			},
+			"dbProps": {},
+			"version": 13,
+			"imageItem": {
+				"type": "page_image",
+				"shadow": false,
+				"fullSize": true,
+				"image": {
+					"source": 1,
+					"image": "jayden-sim-SuyBeDJ02g8-unsplash.jpg"
+				}
+			},
+			"imageBgColor": "#f2f2f2",
+			"controlsBgColor": "white",
+			"imagePosition": "right",
+			"listTotals": 1,
+			"title": {}
+		},
+		{
+			"id": "userinfo",
+			"type": "userinfo",
+			"layoutId": "leftbar",
+			"disabled": true,
+			"default": 0,
+			"forms": {
+				"above-grid": {
+					"modelId": "empty-above-grid",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": []
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"below-grid": {
+					"modelId": "empty-above-grid",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": []
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"supertop": {
+					"modelId": "leftbar-top-edit",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								},
+								{
+									"cell": "c2"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c1": {
+							"model": "c1",
+							"items": [
+								"expand_menu_button",
+								"collapse_button",
+								"breadcrumb"
+							]
+						},
+						"c2": {
+							"model": "c2",
+							"items": [
+								"loginform_login",
+								"username_button"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"left": {
+					"modelId": "leftbar-menu",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "c0"
+								}
+							],
+							"section": ""
+						},
+						{
+							"cells": [
+								{
+									"cell": "c1"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"c0": {
+							"model": "c0",
+							"items": [
+								"logo"
+							]
+						},
+						"c1": {
+							"model": "c1",
+							"items": [
+								"menu"
+							]
+						}
+					},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"top": {
+					"modelId": "empty-above-grid",
+					"grid": [],
+					"cells": {},
+					"deferredItems": [],
+					"recsPerRow": 1
+				},
+				"grid": {
+					"modelId": "userinfo-grid",
+					"grid": [
+						{
+							"cells": [
+								{
+									"cell": "fields_message"
+								}
+							],
+							"section": ""
+						},
+						{
+							"cells": [
+								{
+									"cell": "fields"
+								}
+							],
+							"section": ""
+						},
+						{
+							"cells": [
+								{
+									"cell": "buttons"
+								}
+							],
+							"section": ""
+						}
+					],
+					"cells": {
+						"fields_message": {
+							"model": "fields_message",
+							"items": [
+								"user_fields_title",
+								"fields_message"
+							]
+						},
+						"buttons": {
+							"model": "buttons",
+							"items": [
+								"user_fields_reset",
+								"user_fields_save"
+							]
+						},
+						"fields": {
+							"model": "fields",
+							"items": [
+								"integrated_edit_field"
+							]
+						}
+					},
+					"deferredItems": [],
+					"columnCount": 1,
+					"inlineLabels": false,
+					"separateLabels": false
+				}
+			},
+			"items": {
+				"fields_message": {
+					"type": "fields_message"
+				},
+				"user_fields_reset": {
+					"type": "user_fields_reset"
+				},
+				"user_fields_save": {
+					"type": "user_fields_save"
+				},
+				"user_fields_title": {
+					"type": "user_fields_title",
+					"font-size": "24px"
+				},
+				"breadcrumb": {
+					"type": "breadcrumb"
+				},
+				"logo": {
+					"type": "logo"
+				},
+				"menu": {
+					"type": "menu"
+				},
+				"username_button": {
+					"type": "username_button",
+					"items": [
+						"userinfo_link",
+						"logout_link"
+					]
+				},
+				"loginform_login": {
+					"type": "loginform_login",
+					"popup": false
+				},
+				"userinfo_link": {
+					"type": "userinfo_link"
+				},
+				"logout_link": {
+					"type": "logout_link"
+				},
+				"expand_menu_button": {
+					"type": "expand_menu_button"
+				},
+				"collapse_button": {
+					"type": "collapse_button"
+				},
+				"integrated_edit_field": {
+					"field": "username",
+					"type": "integrated_edit_field",
+					"orientation": 0
+				}
+			},
+			"dbProps": {},
+			"version": 13,
+			"imageItem": {
+				"type": "page_image"
+			},
+			"imageBgColor": "#f2f2f2",
+			"controlsBgColor": "white",
+			"imagePosition": "right",
+			"listTotals": 1,
+			"title": {}
+		}
+	],
+	"eventHandlers": [
+		{
+			"eventId": "EVENT_INIT_APP",
+			"code": "// Place event code here.\n// Use \"Add Action\" button to add code snippets.\n// Security → Login page → After successful login\nCustomQuery(\"SET @app_user_name = \".db_prepare_string($data[\"username\"]));\nCustomQuery(\"SET @app_user_full = \".db_prepare_string($data[\"full_name\"]));\n\n\n// Load helpers once, regardless of where PHPR put them\n\nif (!defined('APP_HELPERS_LOADED')) {\n    define('APP_HELPERS_LOADED', 1);\n    require_once( getabspath(\"include/usercode.php\") );\n}\n\nforeach ($paths as $p) {\n    if (file_exists($p)) { require_once $p; break; }\n}\n\n"
+		},
+		{
+			"eventId": "EVENT_JS_CUSTOM_FUNCTIONS",
+			"code": "// Place event code here.\n// Use \"Add Action\" button to add code snippets.\n\n// custom_functions.js\n(function () {\n  // Set one width for all compact list pages\n  var W = 600;\n\n  function injectCompactWidthOnce(id, widthPx) {\n    if (document.getElementById(id)) return; // avoid duplicates\n    var css = [\n      '@media (min-width:768px){',\n        /* Standard/small layout */\n        '.r-small-page[data-body-width=\"compact\"] > .container,',\n        '.r-small-page[data-body-width=\"compact\"] > .r-body,',\n        '.r-small-page[data-body-width=\"compact\"] > .r-content,',\n        '.r-small-page[data-body-width=\"compact\"] > .r-data-block,',\n        '.r-small-page[data-body-width=\"compact\"] .container{',\n          'max-width:' + widthPx + 'px;',\n          'width:' + widthPx + 'px;',\n          'margin-left:auto;',\n          'margin-right:auto;',\n        '}',\n\n        /* Topbar layout */\n        '.r-topbar-page .r-body .r-content .r-data-block[data-body-width=\"compact\"]{',\n          'width:' + widthPx + 'px;',\n          'max-width:' + widthPx + 'px;',\n          'flex:0 0 ' + widthPx + 'px;',\n          'margin-left:auto;',\n          'margin-right:auto;',\n        '}',\n\n        /* Ensure grid fills the fixed container */\n        '.r-topbar-page .r-body .r-content .r-data-block[data-body-width=\"compact\"] > .r-grid,',\n        '.r-small-page[data-body-width=\"compact\"] .r-grid{',\n          'width:100%;',\n          'max-width:100%;',\n        '}',\n      '}'\n    ].join('');\n\n    var style = document.createElement('style');\n    style.id = id;\n    style.type = 'text/css';\n    style.appendChild(document.createTextNode(css));\n    document.head.appendChild(style);\n  }\n\n  function applyIfCompactListPage() {\n    var b = document.body;\n    var isList = b.classList.contains('list-page');\n    var isCompact = (b.getAttribute('data-body-width') === 'compact');\n    if (isList && isCompact) {\n      injectCompactWidthOnce('compact-width-global', W);\n    }\n  }\n\n  // Run on initial load\n  if (document.readyState === 'loading') {\n    document.addEventListener('DOMContentLoaded', applyIfCompactListPage);\n  } else {\n    applyIfCompactListPage();\n  }\n})();\n\n\n/* === Row color styler for PHPRunner inline grids ==================\n   Turns a row light green when \"start\" is checked, darker green when\n   \"completed\" is checked. Works for inline Add + Edit.\n\n   Wire-up example (on a page JS OnLoad):\n     PhprRowStateStyler.bind('start_checked','completed_checked');\n\n   You can reuse this on any table; just pass the checkbox field names.\n   ================================================================ */\n(function(global){\n  if (global.PhprRowStateStyler) return; // avoid double-load\n\n  function injectRowStylesOnce(){\n    if (document.getElementById('phpr-rowstate-styles')) return;\n    var css = [\n      /* Make sure the entire row paints, not just a single cell */\n      \"tr.phpr-row-started td{ background-color:#e8f5e9 !important; }\",  /* light green */\n      \"tr.phpr-row-completed td{ background-color:#c8e6c9 !important; }\" /* darker green */\n    ].join(\"\\n\");\n    var style = document.createElement('style');\n    style.id = 'phpr-rowstate-styles';\n    style.type = 'text/css';\n    style.appendChild(document.createTextNode(css));\n    document.head.appendChild(style);\n  }\n\n  function getRowFrom(el){\n    var $tr = $(el).closest('tr');\n    if ($tr.length) return $tr;\n    return $(); // empty\n  }\n\n  function isCheckedInRow($tr, field){\n    // Works for inline add/edit: look for the checkbox inside the row & field cell\n    var $cb = $tr.find(\"td[data-field='\"+field+\"'] input[type=checkbox], input[id^='value_\"+field+\"_']\");\n    if (!$cb.length) return false;\n    // Prefer DOM property\n    for (var i=0;i<$cb.length;i++){ if ($cb[i].checked) return true; }\n    // Fallback to value\n    var v = $cb.first().val();\n    return (v===1 || v==='1' || v===true || v==='on' || v==='ON');\n  }\n\n  function paintRow($tr, started, completed){\n    // precedence: completed (dark) > started (light) > none\n    $tr.removeClass('phpr-row-started phpr-row-completed');\n    if (completed)      $tr.addClass('phpr-row-completed');\n    else if (started)   $tr.addClass('phpr-row-started');\n  }\n\n  function updateRowFor(el, startField, completedField){\n    var $tr = getRowFrom(el);\n    if (!$tr.length) return;\n    var started   = isCheckedInRow($tr, startField);\n    var completed = isCheckedInRow($tr, completedField);\n    paintRow($tr, started, completed);\n  }\n\n  function initialSweep(startField, completedField){\n    // Any inline rows already on screen\n    $(\"td[data-field='\"+startField+\"'] input[type=checkbox], input[id^='value_\"+startField+\"_']\").each(function(){\n      updateRowFor(this, startField, completedField);\n    });\n    $(\"td[data-field='\"+completedField+\"'] input[type=checkbox], input[id^='value_\"+completedField+\"_']\").each(function(){\n      updateRowFor(this, startField, completedField);\n    });\n  }\n\n  global.PhprRowStateStyler = {\n    bind: function(startField, completedField){\n      injectRowStylesOnce();\n\n      // Delegate so it works for rows created later (inline add/edit)\n      $(document).on('change',\n        \"td[data-field='\"+startField+\"'] input[type=checkbox], input[id^='value_\"+startField+\"_'], \" +\n        \"td[data-field='\"+completedField+\"'] input[type=checkbox], input[id^='value_\"+completedField+\"_']\",\n        function(){ updateRowFor(this, startField, completedField); }\n      );\n\n      // First pass now…\n      initialSweep(startField, completedField);\n\n      // …and whenever inline rows are created/removed/toggled\n      $(document).on('click', '.rnr-inlinestart, .rnr-inlineedit, .rnr-inlineadd, .rnr-inlinecancel', function(){\n        setTimeout(function(){ initialSweep(startField, completedField); }, 60);\n      });\n    }\n  };\n})(window);\n"
+		}
+	],
+	"projectStyle": {
+		"theme": "cerulean",
+		"size": "small",
+		"sidebarColor": "light",
+		"sidebarTheme": "legacy",
+		"topbarTheme": "legacy",
+		"logoTheme": "legacy",
+		"sidebarCustomThemeColor": "legacy",
+		"topbarCustomThemeColor": "legacy",
+		"logoCustomThemeColor": "legacy",
+		"gpHeaderBg": "legacy",
+		"gpHeaderColor": "legacy",
+		"gpFooterBg": "legacy",
+		"gpPanelBorder": "legacy",
+		"gpBorderColor": "legacy",
+		"gpInnerBorder": "legacy",
+		"gpInnerBorderColor": "legacy",
+		"gcOddBg": "legacy",
+		"gcOddColor": "legacy",
+		"gcEvenBg": "legacy",
+		"gcEvenColor": "legacy",
+		"gcRolloverHighlightBg": "legacy",
+		"gcRolloverHighlightColor": "legacy"
+	},
+	"styleOverrides": [
+		{
+			"table": 3143721048,
+			"page": "list",
+			"style": {
+				"theme": "cerulean",
+				"size": "small",
+				"sidebarWidth": "300px",
+				"sidebarColor": "light",
+				"sidebarTheme": "legacy",
+				"menuStyle": "rounded",
+				"sidebarCompact": false,
+				"topbarTheme": "legacy",
+				"logoTheme": "legacy",
+				"fixedSidebar": true,
+				"fixedTopbar": false,
+				"topbarGradient": false,
+				"topbarLegacy": false,
+				"sidebarCustomThemeColor": "legacy",
+				"topbarCustomThemeColor": "legacy",
+				"logoCustomThemeColor": "legacy",
+				"direction": "ltr",
+				"customCss": "/* Compact width override (loads after theme) */\r\n@media (min-width: 768px) {\r\n  /* Standard/small layout: match Cerulean's own selector but be explicit about children */\r\n  .r-small-page[data-body-width=\"compact\"] > .container,\r\n  .r-small-page[data-body-width=\"compact\"] > .r-body,\r\n  .r-small-page[data-body-width=\"compact\"] > .r-content,\r\n  .r-small-page[data-body-width=\"compact\"] > .r-data-block,\r\n  .r-small-page[data-body-width=\"compact\"] .container {\r\n    max-width: 1200px;\r\n    width: 1200px;\r\n    margin-left: auto;\r\n    margin-right: auto;\r\n  }\r\n\r\n  /* If the page uses Topbar layout, this is the width gate */\r\n  .r-topbar-page .r-body .r-content .r-data-block[data-body-width=\"compact\"] {\r\n    width: 1200px;\r\n    max-width: 1200px;\r\n    flex: 0 0 1200px; /* keeps it from shrinking in flex */\r\n    margin-left: auto;\r\n    margin-right: auto;\r\n  }\r\n}\r\n",
+				"panelLikeGrid": false,
+				"verticalBorders": true,
+				"stripedGrid": true,
+				"condensedGrid": false,
+				"rolloverHighlight": false,
+				"gpHeaderBg": "legacy",
+				"gpHeaderColor": "legacy",
+				"gpFooterBg": "legacy",
+				"gpPanelBorder": "legacy",
+				"gpBorderColor": "legacy",
+				"gpInnerBorder": "legacy",
+				"gpInnerBorderColor": "legacy",
+				"gcOddBg": "legacy",
+				"gcOddColor": "legacy",
+				"gcEvenBg": "legacy",
+				"gcEvenColor": "legacy",
+				"gcRolloverHighlightBg": "legacy",
+				"gcRolloverHighlightColor": "legacy"
+			}
+		},
+		{
+			"table": null,
+			"page": "list",
+			"style": {
+				"theme": "cerulean",
+				"size": "small",
+				"sidebarWidth": "300px",
+				"sidebarColor": "light",
+				"sidebarTheme": "legacy",
+				"menuStyle": "rounded",
+				"sidebarCompact": false,
+				"topbarTheme": "legacy",
+				"logoTheme": "legacy",
+				"fixedSidebar": true,
+				"fixedTopbar": false,
+				"topbarGradient": false,
+				"topbarLegacy": false,
+				"sidebarCustomThemeColor": "legacy",
+				"topbarCustomThemeColor": "legacy",
+				"logoCustomThemeColor": "legacy",
+				"direction": "ltr",
+				"customCss": "/* Compact text */\r\n.subphase-grid .grid { font-size:13px; line-height:1.25; }\r\n\r\n/* Status badges */\r\n.subphase-badge { display:inline-block; padding:2px 8px; border-radius:999px; font-size:12px; line-height:1.2; white-space:nowrap; }\r\n.subphase--notstarted { background:#f1f3f5; color:#495057; }\r\n.subphase--progress   { background:#e7f5ff; color:#0b7285; }\r\n.subphase--blocked    { background:#fff5f5; color:#c92a2a; }\r\n.subphase--done       { background:#e6fcf5; color:#087f5b; }\r\n\r\n/* Optional: dim finished rows */\r\n.subphase-row--dim { opacity:.6; }\r\n\r\n/* Optional: sticky header if the grid is tall */\r\n.subphase-grid thead th { position:sticky; top:0; z-index:2; background:#fff; }\r\n",
+				"panelLikeGrid": false,
+				"verticalBorders": true,
+				"stripedGrid": true,
+				"condensedGrid": false,
+				"rolloverHighlight": false,
+				"gpHeaderBg": "legacy",
+				"gpHeaderColor": "legacy",
+				"gpFooterBg": "legacy",
+				"gpPanelBorder": "legacy",
+				"gpBorderColor": "legacy",
+				"gpInnerBorder": "legacy",
+				"gpInnerBorderColor": "legacy",
+				"gcOddBg": "legacy",
+				"gcOddColor": "legacy",
+				"gcEvenBg": "legacy",
+				"gcEvenColor": "legacy",
+				"gcRolloverHighlightBg": "legacy",
+				"gcRolloverHighlightColor": "legacy"
+			}
+		},
+		{
+			"table": 1903550912,
+			"page": "list",
+			"style": {
+				"theme": "cerulean",
+				"size": "small",
+				"sidebarWidth": "300px",
+				"sidebarColor": "light",
+				"sidebarTheme": "legacy",
+				"menuStyle": "rounded",
+				"sidebarCompact": false,
+				"topbarTheme": "legacy",
+				"logoTheme": "legacy",
+				"fixedSidebar": true,
+				"fixedTopbar": false,
+				"topbarGradient": false,
+				"topbarLegacy": false,
+				"sidebarCustomThemeColor": "legacy",
+				"topbarCustomThemeColor": "legacy",
+				"logoCustomThemeColor": "legacy",
+				"direction": "ltr",
+				"customCss": "\r\n",
+				"panelLikeGrid": false,
+				"verticalBorders": true,
+				"stripedGrid": true,
+				"condensedGrid": false,
+				"rolloverHighlight": false,
+				"gpHeaderBg": "legacy",
+				"gpHeaderColor": "legacy",
+				"gpFooterBg": "legacy",
+				"gpPanelBorder": "legacy",
+				"gpBorderColor": "legacy",
+				"gpInnerBorder": "legacy",
+				"gpInnerBorderColor": "legacy",
+				"gcOddBg": "legacy",
+				"gcOddColor": "legacy",
+				"gcEvenBg": "legacy",
+				"gcEvenColor": "legacy",
+				"gcRolloverHighlightBg": "legacy",
+				"gcRolloverHighlightColor": "legacy"
+			}
+		},
+		{
+			"table": 1903550912,
+			"page": "list1",
+			"style": {
+				"theme": "cerulean",
+				"size": "small",
+				"sidebarWidth": "300px",
+				"sidebarColor": "light",
+				"sidebarTheme": "legacy",
+				"menuStyle": "rounded",
+				"sidebarCompact": false,
+				"topbarTheme": "legacy",
+				"logoTheme": "legacy",
+				"fixedSidebar": true,
+				"fixedTopbar": false,
+				"topbarGradient": false,
+				"topbarLegacy": false,
+				"sidebarCustomThemeColor": "legacy",
+				"topbarCustomThemeColor": "legacy",
+				"logoCustomThemeColor": "legacy",
+				"direction": "ltr",
+				"customCss": "\r\n",
+				"panelLikeGrid": false,
+				"verticalBorders": true,
+				"stripedGrid": true,
+				"condensedGrid": false,
+				"rolloverHighlight": false,
+				"gpHeaderBg": "legacy",
+				"gpHeaderColor": "legacy",
+				"gpFooterBg": "legacy",
+				"gpPanelBorder": "legacy",
+				"gpBorderColor": "legacy",
+				"gpInnerBorder": "legacy",
+				"gpInnerBorderColor": "legacy",
+				"gcOddBg": "legacy",
+				"gcOddColor": "legacy",
+				"gcEvenBg": "legacy",
+				"gcEvenColor": "legacy",
+				"gcRolloverHighlightBg": "legacy",
+				"gcRolloverHighlightColor": "legacy"
+			}
+		}
+	],
+	"settingsTable": {
+		"connId": "conn",
+		"table": "design_v7_settings"
+	},
+	"messages": {},
+	"projectLogo": {},
+	"cookieBannerText": {}
+}
