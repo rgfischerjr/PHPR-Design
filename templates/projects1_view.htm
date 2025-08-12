@@ -1,0 +1,322 @@
+<!doctype html>
+<html  {$html_attrs}>
+	<head>
+						<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>{$pagetitle}</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<base href="{$projectPath}">
+		{BEGIN styleCSSFiles}
+<link REL="stylesheet" href="{$stylepath}" type="text/css">
+{END styleCSSFiles}
+			
+	</head>
+
+	<body class="{$stylename} function-view" >
+	{BEGIN body}
+		{$header}
+		<style>
+			{$containerCss}
+		</style>
+		{$locking}
+		<div class="r-small-page" 
+			data-body-align="center"
+			data-body-width="standard"
+		>
+							{BEGIN top_block}
+<div class="r-form" data-location="top" id="form_top_{$pageid}" data-makeup="small" {$form_top} data-pageid="{$pageid}"
+		data-v-width="4"
+	data-v-margin="1"
+	
+>		
+	 
+		<div class="row">
+			 
+				<div 
+	data-cellId="top_c1" data-pageid="{$pageid}"	{$cell_top_c1}
+	class=" r-ori-vert			col-md-12
+	">
+	 
+		<h2 data-itemtype="view_header" data-itemid="view_header" {$item_view_header} data-pageid="{$pageid}" >{$pagetitlelabel projects_view view}</h2>
+	</div>					</div>
+	</div>		
+{END top_block}
+									{BEGIN above-grid_block}
+<div class="r-form" data-location="above-grid" id="form_above-grid_{$pageid}" data-makeup="small" {$form_above-grid} data-pageid="{$pageid}"
+		data-v-width="4"
+	data-v-margin="1"
+	
+>		
+	 
+		<div class="row">
+			 
+				<div 
+	data-cellId="above-grid_c1" data-pageid="{$pageid}"	{$cell_above-grid_c1}
+	class=" r-ori-vert			col-md-12
+	">
+	</div>					</div>
+	</div>		
+{END above-grid_block}
+									{BEGIN grid_block}
+
+
+
+
+ 
+	 
+												<table 
+	data-body-align="center"
+	data-location="grid" id="form_grid_{$pageid}" data-makeup="small" {$form_grid} data-pageid="{$pageid}" 
+	class="r-edit-form" cellpadding="0" cellspacing="0" 
+	{$grid_hiddenattr} 
+		data-form-width="1"
+		
+		data-v-width="4"
+	>
+	<tbody>
+										<tr {$row_grid_0} >
+										
+
+{BEGIN cellblock_grid_c3}
+<td
+	{$cell_grid_c3}
+	class=" r-ori-vert"
+	
+				data-fullwidth
+		
+			data-cellId="grid_c3" data-pageid="{$pageid}"
+		data-v-cell="4"
+		
+>
+	<div edit-form-cell class="clearfix">
+				
+{BEGIN project_id_fieldblock}
+
+
+<div class="r-integrated-field form-group clearfix {$fielddispclass_project_id}  r-vertical-field" 
+	data-signal-error-for="project_id{$id}" {$required_attr_project_id}
+	data-itemtype="integrated_edit_field" data-itemid="integrated_edit_field" {$item_integrated_edit_field} data-pageid="{$pageid}" data-field="project_id" data-fieldname="project_id" >
+
+	<label class="r-edit-label control-label {$project_id_label_class}" for="{$labelfor_project_id}">
+		{BEGIN project_id_label}
+			{$project_id_forward_control}
+			{$label projects_view project_id }			{END project_id_label}
+		<span class="icon-required"></span>
+	</label>
+	<div class="r-edit-field">
+		{$project_id_value}	</div>
+	</div>
+
+
+{END project_id_fieldblock}
+											
+{BEGIN project_name_fieldblock}
+
+
+<div class="r-integrated-field form-group clearfix {$fielddispclass_project_name}  r-vertical-field" 
+	data-signal-error-for="project_name{$id}" {$required_attr_project_name}
+	data-itemtype="integrated_edit_field" data-itemid="integrated_edit_field1" {$item_integrated_edit_field1} data-pageid="{$pageid}" data-field="project_name" data-fieldname="project_name" >
+
+	<label class="r-edit-label control-label {$project_name_label_class}" for="{$labelfor_project_name}">
+		{BEGIN project_name_label}
+			{$project_name_forward_control}
+			{$label projects_view project_name }			{END project_name_label}
+		<span class="icon-required"></span>
+	</label>
+	<div class="r-edit-field">
+		{$project_name_value}	</div>
+	</div>
+
+
+{END project_name_fieldblock}
+											
+{BEGIN designer_id_fieldblock}
+
+
+<div class="r-integrated-field form-group clearfix {$fielddispclass_designer_id}  r-vertical-field" 
+	data-signal-error-for="designer_id{$id}" {$required_attr_designer_id}
+	data-itemtype="integrated_edit_field" data-itemid="integrated_edit_field3" {$item_integrated_edit_field3} data-pageid="{$pageid}" data-field="designer_id" data-fieldname="designer_id" >
+
+	<label class="r-edit-label control-label {$designer_id_label_class}" for="{$labelfor_designer_id}">
+		{BEGIN designer_id_label}
+			{$designer_id_forward_control}
+			{$label projects_view designer_id }			{END designer_id_label}
+		<span class="icon-required"></span>
+	</label>
+	<div class="r-edit-field">
+		{$designer_id_value}	</div>
+	</div>
+
+
+{END designer_id_fieldblock}
+											
+{BEGIN designer_name_fieldblock}
+
+
+<div class="r-integrated-field form-group clearfix {$fielddispclass_designer_name}  r-vertical-field" 
+	data-signal-error-for="designer_name{$id}" {$required_attr_designer_name}
+	data-itemtype="integrated_edit_field" data-itemid="integrated_edit_field2" {$item_integrated_edit_field2} data-pageid="{$pageid}" data-field="designer_name" data-fieldname="designer_name" >
+
+	<label class="r-edit-label control-label {$designer_name_label_class}" for="{$labelfor_designer_name}">
+		{BEGIN designer_name_label}
+			{$designer_name_forward_control}
+			{$label projects_view designer_name }			{END designer_name_label}
+		<span class="icon-required"></span>
+	</label>
+	<div class="r-edit-field">
+		{$designer_name_value}	</div>
+	</div>
+
+
+{END designer_name_fieldblock}
+											
+{BEGIN phase_id_fieldblock}
+
+
+<div class="r-integrated-field form-group clearfix {$fielddispclass_phase_id}  r-vertical-field" 
+	data-signal-error-for="phase_id{$id}" {$required_attr_phase_id}
+	data-itemtype="integrated_edit_field" data-itemid="integrated_edit_field4" {$item_integrated_edit_field4} data-pageid="{$pageid}" data-field="phase_id" data-fieldname="phase_id" >
+
+	<label class="r-edit-label control-label {$phase_id_label_class}" for="{$labelfor_phase_id}">
+		{BEGIN phase_id_label}
+			{$phase_id_forward_control}
+			{$label projects_view phase_id }			{END phase_id_label}
+		<span class="icon-required"></span>
+	</label>
+	<div class="r-edit-field">
+		{$phase_id_value}	</div>
+	</div>
+
+
+{END phase_id_fieldblock}
+											
+{BEGIN phase_code_fieldblock}
+
+
+<div class="r-integrated-field form-group clearfix {$fielddispclass_phase_code}  r-vertical-field" 
+	data-signal-error-for="phase_code{$id}" {$required_attr_phase_code}
+	data-itemtype="integrated_edit_field" data-itemid="integrated_edit_field5" {$item_integrated_edit_field5} data-pageid="{$pageid}" data-field="phase_code" data-fieldname="phase_code" >
+
+	<label class="r-edit-label control-label {$phase_code_label_class}" for="{$labelfor_phase_code}">
+		{BEGIN phase_code_label}
+			{$phase_code_forward_control}
+			{$label projects_view phase_code }			{END phase_code_label}
+		<span class="icon-required"></span>
+	</label>
+	<div class="r-edit-field">
+		{$phase_code_value}	</div>
+	</div>
+
+
+{END phase_code_fieldblock}
+											
+{BEGIN phase_label_fieldblock}
+
+
+<div class="r-integrated-field form-group clearfix {$fielddispclass_phase_label}  r-vertical-field" 
+	data-signal-error-for="phase_label{$id}" {$required_attr_phase_label}
+	data-itemtype="integrated_edit_field" data-itemid="integrated_edit_field6" {$item_integrated_edit_field6} data-pageid="{$pageid}" data-field="phase_label" data-fieldname="phase_label" >
+
+	<label class="r-edit-label control-label {$phase_label_label_class}" for="{$labelfor_phase_label}">
+		{BEGIN phase_label_label}
+			{$phase_label_forward_control}
+			{$label projects_view phase_label }			{END phase_label_label}
+		<span class="icon-required"></span>
+	</label>
+	<div class="r-edit-field">
+		{$phase_label_value}	</div>
+	</div>
+
+
+{END phase_label_fieldblock}
+											
+{BEGIN due_date_fieldblock}
+
+
+<div class="r-integrated-field form-group clearfix {$fielddispclass_due_date}  r-vertical-field" 
+	data-signal-error-for="due_date{$id}" {$required_attr_due_date}
+	data-itemtype="integrated_edit_field" data-itemid="integrated_edit_field7" {$item_integrated_edit_field7} data-pageid="{$pageid}" data-field="due_date" data-fieldname="due_date" >
+
+	<label class="r-edit-label control-label {$due_date_label_class}" for="{$labelfor_due_date}">
+		{BEGIN due_date_label}
+			{$due_date_forward_control}
+			{$label projects_view due_date }			{END due_date_label}
+		<span class="icon-required"></span>
+	</label>
+	<div class="r-edit-field">
+		{$due_date_value}	</div>
+	</div>
+
+
+{END due_date_fieldblock}
+											
+{BEGIN days_until_due_fieldblock}
+
+
+<div class="r-integrated-field form-group clearfix {$fielddispclass_days_until_due}  r-vertical-field" 
+	data-signal-error-for="days_until_due{$id}" {$required_attr_days_until_due}
+	data-itemtype="integrated_edit_field" data-itemid="integrated_edit_field8" {$item_integrated_edit_field8} data-pageid="{$pageid}" data-field="days_until_due" data-fieldname="days_until_due" >
+
+	<label class="r-edit-label control-label {$days_until_due_label_class}" for="{$labelfor_days_until_due}">
+		{BEGIN days_until_due_label}
+			{$days_until_due_forward_control}
+			{$label projects_view days_until_due }			{END days_until_due_label}
+		<span class="icon-required"></span>
+	</label>
+	<div class="r-edit-field">
+		{$days_until_due_value}	</div>
+	</div>
+
+
+{END days_until_due_fieldblock}
+	
+								</td>
+			{END cellblock_grid_c3}
+								</tr>
+			</tbody></table>
+{END grid_block}
+									{BEGIN below-grid_block}
+<div class="r-form" data-location="below-grid" id="form_below-grid_{$pageid}" data-makeup="small" {$form_below-grid} data-pageid="{$pageid}"
+		data-v-width="4"
+	data-v-margin="1"
+	
+>		
+	 
+		<div class="row">
+			 
+				<div 
+	data-cellId="below-grid_c1" data-pageid="{$pageid}"	{$cell_below-grid_c1}
+	class="			col-md-6
+	">
+	 
+		{BEGIN back_button}
+<span data-itemtype="view_back_list" data-itemid="view_back_list" {$item_view_back_list} data-pageid="{$pageid}" data-small data-button-item>
+	<a type="button" title="" class="btn btn-default   
+	" {$backbutton_attrs} >
+							{mlang_message BACK_TO_LIST}			</a>
+</span>
+{END back_button}
+	 
+		{BEGIN close_button}
+<span data-itemtype="view_close" data-itemid="view_close" {$item_view_close} data-pageid="{$pageid}" data-small data-button-item>
+	<a type="button" title="" class="btn btn-default   
+	" href="#" {$closebutton_attrs} >
+							{mlang_message CLOSE_WINDOW}			</a>
+</span>
+{END close_button}
+	</div>			 
+				<div 
+	data-cellId="below-grid_c2" data-pageid="{$pageid}"	{$cell_below-grid_c2}
+	class="r-align-right r-ori-vert			col-md-6
+	">
+	 
+		<span data-itemtype="hamburger" data-itemid="hamburger" {$item_hamburger} data-pageid="{$pageid}" data-small data-button-item>
+</span>
+	</div>					</div>
+	</div>		
+{END below-grid_block}
+			</div>
+		{$footer}
+	{END body}
+	</body>
+</html>
