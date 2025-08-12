@@ -1854,8 +1854,7 @@
 				"search_panel": {
 					"type": "search_panel",
 					"items": [
-						"search_panel_field1",
-						"search_panel_field"
+						"search_panel_field1"
 					],
 					"_flexiblePanel": true
 				},
@@ -1955,10 +1954,6 @@
 					"type": "grid_field_label",
 					"field": "notes",
 					"clickSort": true
-				},
-				"search_panel_field": {
-					"field": "notes",
-					"type": "search_panel_field"
 				},
 				"next_page": {
 					"type": "next_page"

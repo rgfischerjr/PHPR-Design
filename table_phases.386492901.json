@@ -1,5 +1,5 @@
 {
-	"sql": "SELECT\r\n\tphase_id,\r\n\tproject_id,\r\n\tphase_code,\r\n\t`sequence`,\r\n\tlong_duration,\r\n\tdue_date,\r\n\tcompleted_date,\r\n\tnotes\r\nFROM\r\n\tphases",
+	"sql": "SELECT\n\tphase_id,\n\tproject_id,\n\tphase_code,\n\t`sequence`,\n\tlong_duration,\n\tdue_date,\n\tcompleted_date,\n\tnotes\nFROM\n\tphases\n\n",
 	"connId": "conn",
 	"originalTable": "phases",
 	"name": "phases",
@@ -98,7 +98,7 @@
 				}
 			],
 			"label": {
-				"English": "Short Name"
+				"English": "Phase"
 			},
 			"tableName": "phases"
 		},
@@ -234,6 +234,8 @@
 				"name": "fk_phases_project",
 				"refTable": "projects",
 				"refSchema": "",
+				"del_rule": 1,
+				"upd_rule": 1,
 				"columns": [
 					{
 						"column": "project_id",
@@ -1965,7 +1967,12 @@
 				"simple_grid_field10": {
 					"type": "grid_field_label",
 					"field": "phase_code",
-					"clickSort": true
+					"clickSort": true,
+					"label": {
+						"field": "phase_code",
+						"table": "phases",
+						"type": 3
+					}
 				},
 				"simple_grid_field5": {
 					"field": "long_duration",
@@ -2046,7 +2053,8 @@
 					"field": "notes",
 					"type": "grid_field",
 					"inlineEdit": true,
-					"inlineAdd": false
+					"inlineAdd": false,
+					"width": "30vw"
 				},
 				"grid_field_label": {
 					"type": "grid_field_label",

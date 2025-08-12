@@ -222,12 +222,12 @@
 		{
 			"eventId": "EVENT_JS_ONLOAD",
 			"pageType": "list",
-			"code": "(function(){\r\n  // --- Read state from hidden spans (set in Before display) or URL ---\r\n  var params = new URL(location.href).searchParams;\r\n  var roleEl  = document.getElementById('dash-role');\r\n  var scopeEl = document.getElementById('dash-scope');\r\n  var selEl   = document.getElementById('dash-designer');\r\n\r\n  var role  = (roleEl  && roleEl.textContent)  ? roleEl.textContent.trim()  : '';\r\n  var scope = params.get('scope') || (scopeEl && scopeEl.textContent ? scopeEl.textContent.trim() : '');\r\n  var selId = params.get('designer_id') || (selEl && selEl.textContent ? selEl.textContent.trim() : '');\r\n\r\n  // --- Helpers ---\r\n  function nav(next){\r\n    var url = new URL(location.href);\r\n    Object.keys(next).forEach(function(k){\r\n      if (next[k] === null || next[k] === '') url.searchParams.delete(k);\r\n      else url.searchParams.set(k, next[k]);\r\n    });\r\n    location.href = url.toString();\r\n  }\r\n\r\n  function makeLink(label, val, active){\r\n    var a = document.createElement('a');\r\n    a.href = 'javascript:void(0)';\r\n    a.textContent = label;\r\n    a.style.marginRight = '8px';\r\n    if (active){ a.style.fontWeight = '700'; a.style.textDecoration = 'underline'; }\r\n    a.addEventListener('click', function(){\r\n      // mine clears designer filter; all keeps current selection\r\n      nav({ scope: val, designer_id: (val === 'mine' ? null : selId) });\r\n    });\r\n    return a;\r\n  }\r\n\r\n  // --- Find a good container above the grid ---\r\n  var above = document.querySelector('[data-location=\"above-grid\"]')\r\n          || document.querySelector('.rnr-b-above-grid')\r\n          || document.querySelector('.panel-heading')\r\n          || document.body;\r\n\r\n  // --- Insert scope toggles ---\r\n  var isMine = (scope === 'mine') || (!scope && role === 'designer');\r\n  var toggleWrap = document.createElement('div');\r\n  toggleWrap.style.margin = '8px 0 10px 0';\r\n  toggleWrap.appendChild(makeLink('Show Only Mine', 'mine', isMine));\r\n  if (role !== 'designer') toggleWrap.appendChild(makeLink('Show All', 'all', !isMine));\r\n  above.insertBefore(toggleWrap, above.firstChild);\r\n\r\n  // --- Move legend to top (if present) ---\r\n  (function(){\r\n    var legend = document.getElementById('dash-legend');\r\n    if (!legend) return;\r\n    // Ensure legend is the first element above the grid\r\n    above.insertBefore(legend, above.firstChild);\r\n  })();\r\n\r\n  // --- Admin-only designer dropdown: move & wire ---\r\n  (function(){\r\n    if (role !== 'admin') return;\r\n    var src = document.getElementById('designer-filter-container');\r\n    if (!src) return;\r\n    src.style.display = '';\r\n    var wrap = document.createElement('div');\r\n    wrap.style.margin = '0 0 12px 0';\r\n    wrap.appendChild(src);\r\n    // Place after the toggles but before the grid\r\n    if (toggleWrap.nextSibling) {\r\n      above.insertBefore(wrap, toggleWrap.nextSibling);\r\n    } else {\r\n      above.appendChild(wrap);\r\n    }\r\n\r\n    var sel = document.getElementById('designer-filter');\r\n    if (sel) {\r\n      // Disable in \"mine\" scope\r\n      if (isMine) {\r\n        sel.disabled = true;\r\n        sel.title = \"Switch to 'Show All' to choose a specific designer\";\r\n      }\r\n      // Ensure selected option matches current filter\r\n      if (selId) sel.value = selId;\r\n      sel.addEventListener('change', function(){\r\n        // Selecting a designer forces scope=all\r\n        nav({ scope: 'all', designer_id: sel.value });\r\n      });\r\n    }\r\n  })();\r\n\r\n  // --- Compact rows: add class to the grid table (no !important in CSS) ---\r\n  (function(){\r\n    var t = document.querySelector('table.rnr-gridtable');\r\n    if (t && !t.classList.contains('ds-compact')) t.classList.add('ds-compact');\r\n  })();\r\n})();\r\n\r\n(function() {\r\n  var W = 800; // <-- set your compact width once\r\n\r\n  var css = [\r\n    '@media (min-width:768px){',\r\n      /* Standard/small layout */\r\n      '.r-small-page[data-body-width=\"compact\"] > .container,',\r\n      '.r-small-page[data-body-width=\"compact\"] > .r-body,',\r\n      '.r-small-page[data-body-width=\"compact\"] > .r-content,',\r\n      '.r-small-page[data-body-width=\"compact\"] > .r-data-block,',\r\n      '.r-small-page[data-body-width=\"compact\"] .container{',\r\n        'max-width:' + W + 'px;',\r\n        'width:' + W + 'px;',\r\n        'margin-left:auto;',\r\n        'margin-right:auto;',\r\n      '}',\r\n\r\n      /* Topbar layout */\r\n      '.r-topbar-page .r-body .r-content .r-data-block[data-body-width=\"compact\"]{',\r\n        'width:' + W + 'px;',\r\n        'max-width:' + W + 'px;',\r\n        'flex:0 0 ' + W + 'px;',\r\n        'margin-left:auto;',\r\n        'margin-right:auto;',\r\n      '}',\r\n\r\n      /* Ensure grid fills your fixed container */\r\n      '.r-topbar-page .r-body .r-content .r-data-block[data-body-width=\"compact\"] > .r-grid,',\r\n      '.r-small-page[data-body-width=\"compact\"] .r-grid{',\r\n        'width:100%;',\r\n        'max-width:100%;',\r\n      '}',\r\n    '}'\r\n  ].join('');\r\n\r\n  var style = document.createElement('style');\r\n  style.type = 'text/css';\r\n  style.appendChild(document.createTextNode(css));\r\n  document.head.appendChild(style);\r\n\r\n  // Optional: quick visual confirmation (remove after verifying)\r\n  // document.body.matches('.r-small-page[data-body-width=\"compact\"], .r-topbar-page *[data-body-width=\"compact\"]')\r\n  //   && document.body.insertAdjacentHTML('beforeend','<div style=\"position:fixed;inset:auto 10px 10px auto;padding:4px 8px;background:#000;color:#fff;font:12px system-ui;border-radius:4px;opacity:.7;z-index:99999\">Compact=' + W + 'px</div>');\r\n})();\r\n\r\n"
+			"code": "(function(){\r\n  // --- Read state from hidden spans (set in Before display) or URL ---\r\n  var params = new URL(location.href).searchParams;\r\n  var roleEl  = document.getElementById('dash-role');\r\n  var scopeEl = document.getElementById('dash-scope');\r\n  var selEl   = document.getElementById('dash-designer');\r\n\r\n  var role  = (roleEl  && roleEl.textContent)  ? roleEl.textContent.trim()  : '';\r\n  var scope = params.get('scope') || (scopeEl && scopeEl.textContent ? scopeEl.textContent.trim() : '');\r\n  var selId = params.get('designer_id') || (selEl && selEl.textContent ? selEl.textContent.trim() : '');\r\n\r\n  // --- Helpers ---\r\n  function nav(next){\r\n    var url = new URL(location.href);\r\n    Object.keys(next).forEach(function(k){\r\n      if (next[k] === null || next[k] === '') url.searchParams.delete(k);\r\n      else url.searchParams.set(k, next[k]);\r\n    });\r\n    location.href = url.toString();\r\n  }\r\n\r\n  function makeLink(label, val, active){\r\n    var a = document.createElement('a');\r\n    a.href = 'javascript:void(0)';\r\n    a.textContent = label;\r\n    a.style.marginRight = '8px';\r\n    if (active){ a.style.fontWeight = '700'; a.style.textDecoration = 'underline'; }\r\n    a.addEventListener('click', function(){\r\n      // mine clears designer filter; all keeps current selection\r\n      nav({ scope: val, designer_id: (val === 'mine' ? null : selId) });\r\n    });\r\n    return a;\r\n  }\r\n\r\n  // --- Find a good container above the grid ---\r\n  var above = document.querySelector('[data-location=\"above-grid\"]')\r\n          || document.querySelector('.rnr-b-above-grid')\r\n          || document.querySelector('.panel-heading')\r\n          || document.body;\r\n\r\n//   // --- Insert scope toggles ---\r\n//   var isMine = (scope === 'mine') || (!scope && role === 'designer');\r\n//   var toggleWrap = document.createElement('div');\r\n//   toggleWrap.style.margin = '8px 0 10px 0';\r\n//   toggleWrap.appendChild(makeLink('Show Only Mine', 'mine', isMine));\r\n//   if (role !== 'designer') toggleWrap.appendChild(makeLink('Show All', 'all', !isMine));\r\n//   above.insertBefore(toggleWrap, above.firstChild);\r\n\r\n  // --- Move legend to top (if present) ---\r\n  (function(){\r\n    var legend = document.getElementById('dash-legend');\r\n    if (!legend) return;\r\n    // Ensure legend is the first element above the grid\r\n    above.insertBefore(legend, above.firstChild);\r\n  })();\r\n\r\n  // --- Admin-only designer dropdown: move & wire ---\r\n  (function(){\r\n    if (role !== 'admin') return;\r\n    var src = document.getElementById('designer-filter-container');\r\n    if (!src) return;\r\n    src.style.display = '';\r\n    var wrap = document.createElement('div');\r\n    wrap.style.margin = '0 0 12px 0';\r\n    wrap.appendChild(src);\r\n    // Place after the toggles but before the grid\r\n    if (toggleWrap.nextSibling) {\r\n      above.insertBefore(wrap, toggleWrap.nextSibling);\r\n    } else {\r\n      above.appendChild(wrap);\r\n    }\r\n\r\n    var sel = document.getElementById('designer-filter');\r\n    if (sel) {\r\n      // Disable in \"mine\" scope\r\n      if (isMine) {\r\n        sel.disabled = true;\r\n        sel.title = \"Switch to 'Show All' to choose a specific designer\";\r\n      }\r\n      // Ensure selected option matches current filter\r\n      if (selId) sel.value = selId;\r\n      sel.addEventListener('change', function(){\r\n        // Selecting a designer forces scope=all\r\n        nav({ scope: 'all', designer_id: sel.value });\r\n      });\r\n    }\r\n  })();\r\n\r\n  // --- Compact rows: add class to the grid table (no !important in CSS) ---\r\n  (function(){\r\n    var t = document.querySelector('table.rnr-gridtable');\r\n    if (t && !t.classList.contains('ds-compact')) t.classList.add('ds-compact');\r\n  })();\r\n})();\r\n\r\n(function() {\r\n  var W = 800; // <-- set your compact width once\r\n\r\n  var css = [\r\n    '@media (min-width:768px){',\r\n      /* Standard/small layout */\r\n      '.r-small-page[data-body-width=\"compact\"] > .container,',\r\n      '.r-small-page[data-body-width=\"compact\"] > .r-body,',\r\n      '.r-small-page[data-body-width=\"compact\"] > .r-content,',\r\n      '.r-small-page[data-body-width=\"compact\"] > .r-data-block,',\r\n      '.r-small-page[data-body-width=\"compact\"] .container{',\r\n        'max-width:' + W + 'px;',\r\n        'width:' + W + 'px;',\r\n        'margin-left:auto;',\r\n        'margin-right:auto;',\r\n      '}',\r\n\r\n      /* Topbar layout */\r\n      '.r-topbar-page .r-body .r-content .r-data-block[data-body-width=\"compact\"]{',\r\n        'width:' + W + 'px;',\r\n        'max-width:' + W + 'px;',\r\n        'flex:0 0 ' + W + 'px;',\r\n        'margin-left:auto;',\r\n        'margin-right:auto;',\r\n      '}',\r\n\r\n      /* Ensure grid fills your fixed container */\r\n      '.r-topbar-page .r-body .r-content .r-data-block[data-body-width=\"compact\"] > .r-grid,',\r\n      '.r-small-page[data-body-width=\"compact\"] .r-grid{',\r\n        'width:100%;',\r\n        'max-width:100%;',\r\n      '}',\r\n    '}'\r\n  ].join('');\r\n\r\n  var style = document.createElement('style');\r\n  style.type = 'text/css';\r\n  style.appendChild(document.createTextNode(css));\r\n  document.head.appendChild(style);\r\n\r\n  // Optional: quick visual confirmation (remove after verifying)\r\n  // document.body.matches('.r-small-page[data-body-width=\"compact\"], .r-topbar-page *[data-body-width=\"compact\"]')\r\n  //   && document.body.insertAdjacentHTML('beforeend','<div style=\"position:fixed;inset:auto 10px 10px auto;padding:4px 8px;background:#000;color:#fff;font:12px system-ui;border-radius:4px;opacity:.7;z-index:99999\">Compact=' + W + 'px</div>');\r\n})();\r\n\r\n(function(){\r\n  // Legend colors\r\n  var C_OVERDUE  = '#ffcccc';\r\n  var C_TODAY    = '#fff3cd';\r\n  var C_UPCOMING = '#ffe8c6';\r\n\r\n  function toInt(txt){\r\n    var n = parseInt(String(txt||'').replace(/[^\\-0-9]/g,''), 10);\r\n    return isNaN(n) ? null : n;\r\n  }\r\n\r\n  function paint(){\r\n    // Find any grid on the dashboard that has a days_until_due column\r\n    jQuery(\"table.rnr-gridtable\").each(function(){\r\n      jQuery(this).find(\"tr\").each(function(){\r\n        var $tr   = jQuery(this);\r\n        var $cell = $tr.find(\"td[data-field='days_until_due']\");\r\n        if (!$cell.length) return;                 // not our grid/row\r\n\r\n        var n = toInt($cell.text());\r\n        if (n === null){ $tr.css('background-color',''); return; }\r\n\r\n        if (n < 0)       $tr.css('background-color', C_OVERDUE);   // Overdue\r\n        else if (n === 0)$tr.css('background-color', C_TODAY);     // Today\r\n        else             $tr.css('background-color', C_UPCOMING);  // Next N days\r\n      });\r\n    });\r\n  }\r\n\r\n  // Initial paint (and a tiny delayed pass in case the grid finishes rendering after OnLoad)\r\n  paint();\r\n  setTimeout(paint, 120);\r\n\r\n  // Repaint after common dashboard interactions / ajax loads\r\n  jQuery(document).on('click', \".rnr-button, .pagination a, .rnr-orderlink, .rnr-expand, .rnr-collapse\", function(){\r\n    setTimeout(paint, 120);\r\n  });\r\n\r\n  // Repaint when blocks/rows get inserted dynamically\r\n  try{\r\n    var obs = new MutationObserver(function(){ setTimeout(paint, 60); });\r\n    obs.observe(document.body, {childList:true, subtree:true});\r\n  }catch(e){}\r\n})();\r\n\r\n"
 		},
 		{
 			"eventId": "EVENT_BEFOREMOVENEXT_LIST",
 			"pageType": "list",
-			"code": "// Persist row state on initial render (and every refresh)\r\n$started   = ($data[\"start_checked\"] == 1 || $data[\"start_checked\"] === '1');\r\n$completed = ($data[\"completed_checked\"] == 1 || $data[\"completed_checked\"] === '1');\r\n\r\n// 1) Add data-attrs the JS can read later\r\n$attrs = 'data-started=\"'.($started?1:0).'\" data-completed=\"'.($completed?1:0).'\"';\r\nif (!isset($record[\"rowattrs\"]) || $record[\"rowattrs\"] === '') {\r\n    $record[\"rowattrs\"] = $attrs;\r\n} elseif (strpos($record[\"rowattrs\"], 'class=\"') !== false) {\r\n    // append attrs safely\r\n    $record[\"rowattrs\"] = preg_replace('/class=\"([^\"]*)\"/', 'class=\"$1\" '.$attrs, $record[\"rowattrs\"], 1);\r\n} else {\r\n    $record[\"rowattrs\"] .= ' '.$attrs;\r\n}\r\n\r\n// 2) Inline color so it wins over zebra on first paint\r\nif ($completed) {\r\n    $record[\"css\"] = \"background-color:#c8e6c9 !important;\";\r\n} elseif ($started) {\r\n    $record[\"css\"] = \"background-color:#e8f5e9 !important;\";\r\n} else {\r\n    $record[\"css\"] = \"\";\r\n}\r\n"
+			"code": "// Persist row state on initial render (and every refresh)\r\n$started   = ($data[\"start_checked\"] == 1 || $data[\"start_checked\"] === '1');\r\n$completed = ($data[\"completed_checked\"] == 1 || $data[\"completed_checked\"] === '1');\r\n\r\n// 1) Add data-attrs the JS can read later\r\n$attrs = 'data-started=\"'.($started?1:0).'\" data-completed=\"'.($completed?1:0).'\"';\r\nif (!isset($record[\"rowattrs\"]) || $record[\"rowattrs\"] === '') {\r\n    $record[\"rowattrs\"] = $attrs;\r\n} elseif (strpos($record[\"rowattrs\"], 'class=\"') !== false) {\r\n    // append attrs safely\r\n    $record[\"rowattrs\"] = preg_replace('/class=\"([^\"]*)\"/', 'class=\"$1\" '.$attrs, $record[\"rowattrs\"], 1);\r\n} else {\r\n    $record[\"rowattrs\"] .= ' '.$attrs;\r\n}\r\n\r\n// 2) Inline color so it wins over zebra on first paint\r\nif ($completed) {\r\n    $record[\"css\"] = \"background-color:#c8e6c9 !important;\";\r\n} elseif ($started) {\r\n    $record[\"css\"] = \"background-color:#e8f5e9 !important;\";\r\n} else {\r\n    $record[\"css\"] = \"\";\r\n}\r\n\r\n\r\n// Color rows to match dashboard legend using days_until_due\r\n// Overdue: #ffcccc / Today: #fff3cd / Upcoming: #ffe8c6\r\n\r\n// If you ONLY want this when embedded under Projects → View, uncomment:\r\n// if ($pageObject->masterTable !== \"projects\") return;\r\n\r\n$color = \"\";\r\nif (isset($data[\"days_until_due\"])) {\r\n    $d = (int)$data[\"days_until_due\"];\r\n    if ($d < 0)        $color = \"#ffcccc\"; // Overdue\r\n    elseif ($d === 0)  $color = \"#fff3cd\"; // Today\r\n    else               $color = \"#ffe8c6\"; // Upcoming (within N days per your view filter)\r\n}\r\n\r\n// Paint whole row; !important beats zebra/themes\r\n$record[\"css\"] = $color ? \"background-color:{$color} !important;\" : \"\";\r\n"
 		},
 		{
 			"eventId": "EVENT_BEFORESHOW_LIST",
@@ -1161,17 +1161,6 @@
 						{
 							"cells": [
 								{
-									"cell": "c1"
-								},
-								{
-									"cell": "c2"
-								}
-							],
-							"section": ""
-						},
-						{
-							"cells": [
-								{
 									"cell": "c3"
 								},
 								{
@@ -1182,20 +1171,6 @@
 						}
 					],
 					"cells": {
-						"c1": {
-							"model": "c1",
-							"items": [
-								"add"
-							]
-						},
-						"c2": {
-							"model": "c2",
-							"items": [
-								"details_found_unknown",
-								"page_size",
-								"print_panel"
-							]
-						},
 						"c3": {
 							"model": "c3",
 							"items": [
@@ -1204,7 +1179,11 @@
 						},
 						"c4": {
 							"model": "c4",
-							"items": []
+							"items": [
+								"details_found_unknown",
+								"print_panel",
+								"page_size"
+							]
 						}
 					},
 					"deferredItems": [],
@@ -1282,13 +1261,25 @@
 								}
 							],
 							"section": ""
+						},
+						{
+							"cells": [
+								{
+									"cell": "c2"
+								}
+							],
+							"section": ""
 						}
 					],
 					"cells": {
 						"c1": {
 							"model": "c1",
+							"items": []
+						},
+						"c2": {
+							"model": "c2",
 							"items": [
-								"search_panel"
+								"filter_panel"
 							]
 						}
 					},
@@ -1339,9 +1330,6 @@
 							"section": "head",
 							"cells": [
 								{
-									"cell": "headcell_checkbox"
-								},
-								{
 									"cell": "headcell_details"
 								},
 								{
@@ -1364,9 +1352,6 @@
 						{
 							"section": "body",
 							"cells": [
-								{
-									"cell": "cell_checkbox"
-								},
 								{
 									"cell": "cell_details"
 								},
@@ -1391,7 +1376,7 @@
 							"cells": [
 								{
 									"cell": "cell_dpreview",
-									"colspan": 7
+									"colspan": 6
 								}
 							],
 							"section": "body"
@@ -1399,9 +1384,6 @@
 						{
 							"section": "foot",
 							"cells": [
-								{
-									"cell": "footcell_checkbox"
-								},
 								{
 									"cell": "footcell_details"
 								},
@@ -1543,28 +1525,6 @@
 							"columnName": "field",
 							"field": "days_until_due"
 						},
-						"headcell_checkbox": {
-							"model": "headcell_checkbox",
-							"items": [
-								"grid_checkbox_head"
-							],
-							"columnName": "checkbox",
-							"field": ""
-						},
-						"cell_checkbox": {
-							"model": "cell_checkbox",
-							"items": [
-								"grid_checkbox"
-							],
-							"columnName": "checkbox",
-							"field": ""
-						},
-						"footcell_checkbox": {
-							"model": "footcell_checkbox",
-							"items": [],
-							"columnName": "checkbox",
-							"field": ""
-						},
 						"headcell_details": {
 							"model": "headcell_details",
 							"items": [],
@@ -1574,9 +1534,7 @@
 						"cell_details": {
 							"model": "cell_details",
 							"items": [
-								"grid_alldetails_link",
-								"grid_details_link",
-								"grid_details_link1"
+								"grid_alldetails_link"
 							],
 							"columnName": "details",
 							"field": ""
@@ -1593,10 +1551,6 @@
 				}
 			},
 			"items": {
-				"add": {
-					"type": "add",
-					"popup": false
-				},
 				"page_size": {
 					"type": "page_size"
 				},
@@ -1607,7 +1561,10 @@
 						"print_details",
 						"print_records",
 						"print_button"
-					]
+					],
+					"icon": {
+						"glyph": "print"
+					}
 				},
 				"print_scope": {
 					"type": "print_scope"
@@ -1627,42 +1584,6 @@
 				},
 				"pagination": {
 					"type": "pagination"
-				},
-				"search_panel_field": {
-					"field": "project_id",
-					"type": "search_panel_field"
-				},
-				"search_panel_field8": {
-					"field": "days_until_due",
-					"type": "search_panel_field"
-				},
-				"search_panel_field7": {
-					"field": "due_date",
-					"type": "search_panel_field"
-				},
-				"search_panel_field6": {
-					"field": "phase_label",
-					"type": "search_panel_field"
-				},
-				"search_panel_field5": {
-					"field": "phase_code",
-					"type": "search_panel_field"
-				},
-				"search_panel_field4": {
-					"field": "phase_id",
-					"type": "search_panel_field"
-				},
-				"search_panel_field2": {
-					"field": "designer_name",
-					"type": "search_panel_field"
-				},
-				"search_panel_field3": {
-					"field": "designer_id",
-					"type": "search_panel_field"
-				},
-				"search_panel_field1": {
-					"field": "project_name",
-					"type": "search_panel_field"
 				},
 				"export_selected": {
 					"type": "export_selected"
@@ -1699,21 +1620,6 @@
 				},
 				"simple_search": {
 					"type": "simple_search"
-				},
-				"search_panel": {
-					"type": "search_panel",
-					"items": [
-						"search_panel_field",
-						"search_panel_field8",
-						"search_panel_field7",
-						"search_panel_field6",
-						"search_panel_field5",
-						"search_panel_field4",
-						"search_panel_field2",
-						"search_panel_field3",
-						"search_panel_field1"
-					],
-					"_flexiblePanel": true
 				},
 				"list_options": {
 					"type": "list_options",
@@ -1815,28 +1721,11 @@
 					"pageId": "list",
 					"hideEmptyPreview": false
 				},
-				"grid_checkbox": {
-					"type": "grid_checkbox"
-				},
-				"grid_checkbox_head": {
-					"type": "grid_checkbox_head"
-				},
 				"grid_alldetails_link": {
-					"type": "grid_alldetails_link"
-				},
-				"grid_details_link": {
-					"type": "grid_details_link",
-					"table": 1903550912,
-					"badge": true,
-					"hideIfNone": false,
-					"showCount": true
-				},
-				"grid_details_link1": {
-					"type": "grid_details_link",
-					"table": 386492901,
-					"badge": true,
-					"showCount": true,
-					"hideIfNone": false
+					"type": "grid_alldetails_link",
+					"icon": {
+						"glyph": "th-list"
+					}
 				},
 				"loginform_login": {
 					"type": "deleted",
@@ -1864,6 +1753,16 @@
 				},
 				"details_found_unknown": {
 					"type": "details_found_unknown"
+				},
+				"filter_panel": {
+					"type": "filter_panel",
+					"items": [
+						"filter_panel_field"
+					]
+				},
+				"filter_panel_field": {
+					"field": "designer_name",
+					"type": "filter_panel_field"
 				}
 			},
 			"dbProps": {},

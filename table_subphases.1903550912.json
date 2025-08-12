@@ -324,24 +324,19 @@
 		"type": 0,
 		"foreignKeys": [
 			{
-				"name": "fk_subphases_phase",
+				"name": "fk_subphases_phase_project",
 				"refTable": "phases",
 				"refSchema": "",
+				"del_rule": 4,
+				"upd_rule": 1,
 				"columns": [
 					{
 						"column": "phase_id",
 						"ref_column": "phase_id"
-					}
-				]
-			},
-			{
-				"name": "fk_subphases_project",
-				"refTable": "projects",
-				"refSchema": "",
-				"columns": [
+					},
 					{
-						"column": "project_id",
-						"ref_column": "project_id"
+						"column": "",
+						"ref_column": ""
 					}
 				]
 			}
