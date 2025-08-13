@@ -77,7 +77,7 @@ function create_project_scaffold($projectId, $contractDate, $dur = null)
         FROM phases ph
         JOIN default_subphases ds ON ds.phase_code = ph.phase_code
         WHERE ph.project_id = ".$projectId."
-          AND ph.phase_code IN ('TF','SD','DD','PP')
+          AND ph.phase_code IN ('DSA','TF','SD','DD','PP')
         ORDER BY ph.phase_id, ds.sort_order
     ");
 
