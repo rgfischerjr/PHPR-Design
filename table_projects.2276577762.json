@@ -1,8 +1,8 @@
 {
-	"sql": "SELECT\r\n\tproject_id,\r\n\tproject_name,\r\n\tcontract_date,\r\n\tdesigner_id,\r\n\tcreated_by,\r\n\tcreated_at,\r\n\tnotes\r\nFROM\r\n\tprojects",
+	"sql": "SELECT\r\n\tproject_id,\r\n\tproject_name,\r\n\tcontract_date,\r\n\tdesigner_id,\r\n\tcreated_by,\r\n\tcreated_at,\r\n\tnotes\r\nFROM\r\n\tdesign_projects",
 	"connId": "conn",
-	"originalTable": "projects",
-	"name": "projects",
+	"originalTable": "design_projects",
+	"name": "design_projects",
 	"shortTableName": "projects",
 	"dbType": 0,
 	"keyFields": [
@@ -10,7 +10,7 @@
 	],
 	"masterTables": [
 		{
-			"table": 344172009,
+			"table": 2992821450,
 			"masterKeys": [
 				"user_id"
 			],
@@ -21,7 +21,7 @@
 	],
 	"detailsBadgeColor": "3cb371",
 	"detailsTables": [
-		386492901
+		3049847270
 	],
 	"fields": [
 		{
@@ -40,7 +40,7 @@
 			"label": {
 				"English": "Project Id"
 			},
-			"tableName": "projects"
+			"tableName": "design_projects"
 		},
 		{
 			"name": "project_name",
@@ -57,7 +57,7 @@
 			"label": {
 				"English": "Project Name"
 			},
-			"tableName": "projects"
+			"tableName": "design_projects"
 		},
 		{
 			"name": "contract_date",
@@ -81,7 +81,7 @@
 			"label": {
 				"English": "Contract Date"
 			},
-			"tableName": "projects"
+			"tableName": "design_projects"
 		},
 		{
 			"name": "designer_id",
@@ -106,7 +106,7 @@
 			"label": {
 				"English": "Designer"
 			},
-			"tableName": "projects"
+			"tableName": "design_projects"
 		},
 		{
 			"name": "created_by",
@@ -120,7 +120,7 @@
 			"editFormats": [
 				{
 					"format": "Lookup wizard",
-					"lookupTable": "users",
+					"lookupTable": "design_users",
 					"lookupTableConnection": "conn",
 					"lookupLinkField": "user_id",
 					"lookupDisplayField": "username"
@@ -129,7 +129,7 @@
 			"label": {
 				"English": "Created By"
 			},
-			"tableName": "projects"
+			"tableName": "design_projects"
 		},
 		{
 			"name": "created_at",
@@ -151,7 +151,7 @@
 			"label": {
 				"English": "Created At"
 			},
-			"tableName": "projects"
+			"tableName": "design_projects"
 		},
 		{
 			"name": "notes",
@@ -170,7 +170,7 @@
 			"label": {
 				"English": "Notes"
 			},
-			"tableName": "projects"
+			"tableName": "design_projects"
 		}
 	],
 	"afterEditAction": 0,
@@ -316,7 +316,7 @@
 			"project_id"
 		],
 		"uniqueFields": [],
-		"name": "projects"
+		"name": "design_projects"
 	},
 	"pages": [
 		{
@@ -1874,7 +1874,7 @@
 				"master_info": {
 					"type": "master_info",
 					"tables": {
-						"344172009": "true"
+						"2992821450": "true"
 					}
 				},
 				"username_button": {
@@ -1941,7 +1941,7 @@
 				},
 				"grid_details_link1": {
 					"type": "grid_details_link",
-					"table": 386492901,
+					"table": 3049847270,
 					"showCount": false,
 					"hideIfNone": true,
 					"badge": false
@@ -2302,7 +2302,7 @@
 				"master_info": {
 					"type": "master_info",
 					"tables": {
-						"344172009": "true"
+						"2992821450": "true"
 					}
 				},
 				"simple_grid_field": {

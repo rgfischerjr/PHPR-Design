@@ -9,8 +9,8 @@
 	],
 	"sql": "SELECT\r\n\tsubphase_id,\r\n\tproject_id,\r\n\tphase_id,\r\n\tsubphase_name,\r\n\tsort_order,\r\n\tis_default,\r\n\tnotes,\r\n\tstart_date,\r\n\tstart_checked,\r\n\tcompleted_date,\r\n\tcompleted_checked\r\nFROM\r\n\tsubphases\r\nORDER BY sort_order ASC",
 	"connId": "conn",
-	"originalTable": "subphases",
-	"name": "subphases",
+	"originalTable": "design_subphases",
+	"name": "design_subphases",
 	"shortTableName": "subphases",
 	"dbType": 0,
 	"keyFields": [
@@ -18,7 +18,7 @@
 	],
 	"masterTables": [
 		{
-			"table": 386492901,
+			"table": 3049847270,
 			"masterKeys": [
 				"phase_id",
 				"project_id"
@@ -61,7 +61,7 @@
 			"editFormats": [
 				{
 					"format": "Lookup wizard",
-					"lookupTable": "projects",
+					"lookupTable": "design_projects",
 					"lookupTableConnection": "conn",
 					"lookupLinkField": "project_id",
 					"lookupDisplayField": "project_name"
@@ -84,7 +84,7 @@
 			"editFormats": [
 				{
 					"format": "Lookup wizard",
-					"lookupTable": "phases",
+					"lookupTable": "design_phases",
 					"lookupTableConnection": "conn",
 					"lookupLinkField": "phase_id",
 					"lookupDisplayField": "phase_code"
@@ -1992,7 +1992,7 @@
 				"master_info": {
 					"type": "master_info",
 					"tables": {
-						"386492901": "true"
+						"3049847270": "true"
 					}
 				},
 				"loginform_login": {
@@ -2334,7 +2334,7 @@
 				"master_info": {
 					"type": "master_info",
 					"tables": {
-						"386492901": "true"
+						"3049847270": "true"
 					}
 				},
 				"simple_grid_field": {

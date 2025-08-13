@@ -19,56 +19,56 @@
 				"height": 96
 			},
 			{
-				"gid": 3759655271,
+				"gid": 4287287413,
 				"y": 10,
 				"x": 1160,
 				"width": 186.546875,
 				"height": 152
 			},
 			{
-				"gid": 189308715,
+				"gid": 349274896,
 				"y": 443,
 				"x": 8,
 				"width": 160.078125,
 				"height": 180
 			},
 			{
-				"gid": 386492901,
+				"gid": 3049847270,
 				"y": 372,
 				"x": 480,
 				"width": 121.390625,
 				"height": 292
 			},
 			{
-				"gid": 1553183652,
+				"gid": 2276577762,
 				"y": 26,
 				"x": 195,
 				"width": 129.03125,
-				"height": 511
+				"height": 248
 			},
 			{
-				"gid": 3143721048,
+				"gid": 2767748195,
 				"y": 319,
 				"x": 896,
 				"width": 160.921875,
 				"height": 448
 			},
 			{
-				"gid": 3846545605,
+				"gid": 1046987395,
 				"y": 299,
 				"x": 35,
 				"width": 117.25,
 				"height": 124
 			},
 			{
-				"gid": 1903550912,
+				"gid": 3994101511,
 				"y": 410,
 				"x": 682,
 				"width": 147.71875,
 				"height": 477
 			},
 			{
-				"gid": 344172009,
+				"gid": 2992821450,
 				"y": 10,
 				"x": 20,
 				"width": 115.390625,
@@ -91,7 +91,7 @@
 				"code": "00",
 				"table": {
 					"connId": "conn",
-					"table": "users"
+					"table": "design_users"
 				},
 				"usernameField": "username",
 				"passwordField": "password_hash",
@@ -163,15 +163,7 @@
 				"table": "˂Create new˃"
 			},
 			"tables": {
-				"189308715": {
-					"logModifications": true,
-					"logFieldValues": true
-				},
-				"344172009": {
-					"logModifications": true,
-					"logFieldValues": true
-				},
-				"386492901": {
+				"349274896": {
 					"logModifications": true,
 					"logFieldValues": true
 				},
@@ -179,15 +171,23 @@
 					"logModifications": true,
 					"logFieldValues": true
 				},
-				"1553183652": {
+				"1046987395": {
 					"logModifications": true,
 					"logFieldValues": true
 				},
-				"1903550912": {
+				"2276577762": {
 					"logModifications": true,
 					"logFieldValues": true
 				},
-				"3143721048": {
+				"2767748195": {
+					"logModifications": true,
+					"logFieldValues": true
+				},
+				"2992821450": {
+					"logModifications": true,
+					"logFieldValues": true
+				},
+				"3049847270": {
 					"logModifications": true,
 					"logFieldValues": true
 				},
@@ -195,11 +195,11 @@
 					"logModifications": true,
 					"logFieldValues": true
 				},
-				"3759655271": {
+				"3994101511": {
 					"logModifications": true,
 					"logFieldValues": true
 				},
-				"3846545605": {
+				"4287287413": {
 					"logModifications": true,
 					"logFieldValues": true
 				},
@@ -225,44 +225,9 @@
 			"groups": {
 				"<Default>": {
 					"permissions": {
-						"users": {
-							"mask": "ADESPI",
-							"table": "users",
-							"restrictedPages": {}
-						},
-						"subphases": {
-							"mask": "ADESPI",
-							"table": "subphases",
-							"restrictedPages": {}
-						},
-						"settings": {
-							"mask": "ADESPI",
-							"table": "settings",
-							"restrictedPages": {}
-						},
 						"subphase_status": {
 							"mask": "ADESPI",
 							"table": "subphase_status",
-							"restrictedPages": {}
-						},
-						"projects": {
-							"mask": "ADESPI",
-							"table": "projects",
-							"restrictedPages": {}
-						},
-						"phase_catalog": {
-							"mask": "ADESPI",
-							"table": "phase_catalog",
-							"restrictedPages": {}
-						},
-						"phases": {
-							"mask": "ADESPI",
-							"table": "phases",
-							"restrictedPages": {}
-						},
-						"default_subphases": {
-							"mask": "ADESPI",
-							"table": "default_subphases",
 							"restrictedPages": {}
 						},
 						"company_holidays": {
@@ -275,14 +240,49 @@
 							"table": "calendar_dim",
 							"restrictedPages": {}
 						},
-						"projects view": {
-							"mask": "ADESPI",
-							"table": "projects view",
-							"restrictedPages": {}
-						},
 						"<global>": {
 							"mask": "ADESPI",
 							"table": "<global>",
+							"restrictedPages": {}
+						},
+						"design_projects": {
+							"mask": "ADESPI",
+							"table": "design_projects",
+							"restrictedPages": {}
+						},
+						"design_phase_catalog": {
+							"mask": "ADESPI",
+							"table": "design_phase_catalog",
+							"restrictedPages": {}
+						},
+						"design_default_subphases": {
+							"mask": "ADESPI",
+							"table": "design_default_subphases",
+							"restrictedPages": {}
+						},
+						"design_phases": {
+							"mask": "ADESPI",
+							"table": "design_phases",
+							"restrictedPages": {}
+						},
+						"design_projects view": {
+							"mask": "ADESPI",
+							"table": "design_projects view",
+							"restrictedPages": {}
+						},
+						"design_settings": {
+							"mask": "ADESPI",
+							"table": "design_settings",
+							"restrictedPages": {}
+						},
+						"design_subphases": {
+							"mask": "ADESPI",
+							"table": "design_subphases",
+							"restrictedPages": {}
+						},
+						"design_users": {
+							"mask": "ADESPI",
+							"table": "design_users",
 							"restrictedPages": {}
 						}
 					},
@@ -309,7 +309,7 @@
 						"id": "1",
 						"data": {
 							"name": {
-								"table": "users",
+								"table": "design_users",
 								"type": 6
 							},
 							"pageId": "list",
@@ -318,7 +318,7 @@
 							"iconType": 2,
 							"iconName": "glyphicon-leaf",
 							"showIconType": 2,
-							"table": 344172009,
+							"table": 2992821450,
 							"pageType": "list"
 						}
 					},
@@ -326,7 +326,7 @@
 						"id": "2",
 						"data": {
 							"name": {
-								"table": "subphases",
+								"table": "design_subphases",
 								"type": 6
 							},
 							"pageId": "list",
@@ -335,7 +335,7 @@
 							"iconType": 2,
 							"iconName": "glyphicon-headphones",
 							"showIconType": 2,
-							"table": 1903550912,
+							"table": 3994101511,
 							"pageType": "list"
 						}
 					},
@@ -343,7 +343,7 @@
 						"id": "3",
 						"data": {
 							"name": {
-								"table": "settings",
+								"table": "design_settings",
 								"type": 6
 							},
 							"pageId": "list",
@@ -352,7 +352,7 @@
 							"iconType": 2,
 							"iconName": "glyphicon-camera",
 							"showIconType": 2,
-							"table": 3846545605,
+							"table": 1046987395,
 							"pageType": "list"
 						}
 					},
@@ -360,7 +360,7 @@
 						"id": "5",
 						"data": {
 							"name": {
-								"table": "projects",
+								"table": "design_projects",
 								"type": 6
 							},
 							"pageId": "list",
@@ -369,7 +369,7 @@
 							"iconType": 2,
 							"iconName": "glyphicon-briefcase",
 							"showIconType": 2,
-							"table": 1553183652,
+							"table": 2276577762,
 							"pageType": "list"
 						}
 					},
@@ -377,7 +377,7 @@
 						"id": "6",
 						"data": {
 							"name": {
-								"table": "phase_catalog",
+								"table": "design_phase_catalog",
 								"type": 6
 							},
 							"pageId": "list",
@@ -386,7 +386,7 @@
 							"iconType": 2,
 							"iconName": "glyphicon-earphone",
 							"showIconType": 2,
-							"table": 189308715,
+							"table": 349274896,
 							"pageType": "list"
 						}
 					},
@@ -394,7 +394,7 @@
 						"id": "8",
 						"data": {
 							"name": {
-								"table": "default_subphases",
+								"table": "design_default_subphases",
 								"type": 6
 							},
 							"pageId": "list",
@@ -403,7 +403,7 @@
 							"iconType": 2,
 							"iconName": "glyphicon-fire",
 							"showIconType": 2,
-							"table": 3759655271,
+							"table": 4287287413,
 							"pageType": "list"
 						}
 					},
@@ -450,7 +450,7 @@
 							"linkType": 0,
 							"iconType": 2,
 							"iconName": "glyphicon-folder-close",
-							"table": 3143721048,
+							"table": 2767748195,
 							"pageType": "list"
 						}
 					}
@@ -557,10 +557,10 @@
 				"welcome_item4": {
 					"type": "welcome_item",
 					"linkUrl": "",
-					"linkTable": "projects",
+					"linkTable": "design_projects",
 					"linkPage": "list",
 					"linkText": {
-						"table": "projects",
+						"table": "design_projects",
 						"type": 6
 					},
 					"linkIcon": {
@@ -576,10 +576,10 @@
 				"welcome_item6": {
 					"type": "welcome_item",
 					"linkUrl": "",
-					"linkTable": "phases",
+					"linkTable": "design_phases",
 					"linkPage": "list",
 					"linkText": {
-						"table": "phases",
+						"table": "design_phases",
 						"type": 6
 					},
 					"linkIcon": {
@@ -591,10 +591,10 @@
 				"welcome_item10": {
 					"type": "welcome_item",
 					"linkUrl": "",
-					"linkTable": "projects view",
+					"linkTable": "design_projects view",
 					"linkPage": "list",
 					"linkText": {
-						"table": "projects view",
+						"table": "design_projects view",
 						"type": 6
 					},
 					"linkType": 0,
@@ -1155,7 +1155,7 @@
 	},
 	"styleOverrides": [
 		{
-			"table": 3143721048,
+			"table": 2767748195,
 			"page": "list",
 			"style": {
 				"theme": "cerulean",
@@ -1239,7 +1239,7 @@
 			}
 		},
 		{
-			"table": 1903550912,
+			"table": 3994101511,
 			"page": "list",
 			"style": {
 				"theme": "cerulean",
@@ -1281,7 +1281,7 @@
 			}
 		},
 		{
-			"table": 1903550912,
+			"table": 3994101511,
 			"page": "list1",
 			"style": {
 				"theme": "cerulean",

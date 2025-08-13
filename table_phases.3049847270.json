@@ -1,8 +1,8 @@
 {
-	"sql": "SELECT\n\tphase_id,\n\tproject_id,\n\tphase_code,\n\t`sequence`,\n\tlong_duration,\n\tdue_date,\n\tcompleted_date,\n\tnotes\nFROM\n\tphases\n\n",
+	"sql": "SELECT\r\n\tphase_id,\r\n\tproject_id,\r\n\tphase_code,\r\n\t`sequence`,\r\n\tlong_duration,\r\n\tdue_date,\r\n\tcompleted_date,\r\n\tnotes\r\nFROM\r\n\tdesign_phases",
 	"connId": "conn",
-	"originalTable": "phases",
-	"name": "phases",
+	"originalTable": "design_phases",
+	"name": "design_phases",
 	"shortTableName": "phases",
 	"dbType": 0,
 	"keyFields": [
@@ -10,7 +10,7 @@
 	],
 	"masterTables": [
 		{
-			"table": 1553183652,
+			"table": 2276577762,
 			"masterKeys": [
 				"project_id"
 			],
@@ -19,7 +19,7 @@
 			]
 		},
 		{
-			"table": 3143721048,
+			"table": 2767748195,
 			"masterKeys": [
 				"project_id"
 			],
@@ -30,7 +30,7 @@
 	],
 	"detailsBadgeColor": "71e414",
 	"detailsTables": [
-		1903550912
+		3994101511
 	],
 	"fields": [
 		{
@@ -49,7 +49,7 @@
 			"label": {
 				"English": "Phase Id"
 			},
-			"tableName": "phases"
+			"tableName": "design_phases"
 		},
 		{
 			"name": "project_id",
@@ -63,7 +63,7 @@
 			"editFormats": [
 				{
 					"format": "Lookup wizard",
-					"lookupTable": "projects",
+					"lookupTable": "design_projects",
 					"lookupTableConnection": "conn",
 					"lookupLinkField": "project_id",
 					"lookupDisplayField": "project_name"
@@ -72,7 +72,7 @@
 			"label": {
 				"English": "Project Id"
 			},
-			"tableName": "phases"
+			"tableName": "design_phases"
 		},
 		{
 			"name": "phase_code",
@@ -100,7 +100,7 @@
 			"label": {
 				"English": "Phase"
 			},
-			"tableName": "phases"
+			"tableName": "design_phases"
 		},
 		{
 			"name": "sequence",
@@ -117,7 +117,7 @@
 			"label": {
 				"English": "Sequence"
 			},
-			"tableName": "phases"
+			"tableName": "design_phases"
 		},
 		{
 			"name": "long_duration",
@@ -134,7 +134,7 @@
 			"label": {
 				"English": "Days"
 			},
-			"tableName": "phases"
+			"tableName": "design_phases"
 		},
 		{
 			"name": "due_date",
@@ -156,7 +156,7 @@
 			"label": {
 				"English": "Due Date"
 			},
-			"tableName": "phases"
+			"tableName": "design_phases"
 		},
 		{
 			"name": "completed_date",
@@ -178,7 +178,7 @@
 			"label": {
 				"English": "Completed Date"
 			},
-			"tableName": "phases"
+			"tableName": "design_phases"
 		},
 		{
 			"name": "notes",
@@ -195,7 +195,7 @@
 			"label": {
 				"English": "Notes"
 			},
-			"tableName": "phases"
+			"tableName": "design_phases"
 		}
 	],
 	"afterEditAction": 0,
@@ -232,7 +232,7 @@
 		"foreignKeys": [
 			{
 				"name": "fk_phases_project",
-				"refTable": "projects",
+				"refTable": "design_projects",
 				"refSchema": "",
 				"del_rule": 1,
 				"upd_rule": 1,
@@ -346,7 +346,7 @@
 			"phase_id"
 		],
 		"uniqueFields": [],
-		"name": "phases"
+		"name": "design_phases"
 	},
 	"pages": [
 		{
@@ -1894,7 +1894,7 @@
 				"print_details": {
 					"type": "print_details",
 					"tables": {
-						"1903550912": true
+						"3994101511": true
 					}
 				},
 				"print_records": {
@@ -1939,8 +1939,8 @@
 				"master_info": {
 					"type": "master_info",
 					"tables": {
-						"1553183652": "true",
-						"3143721048": "true"
+						"2276577762": "true",
+						"2767748195": "true"
 					}
 				},
 				"filter_panel": {
@@ -2020,7 +2020,7 @@
 				},
 				"details_preview": {
 					"type": "details_preview",
-					"table": 1903550912,
+					"table": 3994101511,
 					"items": [],
 					"proceedLink": true,
 					"popup": false,
@@ -2032,7 +2032,7 @@
 				},
 				"grid_details_link": {
 					"type": "grid_details_link",
-					"table": 1903550912,
+					"table": 3994101511,
 					"badge": true,
 					"hideIfNone": false,
 					"showCount": true
@@ -2291,7 +2291,7 @@
 				},
 				"details_preview": {
 					"type": "details_preview",
-					"table": 1903550912,
+					"table": 3994101511,
 					"items": [],
 					"popup": false
 				},
@@ -2306,7 +2306,7 @@
 				"master_info": {
 					"type": "master_info",
 					"tables": {
-						"3143721048": "true"
+						"2767748195": "true"
 					}
 				}
 			},

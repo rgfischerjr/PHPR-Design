@@ -1,37 +1,19 @@
 {
-	"sql": "SELECT\r\n\tdefault_id,\r\n\tphase_code,\r\n\tsubphase_name,\r\n\tsort_order\r\nFROM\r\n\tdefault_subphases",
+	"sql": "SELECT\r\n\tphase_code,\r\n\tphase_name,\r\n\tdefault_long_duration,\r\n\t`sequence`\r\nFROM\r\n\tdesign_phase_catalog",
 	"connId": "conn",
-	"originalTable": "default_subphases",
-	"name": "default_subphases",
-	"shortTableName": "default_subphases",
+	"originalTable": "design_phase_catalog",
+	"name": "design_phase_catalog",
+	"shortTableName": "phase_catalog",
 	"dbType": 0,
 	"keyFields": [
-		"default_id"
+		"phase_code"
 	],
-	"detailsBadgeColor": "edca00",
+	"detailsBadgeColor": "d2af80",
 	"fields": [
-		{
-			"name": "default_id",
-			"sqlExpression": "default_id",
-			"index": 1,
-			"strField": "default_id",
-			"type": 3,
-			"autoinc": true,
-			"viewFormats": [
-				{}
-			],
-			"editFormats": [
-				{}
-			],
-			"label": {
-				"English": "Default Id"
-			},
-			"tableName": "default_subphases"
-		},
 		{
 			"name": "phase_code",
 			"sqlExpression": "phase_code",
-			"index": 2,
+			"index": 1,
 			"strField": "phase_code",
 			"type": 129,
 			"viewFormats": [
@@ -52,15 +34,15 @@
 				}
 			],
 			"label": {
-				"English": "Phase"
+				"English": "Short Name"
 			},
-			"tableName": "default_subphases"
+			"tableName": "design_phase_catalog"
 		},
 		{
-			"name": "subphase_name",
-			"sqlExpression": "subphase_name",
-			"index": 3,
-			"strField": "subphase_name",
+			"name": "phase_name",
+			"sqlExpression": "phase_name",
+			"index": 2,
+			"strField": "phase_name",
 			"type": 200,
 			"viewFormats": [
 				{}
@@ -69,15 +51,15 @@
 				{}
 			],
 			"label": {
-				"English": "Subphase Name"
+				"English": "Name"
 			},
-			"tableName": "default_subphases"
+			"tableName": "design_phase_catalog"
 		},
 		{
-			"name": "sort_order",
-			"sqlExpression": "sort_order",
-			"index": 4,
-			"strField": "sort_order",
+			"name": "default_long_duration",
+			"sqlExpression": "default_long_duration",
+			"index": 3,
+			"strField": "default_long_duration",
 			"type": 3,
 			"viewFormats": [
 				{}
@@ -86,9 +68,26 @@
 				{}
 			],
 			"label": {
-				"English": "Sort Order"
+				"English": "Default Duration"
 			},
-			"tableName": "default_subphases"
+			"tableName": "design_phase_catalog"
+		},
+		{
+			"name": "sequence",
+			"sqlExpression": "`sequence`",
+			"index": 4,
+			"strField": "sequence",
+			"type": 2,
+			"viewFormats": [
+				{}
+			],
+			"editFormats": [
+				{}
+			],
+			"label": {
+				"English": "Sequence"
+			},
+			"tableName": "design_phase_catalog"
 		}
 	],
 	"afterEditAction": 0,
@@ -98,23 +97,13 @@
 		"foreignKeys": [],
 		"fields": [
 			{
-				"name": "default_id",
-				"type": 3,
-				"size": 0,
-				"scale": 0,
-				"typeName": "int",
-				"nullable": false,
-				"autoinc": true,
-				"defaultValueSQL": null,
-				"defaultValue": ""
-			},
-			{
 				"name": "phase_code",
 				"type": 129,
 				"size": 0,
 				"scale": 0,
-				"typeName": "enum('TF','SD','QA_QC1','DD','QA_QC2','PP')",
+				"typeName": "enum('DSA','TF','SD','QA_QC1','DD','QA_QC2','PP')",
 				"enumValues": [
+					"DSA",
 					"TF",
 					"SD",
 					"QA_QC1",
@@ -128,33 +117,44 @@
 				"defaultValue": ""
 			},
 			{
-				"name": "subphase_name",
+				"name": "phase_name",
 				"type": 200,
-				"size": 255,
+				"size": 50,
 				"scale": 0,
-				"typeName": "varchar(255)",
+				"typeName": "varchar(50)",
 				"nullable": false,
 				"autoinc": false,
 				"defaultValueSQL": null,
 				"defaultValue": ""
 			},
 			{
-				"name": "sort_order",
+				"name": "default_long_duration",
 				"type": 3,
 				"size": 0,
 				"scale": 0,
 				"typeName": "int",
 				"nullable": false,
 				"autoinc": false,
-				"defaultValueSQL": "100",
-				"defaultValue": "100"
+				"defaultValueSQL": null,
+				"defaultValue": ""
+			},
+			{
+				"name": "sequence",
+				"type": 16,
+				"size": 0,
+				"scale": 0,
+				"typeName": "tinyint",
+				"nullable": false,
+				"autoinc": false,
+				"defaultValueSQL": null,
+				"defaultValue": ""
 			}
 		],
 		"primaryKeys": [
-			"default_id"
+			"phase_code"
 		],
 		"uniqueFields": [],
-		"name": "default_subphases"
+		"name": "design_phase_catalog"
 	},
 	"pages": [
 		{
@@ -242,31 +242,160 @@
 						{
 							"cells": [
 								{
+									"cell": "c4"
+								},
+								{
+									"cell": "c2"
+								},
+								{
+									"cell": "c"
+								}
+							],
+							"section": ""
+						},
+						{
+							"cells": [
+								{
+									"cell": "c5"
+								},
+								{
 									"cell": "c3"
+								},
+								{
+									"cell": "c6"
+								}
+							],
+							"section": ""
+						},
+						{
+							"cells": [
+								{
+									"cell": "c10"
+								},
+								{
+									"cell": "c11"
+								},
+								{
+									"cell": "c12"
+								}
+							],
+							"section": ""
+						},
+						{
+							"cells": [
+								{
+									"cell": "c13"
+								},
+								{
+									"cell": "c14"
+								},
+								{
+									"cell": "c15"
 								}
 							],
 							"section": ""
 						}
 					],
 					"cells": {
-						"c3": {
-							"model": "c3",
+						"c4": {
+							"model": "c4",
 							"items": [
-								"integrated_edit_field",
-								"integrated_edit_field1",
-								"integrated_edit_field2"
-							]
+								"integrated_edit_field5"
+							],
+							"field": "phase_code"
+						},
+						"c2": {
+							"model": "c2",
+							"items": [
+								"integrated_edit_field"
+							],
+							"field": "phase_code"
+						},
+						"c": {
+							"model": "c2",
+							"items": [
+								"integrated_edit_field6"
+							],
+							"field": "phase_code"
+						},
+						"c5": {
+							"model": "c4",
+							"items": [
+								"integrated_edit_field7"
+							],
+							"field": "phase_name"
+						},
+						"c3": {
+							"model": "c2",
+							"items": [
+								"integrated_edit_field1"
+							],
+							"field": "phase_name"
+						},
+						"c6": {
+							"model": "c2",
+							"items": [
+								"integrated_edit_field8"
+							],
+							"field": "phase_name"
+						},
+						"c10": {
+							"model": "c4",
+							"items": [
+								"integrated_edit_field11"
+							],
+							"field": "default_long_duration"
+						},
+						"c11": {
+							"model": "c2",
+							"items": [
+								"integrated_edit_field3"
+							],
+							"field": "default_long_duration"
+						},
+						"c12": {
+							"model": "c2",
+							"items": [
+								"integrated_edit_field12"
+							],
+							"field": "default_long_duration"
+						},
+						"c13": {
+							"model": "c4",
+							"items": [
+								"integrated_edit_field13"
+							],
+							"field": "sequence"
+						},
+						"c14": {
+							"model": "c2",
+							"items": [
+								"integrated_edit_field4"
+							],
+							"field": "sequence"
+						},
+						"c15": {
+							"model": "c2",
+							"items": [
+								"integrated_edit_field14"
+							],
+							"field": "sequence"
 						}
 					},
 					"deferredItems": [],
 					"columnCount": 1,
-					"inlineLabels": false,
-					"separateLabels": false
+					"inlineLabels": true,
+					"separateLabels": true
 				}
 			},
 			"items": {
 				"add_header": {
-					"type": "add_header"
+					"type": "add_header",
+					"title": {
+						"page": "add",
+						"table": "phase_catalog",
+						"type": 7
+					}
 				},
 				"add_back_list": {
 					"type": "add_back_list"
@@ -285,18 +414,51 @@
 				},
 				"integrated_edit_field": {
 					"field": "phase_code",
-					"type": "integrated_edit_field",
-					"orientation": 0
+					"type": "edit_field"
+				},
+				"integrated_edit_field5": {
+					"type": "edit_field_label",
+					"field": "phase_code"
+				},
+				"integrated_edit_field6": {
+					"type": "edit_field_tooltip",
+					"field": "phase_code"
 				},
 				"integrated_edit_field1": {
-					"field": "subphase_name",
-					"type": "integrated_edit_field",
-					"orientation": 0
+					"field": "phase_name",
+					"type": "edit_field"
 				},
-				"integrated_edit_field2": {
-					"field": "sort_order",
-					"type": "integrated_edit_field",
-					"orientation": 0
+				"integrated_edit_field7": {
+					"type": "edit_field_label",
+					"field": "phase_name"
+				},
+				"integrated_edit_field8": {
+					"type": "edit_field_tooltip",
+					"field": "phase_name"
+				},
+				"integrated_edit_field3": {
+					"field": "default_long_duration",
+					"type": "edit_field"
+				},
+				"integrated_edit_field11": {
+					"type": "edit_field_label",
+					"field": "default_long_duration"
+				},
+				"integrated_edit_field12": {
+					"type": "edit_field_tooltip",
+					"field": "default_long_duration"
+				},
+				"integrated_edit_field4": {
+					"field": "sequence",
+					"type": "edit_field"
+				},
+				"integrated_edit_field13": {
+					"type": "edit_field_label",
+					"field": "sequence"
+				},
+				"integrated_edit_field14": {
+					"type": "edit_field_tooltip",
+					"field": "sequence"
 				}
 			},
 			"dbProps": {},
@@ -308,7 +470,9 @@
 			"controlsBgColor": "white",
 			"imagePosition": "right",
 			"listTotals": 1,
-			"title": {}
+			"title": {
+				"English": "Add Phase to Catalog"
+			}
 		},
 		{
 			"id": "export",
@@ -379,8 +543,8 @@
 							"items": [
 								"export_field",
 								"export_field1",
-								"export_field2",
-								"export_field3"
+								"export_field3",
+								"export_field4"
 							]
 						}
 					},
@@ -430,19 +594,19 @@
 					"type": "export_cancel"
 				},
 				"export_field": {
-					"field": "default_id",
-					"type": "export_field"
-				},
-				"export_field1": {
 					"field": "phase_code",
 					"type": "export_field"
 				},
-				"export_field2": {
-					"field": "subphase_name",
+				"export_field1": {
+					"field": "phase_name",
 					"type": "export_field"
 				},
 				"export_field3": {
-					"field": "sort_order",
+					"field": "default_long_duration",
+					"type": "export_field"
+				},
+				"export_field4": {
+					"field": "sequence",
 					"type": "export_field"
 				}
 			},
@@ -530,8 +694,8 @@
 							"items": [
 								"import_field",
 								"import_field1",
-								"import_field2",
-								"import_field3"
+								"import_field3",
+								"import_field4"
 							]
 						}
 					},
@@ -544,19 +708,19 @@
 					"type": "import_header"
 				},
 				"import_field": {
-					"field": "default_id",
-					"type": "import_field"
-				},
-				"import_field1": {
 					"field": "phase_code",
 					"type": "import_field"
 				},
-				"import_field2": {
-					"field": "subphase_name",
+				"import_field1": {
+					"field": "phase_name",
 					"type": "import_field"
 				},
 				"import_field3": {
-					"field": "sort_order",
+					"field": "default_long_duration",
+					"type": "import_field"
+				},
+				"import_field4": {
+					"field": "sequence",
 					"type": "import_field"
 				}
 			},
@@ -664,31 +828,160 @@
 						{
 							"cells": [
 								{
+									"cell": "c4"
+								},
+								{
+									"cell": "c2"
+								},
+								{
+									"cell": "c"
+								}
+							],
+							"section": ""
+						},
+						{
+							"cells": [
+								{
+									"cell": "c5"
+								},
+								{
 									"cell": "c3"
+								},
+								{
+									"cell": "c6"
+								}
+							],
+							"section": ""
+						},
+						{
+							"cells": [
+								{
+									"cell": "c10"
+								},
+								{
+									"cell": "c11"
+								},
+								{
+									"cell": "c12"
+								}
+							],
+							"section": ""
+						},
+						{
+							"cells": [
+								{
+									"cell": "c13"
+								},
+								{
+									"cell": "c14"
+								},
+								{
+									"cell": "c15"
 								}
 							],
 							"section": ""
 						}
 					],
 					"cells": {
-						"c3": {
-							"model": "c3",
+						"c4": {
+							"model": "c4",
 							"items": [
-								"integrated_edit_field",
-								"integrated_edit_field1",
-								"integrated_edit_field2"
-							]
+								"integrated_edit_field5"
+							],
+							"field": "phase_code"
+						},
+						"c2": {
+							"model": "c2",
+							"items": [
+								"integrated_edit_field"
+							],
+							"field": "phase_code"
+						},
+						"c": {
+							"model": "c2",
+							"items": [
+								"integrated_edit_field6"
+							],
+							"field": "phase_code"
+						},
+						"c5": {
+							"model": "c4",
+							"items": [
+								"integrated_edit_field7"
+							],
+							"field": "phase_name"
+						},
+						"c3": {
+							"model": "c2",
+							"items": [
+								"integrated_edit_field1"
+							],
+							"field": "phase_name"
+						},
+						"c6": {
+							"model": "c2",
+							"items": [
+								"integrated_edit_field8"
+							],
+							"field": "phase_name"
+						},
+						"c10": {
+							"model": "c4",
+							"items": [
+								"integrated_edit_field11"
+							],
+							"field": "default_long_duration"
+						},
+						"c11": {
+							"model": "c2",
+							"items": [
+								"integrated_edit_field3"
+							],
+							"field": "default_long_duration"
+						},
+						"c12": {
+							"model": "c2",
+							"items": [
+								"integrated_edit_field12"
+							],
+							"field": "default_long_duration"
+						},
+						"c13": {
+							"model": "c4",
+							"items": [
+								"integrated_edit_field13"
+							],
+							"field": "sequence"
+						},
+						"c14": {
+							"model": "c2",
+							"items": [
+								"integrated_edit_field4"
+							],
+							"field": "sequence"
+						},
+						"c15": {
+							"model": "c2",
+							"items": [
+								"integrated_edit_field14"
+							],
+							"field": "sequence"
 						}
 					},
 					"deferredItems": [],
 					"columnCount": 1,
-					"inlineLabels": false,
-					"separateLabels": false
+					"inlineLabels": true,
+					"separateLabels": true
 				}
 			},
 			"items": {
 				"edit_header": {
-					"type": "edit_header"
+					"type": "edit_header",
+					"title": {
+						"page": "edit",
+						"table": "phase_catalog",
+						"type": 7
+					}
 				},
 				"hamburger": {
 					"type": "hamburger",
@@ -713,21 +1006,55 @@
 				},
 				"integrated_edit_field": {
 					"field": "phase_code",
-					"type": "integrated_edit_field",
-					"orientation": 0,
+					"type": "edit_field",
 					"updateOnEdit": false
+				},
+				"integrated_edit_field5": {
+					"type": "edit_field_label",
+					"field": "phase_code"
+				},
+				"integrated_edit_field6": {
+					"type": "edit_field_tooltip",
+					"field": "phase_code"
 				},
 				"integrated_edit_field1": {
-					"field": "subphase_name",
-					"type": "integrated_edit_field",
-					"orientation": 0,
+					"field": "phase_name",
+					"type": "edit_field",
 					"updateOnEdit": false
 				},
-				"integrated_edit_field2": {
-					"field": "sort_order",
-					"type": "integrated_edit_field",
-					"orientation": 0,
+				"integrated_edit_field7": {
+					"type": "edit_field_label",
+					"field": "phase_name"
+				},
+				"integrated_edit_field8": {
+					"type": "edit_field_tooltip",
+					"field": "phase_name"
+				},
+				"integrated_edit_field3": {
+					"field": "default_long_duration",
+					"type": "edit_field",
 					"updateOnEdit": false
+				},
+				"integrated_edit_field11": {
+					"type": "edit_field_label",
+					"field": "default_long_duration"
+				},
+				"integrated_edit_field12": {
+					"type": "edit_field_tooltip",
+					"field": "default_long_duration"
+				},
+				"integrated_edit_field4": {
+					"field": "sequence",
+					"type": "edit_field",
+					"updateOnEdit": false
+				},
+				"integrated_edit_field13": {
+					"type": "edit_field_label",
+					"field": "sequence"
+				},
+				"integrated_edit_field14": {
+					"type": "edit_field_tooltip",
+					"field": "sequence"
 				}
 			},
 			"dbProps": {},
@@ -739,7 +1066,9 @@
 			"controlsBgColor": "white",
 			"imagePosition": "right",
 			"listTotals": 1,
-			"title": {}
+			"title": {
+				"English": "Edit Phase Catalog"
+			}
 		},
 		{
 			"id": "view",
@@ -844,8 +1173,8 @@
 							"items": [
 								"integrated_edit_field",
 								"integrated_edit_field1",
-								"integrated_edit_field2",
-								"integrated_edit_field3"
+								"integrated_edit_field3",
+								"integrated_edit_field4"
 							]
 						}
 					},
@@ -866,22 +1195,22 @@
 					"type": "view_close"
 				},
 				"integrated_edit_field": {
-					"field": "default_id",
-					"type": "integrated_edit_field",
-					"orientation": 0
-				},
-				"integrated_edit_field1": {
 					"field": "phase_code",
 					"type": "integrated_edit_field",
 					"orientation": 0
 				},
-				"integrated_edit_field2": {
-					"field": "subphase_name",
+				"integrated_edit_field1": {
+					"field": "phase_name",
 					"type": "integrated_edit_field",
 					"orientation": 0
 				},
 				"integrated_edit_field3": {
-					"field": "sort_order",
+					"field": "default_long_duration",
+					"type": "integrated_edit_field",
+					"orientation": 0
+				},
+				"integrated_edit_field4": {
+					"field": "sequence",
 					"type": "integrated_edit_field",
 					"orientation": 0
 				},
@@ -932,8 +1261,7 @@
 						"c1": {
 							"model": "c1",
 							"items": [
-								"add",
-								"delete"
+								"add"
 							]
 						},
 						"c2": {
@@ -1045,9 +1373,7 @@
 					"cells": {
 						"c1": {
 							"model": "c1",
-							"items": [
-								"breadcrumb"
-							]
+							"items": []
 						}
 					},
 					"deferredItems": [],
@@ -1063,16 +1389,19 @@
 									"cell": "headcell_icons"
 								},
 								{
+									"cell": "headcell_checkbox"
+								},
+								{
 									"cell": "headcell_field"
 								},
 								{
 									"cell": "headcell_field1"
 								},
 								{
-									"cell": "headcell_field2"
+									"cell": "headcell_field3"
 								},
 								{
-									"cell": "headcell_field3"
+									"cell": "headcell_field4"
 								}
 							]
 						},
@@ -1083,16 +1412,19 @@
 									"cell": "cell_icons"
 								},
 								{
+									"cell": "cell_checkbox"
+								},
+								{
 									"cell": "cell_field"
 								},
 								{
 									"cell": "cell_field1"
 								},
 								{
-									"cell": "cell_field2"
+									"cell": "cell_field3"
 								},
 								{
-									"cell": "cell_field3"
+									"cell": "cell_field4"
 								}
 							]
 						},
@@ -1103,16 +1435,19 @@
 									"cell": "footcell_icons"
 								},
 								{
+									"cell": "footcell_checkbox"
+								},
+								{
 									"cell": "footcell_field"
 								},
 								{
 									"cell": "footcell_field1"
 								},
 								{
-									"cell": "footcell_field2"
+									"cell": "footcell_field3"
 								},
 								{
-									"cell": "footcell_field3"
+									"cell": "footcell_field4"
 								}
 							]
 						}
@@ -1121,110 +1456,108 @@
 						"headcell_field": {
 							"model": "headcell_field",
 							"items": [
-								"simple_grid_field4"
+								"simple_grid_field5"
 							],
-							"field": "default_id",
-							"columnName": "field"
+							"field": "phase_code"
 						},
 						"cell_field": {
 							"model": "cell_field",
 							"items": [
 								"simple_grid_field"
 							],
-							"field": "default_id",
-							"columnName": "field"
+							"field": "phase_code"
 						},
 						"footcell_field": {
 							"model": "footcell_field",
 							"items": [],
-							"columnName": "field",
-							"field": "default_id"
+							"field": "phase_code"
 						},
 						"headcell_field1": {
 							"model": "headcell_field",
 							"items": [
-								"simple_grid_field5"
+								"simple_grid_field6"
 							],
-							"field": "phase_code",
-							"columnName": "field"
+							"field": "phase_name"
 						},
 						"cell_field1": {
 							"model": "cell_field",
 							"items": [
 								"simple_grid_field1"
 							],
-							"field": "phase_code",
-							"columnName": "field"
+							"field": "phase_name"
 						},
 						"footcell_field1": {
 							"model": "footcell_field",
 							"items": [],
-							"columnName": "field",
-							"field": "phase_code"
-						},
-						"headcell_field2": {
-							"model": "headcell_field",
-							"items": [
-								"simple_grid_field6"
-							],
-							"field": "subphase_name",
-							"columnName": "field"
-						},
-						"cell_field2": {
-							"model": "cell_field",
-							"items": [
-								"simple_grid_field2"
-							],
-							"field": "subphase_name",
-							"columnName": "field"
-						},
-						"footcell_field2": {
-							"model": "footcell_field",
-							"items": [],
-							"columnName": "field",
-							"field": "subphase_name"
+							"field": "phase_name"
 						},
 						"headcell_field3": {
 							"model": "headcell_field",
 							"items": [
-								"simple_grid_field7"
+								"simple_grid_field8"
 							],
-							"field": "sort_order",
-							"columnName": "field"
+							"field": "default_long_duration"
 						},
 						"cell_field3": {
 							"model": "cell_field",
 							"items": [
 								"simple_grid_field3"
 							],
-							"field": "sort_order",
-							"columnName": "field"
+							"field": "default_long_duration"
 						},
 						"footcell_field3": {
 							"model": "footcell_field",
 							"items": [],
-							"columnName": "field",
-							"field": "sort_order"
+							"field": "default_long_duration"
+						},
+						"headcell_field4": {
+							"model": "headcell_field",
+							"items": [
+								"simple_grid_field9"
+							],
+							"field": "sequence"
+						},
+						"cell_field4": {
+							"model": "cell_field",
+							"items": [
+								"simple_grid_field4"
+							],
+							"field": "sequence"
+						},
+						"footcell_field4": {
+							"model": "footcell_field",
+							"items": [],
+							"field": "sequence"
+						},
+						"headcell_checkbox": {
+							"model": "headcell_checkbox",
+							"items": [
+								"grid_checkbox_head"
+							]
+						},
+						"cell_checkbox": {
+							"model": "cell_checkbox",
+							"items": [
+								"grid_checkbox"
+							]
+						},
+						"footcell_checkbox": {
+							"model": "footcell_checkbox",
+							"items": []
 						},
 						"headcell_icons": {
 							"model": "headcell_icons",
-							"items": [],
-							"columnName": "edit",
-							"field": ""
+							"items": []
 						},
 						"cell_icons": {
 							"model": "cell_icons",
 							"items": [
 								"grid_edit"
-							],
-							"columnName": "edit",
-							"field": ""
+							]
 						},
 						"footcell_icons": {
 							"model": "footcell_icons",
-							"items": [],
-							"columnName": "edit",
-							"field": ""
+							"items": []
 						}
 					},
 					"deferredItems": [],
@@ -1236,45 +1569,17 @@
 					"type": "add",
 					"popup": false
 				},
-				"delete": {
-					"type": "delete"
-				},
 				"page_size": {
 					"type": "page_size"
 				},
 				"pagination": {
 					"type": "pagination"
 				},
-				"search_panel_field": {
-					"field": "default_id",
-					"type": "search_panel_field"
-				},
-				"search_panel_field3": {
-					"field": "sort_order",
-					"type": "search_panel_field"
-				},
-				"search_panel_field2": {
-					"field": "subphase_name",
-					"type": "search_panel_field"
-				},
-				"search_panel_field1": {
-					"field": "phase_code",
-					"type": "search_panel_field"
-				},
 				"export_selected": {
 					"type": "export_selected"
 				},
-				"delete_selected": {
-					"type": "delete_selected"
-				},
 				"-1": {
 					"type": "-"
-				},
-				"show_search_panel": {
-					"type": "show_search_panel"
-				},
-				"hide_search_panel": {
-					"type": "hide_search_panel"
 				},
 				"-": {
 					"type": "-"
@@ -1285,9 +1590,6 @@
 				"-2": {
 					"type": "-"
 				},
-				"breadcrumb": {
-					"type": "breadcrumb"
-				},
 				"logo": {
 					"type": "logo"
 				},
@@ -1297,25 +1599,14 @@
 				"simple_search": {
 					"type": "simple_search"
 				},
-				"search_panel": {
-					"type": "search_panel",
-					"items": [
-						"search_panel_field",
-						"search_panel_field3",
-						"search_panel_field2",
-						"search_panel_field1"
-					],
-					"_flexiblePanel": true
-				},
 				"list_options": {
 					"type": "list_options",
 					"items": [
 						"export_selected",
-						"delete_selected",
-						"-1",
+						"-3",
 						"show_search_panel",
 						"hide_search_panel",
-						"-",
+						"-1",
 						"export"
 					]
 				},
@@ -1333,17 +1624,6 @@
 					"type": "logout_link"
 				},
 				"simple_grid_field": {
-					"field": "default_id",
-					"type": "grid_field",
-					"inlineAdd": false,
-					"inlineEdit": false
-				},
-				"simple_grid_field4": {
-					"type": "grid_field_label",
-					"field": "default_id",
-					"clickSort": true
-				},
-				"simple_grid_field1": {
 					"field": "phase_code",
 					"type": "grid_field",
 					"inlineAdd": false,
@@ -1354,34 +1634,87 @@
 					"field": "phase_code",
 					"clickSort": true
 				},
-				"simple_grid_field2": {
-					"field": "subphase_name",
+				"simple_grid_field1": {
+					"field": "phase_name",
 					"type": "grid_field",
 					"inlineAdd": false,
 					"inlineEdit": false
 				},
 				"simple_grid_field6": {
 					"type": "grid_field_label",
-					"field": "subphase_name",
+					"field": "phase_name",
 					"clickSort": true
 				},
 				"simple_grid_field3": {
-					"field": "sort_order",
+					"field": "default_long_duration",
 					"type": "grid_field",
 					"inlineAdd": false,
 					"inlineEdit": false
 				},
-				"simple_grid_field7": {
+				"simple_grid_field8": {
 					"type": "grid_field_label",
-					"field": "sort_order",
+					"field": "default_long_duration",
+					"label": {
+						"field": "default_long_duration",
+						"table": "phase_catalog",
+						"type": 3
+					},
 					"clickSort": true
+				},
+				"simple_grid_field4": {
+					"field": "sequence",
+					"type": "grid_field",
+					"inlineAdd": false,
+					"inlineEdit": false
+				},
+				"simple_grid_field9": {
+					"type": "grid_field_label",
+					"field": "sequence",
+					"clickSort": true
+				},
+				"grid_checkbox": {
+					"type": "grid_checkbox"
+				},
+				"grid_checkbox_head": {
+					"type": "grid_checkbox_head"
 				},
 				"grid_edit": {
 					"type": "grid_edit",
-					"icon": {
-						"glyph": "pencil"
-					},
 					"popup": false
+				},
+				"search_panel": {
+					"type": "search_panel",
+					"items": [
+						"search_panel_field",
+						"search_panel_field3",
+						"search_panel_field2",
+						"search_panel_field1"
+					]
+				},
+				"show_search_panel": {
+					"type": "show_search_panel"
+				},
+				"-3": {
+					"type": "-"
+				},
+				"hide_search_panel": {
+					"type": "hide_search_panel"
+				},
+				"search_panel_field": {
+					"field": "phase_code",
+					"type": "search_panel_field"
+				},
+				"search_panel_field1": {
+					"field": "phase_name",
+					"type": "search_panel_field"
+				},
+				"search_panel_field2": {
+					"field": "default_long_duration",
+					"type": "search_panel_field"
+				},
+				"search_panel_field3": {
+					"field": "sequence",
+					"type": "search_panel_field"
 				},
 				"next_page": {
 					"type": "next_page"
@@ -1392,7 +1725,6 @@
 			},
 			"dbProps": {},
 			"version": 13,
-			"pageWidth": "compact",
 			"pageAlign": "center",
 			"reorderRows": false,
 			"reorderRowsField": "",
@@ -1499,8 +1831,8 @@
 							"items": [
 								"simple_grid_field",
 								"simple_grid_field1",
-								"simple_grid_field2",
-								"simple_grid_field3"
+								"simple_grid_field3",
+								"simple_grid_field4"
 							]
 						}
 					},
@@ -1519,19 +1851,19 @@
 					"type": "print_pages"
 				},
 				"simple_grid_field": {
-					"field": "default_id",
-					"type": "simple_grid_field"
-				},
-				"simple_grid_field1": {
 					"field": "phase_code",
 					"type": "simple_grid_field"
 				},
-				"simple_grid_field2": {
-					"field": "subphase_name",
+				"simple_grid_field1": {
+					"field": "phase_name",
 					"type": "simple_grid_field"
 				},
 				"simple_grid_field3": {
-					"field": "sort_order",
+					"field": "default_long_duration",
+					"type": "simple_grid_field"
+				},
+				"simple_grid_field4": {
+					"field": "sequence",
 					"type": "simple_grid_field"
 				}
 			},
@@ -1554,6 +1886,6 @@
 		"addressFields": []
 	},
 	"caption": {
-		"English": "Default Subphases"
+		"English": "Phase Catalog"
 	}
 }

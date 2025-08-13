@@ -17,7 +17,7 @@
 	"type": 1,
 	"connId": "conn",
 	"originalTable": "projects",
-	"name": "projects view",
+	"name": "design_projects view",
 	"shortTableName": "projects1",
 	"dbType": 0,
 	"keyFields": [
@@ -25,7 +25,7 @@
 	],
 	"detailsBadgeColor": "3cb371",
 	"detailsTables": [
-		386492901
+		3049847270
 	],
 	"fields": [
 		{
@@ -78,7 +78,7 @@
 			"editFormats": [
 				{
 					"format": "Lookup wizard",
-					"lookupTable": "users",
+					"lookupTable": "design_users",
 					"lookupTableConnection": "conn",
 					"lookupLinkField": "user_id",
 					"lookupDisplayField": "username"
@@ -1572,8 +1572,8 @@
 				"print_details": {
 					"type": "print_details",
 					"tables": {
-						"386492901": true,
-						"1903550912": true
+						"3049847270": true,
+						"3994101511": true
 					}
 				},
 				"print_records": {
@@ -1628,7 +1628,7 @@
 				"master_info": {
 					"type": "master_info",
 					"tables": {
-						"344172009": "true"
+						"2992821450": "true"
 					}
 				},
 				"simple_grid_field1": {
@@ -1693,7 +1693,7 @@
 				},
 				"details_preview": {
 					"type": "details_preview",
-					"table": 1903550912,
+					"table": 3994101511,
 					"items": [],
 					"proceedLink": true,
 					"popup": false,
@@ -1705,7 +1705,7 @@
 				},
 				"details_preview2": {
 					"type": "details_preview",
-					"table": 386492901,
+					"table": 3049847270,
 					"items": [],
 					"proceedLink": true,
 					"popup": false,
@@ -1935,12 +1935,12 @@
 				"master_info": {
 					"type": "master_info",
 					"tables": {
-						"344172009": "true"
+						"2992821450": "true"
 					}
 				},
 				"details_preview": {
 					"type": "details_preview",
-					"table": 1903550912,
+					"table": 3994101511,
 					"items": [],
 					"popup": false
 				},
@@ -1950,7 +1950,7 @@
 				},
 				"details_preview2": {
 					"type": "details_preview",
-					"table": 386492901,
+					"table": 3049847270,
 					"items": [],
 					"popup": false
 				},
