@@ -167,7 +167,7 @@ function recalc_phase_due_dates($projectId)
     $pp_start = $earlierOfCompleteOrDue($ph["DD"]);
     $pp_due   = $bdAddEx($pp_start, (int)$ph["PP"]["long_duration"]);
     if ($pp_due) {
-        CustomQuery("UPDATE phases SET due_date=".db_prepare_string($pp_due)." WHERE phase_id=".(int)$ph["PP"]["phase_id"]);
+        CustomQuery("UPDATE design_phases SET due_date=".db_prepare_string($pp_due)." WHERE phase_id=".(int)$ph["PP"]["phase_id"]);
         $ph["PP"]["due_date"] = $pp_due;
     }
 
