@@ -10,7 +10,7 @@
 	],
 	"masterTables": [
 		{
-			"table": 2992821450,
+			"table": null,
 			"masterKeys": [
 				"user_id"
 			],
@@ -95,12 +95,12 @@
 			"editFormats": [
 				{
 					"format": "Lookup wizard",
-					"lookupType": 2,
-					"lookupTable": "users",
+					"lookupTable": "eviz_users",
 					"lookupTableConnection": "conn",
-					"lookupLinkField": "user_id",
-					"lookupDisplayField": "full_name",
-					"lookupOrderBy": "user_id"
+					"lookupLinkField": "ID",
+					"lookupDisplayField": "fullname",
+					"lookupOrderBy": "fullname",
+					"lookupWhere": "role = 'admin'"
 				}
 			],
 			"label": {
@@ -193,12 +193,12 @@
 		{
 			"eventId": "EVENT_BEFOREADD",
 			"pageType": "add",
-			"code": "// ---- audit fields ----\r\nglobal $cUserName;\r\n$uid = (int)db_lookup(\"SELECT user_id FROM users WHERE username=\".db_prepare_string($cUserName).\" LIMIT 1\");\r\nif (!$uid) { $uid = (int)db_lookup(\"SELECT MIN(user_id) FROM users\"); if (!$uid){ $message=\"No users exist. Add a user first.\"; return false; } }\r\n$values[\"created_by\"] = $uid;\r\nif (empty($values[\"created_at\"])) $values[\"created_at\"] = NOW();\r\n\r\n// ---- durations (admin only) ----\r\n$role = strtolower((string)db_lookup(\"SELECT role FROM users WHERE username=\".db_prepare_string($cUserName).\" LIMIT 1\"));\r\n$longIn = postvalue(\"phase_long\");\r\n\r\nunset($_SESSION[\"add_phase_long\"]);\r\nif ($role === \"admin\" && is_array($longIn)) {\r\n    $codes = [\"TF\",\"SD\",\"QA_QC1\",\"DD\",\"QA_QC2\",\"PP\"];\r\n    $cleanLong = [];\r\n    foreach ($codes as $c){\r\n        $l = isset($longIn[$c]) ? (int)$longIn[$c] : 0;\r\n        $cleanLong[$c] = $l > 0 ? $l : null;\r\n    }\r\n    foreach ($codes as $c){\r\n        if ($cleanLong[$c] === null){\r\n            $message = \"Please enter a valid Long duration for \".$c.\".\";\r\n            return false;\r\n        }\r\n    }\r\n    $_SESSION[\"add_phase_long\"] = $cleanLong;\r\n} else {\r\n    $_POST[\"phase_long\"] = null; // ignore tampering\r\n}\r\nreturn true;\r\n"
+			"code": "// ---- audit fields ----\r\nglobal $cUserName;\r\n$uid = (int)db_lookup(\"SELECT id FROM eviz_users WHERE username=\".db_prepare_string($cUserName).\" LIMIT 1\");\r\nif (!$uid) { $uid = (int)db_lookup(\"SELECT MIN(id) FROM eviz_users\"); if (!$uid){ $message=\"No users exist. Add a user first.\"; return false; } }\r\n$values[\"created_by\"] = $uid;\r\nif (empty($values[\"created_at\"])) $values[\"created_at\"] = NOW();\r\n\r\n// ---- durations (admin only) ----\r\n$role = strtolower((string)db_lookup(\"SELECT role FROM eviz_users WHERE username=\".db_prepare_string($cUserName).\" LIMIT 1\"));\r\n$longIn = postvalue(\"phase_long\");\r\n\r\nunset($_SESSION[\"add_phase_long\"]);\r\nif ($role === \"admin\" && is_array($longIn)) {\r\n    $codes = [\"TF\",\"SD\",\"QA_QC1\",\"DD\",\"QA_QC2\",\"PP\"];\r\n    $cleanLong = [];\r\n    foreach ($codes as $c){\r\n        $l = isset($longIn[$c]) ? (int)$longIn[$c] : 0;\r\n        $cleanLong[$c] = $l > 0 ? $l : null;\r\n    }\r\n    foreach ($codes as $c){\r\n        if ($cleanLong[$c] === null){\r\n            $message = \"Please enter a valid Long duration for \".$c.\".\";\r\n            return false;\r\n        }\r\n    }\r\n    $_SESSION[\"add_phase_long\"] = $cleanLong;\r\n} else {\r\n    $_POST[\"phase_long\"] = null; // ignore tampering\r\n}\r\nreturn true;\r\n"
 		},
 		{
 			"eventId": "EVENT_BEFORESHOW_ADD",
 			"pageType": "add",
-			"code": "global $cUserName;\r\n$role = strtolower((string)db_lookup(\"SELECT role FROM users WHERE username=\".db_prepare_string($cUserName).\" LIMIT 1\"));\r\n\r\n$rows = [];\r\nif ($role === \"admin\") {\r\n  $rs = CustomQuery(\"\r\n    SELECT phase_code,\r\n           CASE phase_code\r\n             WHEN 'TF' THEN 'Test Fit'\r\n             WHEN 'SD' THEN 'Schematic Design'\r\n             WHEN 'QA_QC1' THEN 'QA/QC1'\r\n             WHEN 'DD' THEN 'Design Development'\r\n             WHEN 'QA_QC2' THEN 'QA/QC2'\r\n             WHEN 'PP' THEN 'P&P'\r\n           END AS label,\r\n           default_long_duration AS l,\r\n           sequence\r\n    FROM phase_catalog\r\n    ORDER BY sequence\r\n  \");\r\n  while($r = db_fetch_array($rs)) $rows[] = $r;\r\n}\r\n\r\necho '<script>window.__isAdmin='.($role==='admin'?'true':'false').';window.__phaseDefaults='.json_encode($rows).';</script>';\r\nreturn true;\r\n\r\necho \"<!-- role=\".(isset($role)?$role:'?').\" defaults_count=\".(isset($rows)?count($rows):0).\" -->\";\r\nreturn true;\r\n"
+			"code": "global $cUserName;\r\n$role = strtolower((string)db_lookup(\"SELECT role FROM eviz_users WHERE username=\".db_prepare_string($cUserName).\" LIMIT 1\"));\r\n\r\n$rows = [];\r\nif ($role === \"admin\") {\r\n  $rs = CustomQuery(\"\r\n    SELECT phase_code,\r\n           CASE phase_code\r\n             WHEN 'TF' THEN 'Test Fit'\r\n             WHEN 'SD' THEN 'Schematic Design'\r\n             WHEN 'QA_QC1' THEN 'QA/QC1'\r\n             WHEN 'DD' THEN 'Design Development'\r\n             WHEN 'QA_QC2' THEN 'QA/QC2'\r\n             WHEN 'PP' THEN 'P&P'\r\n           END AS label,\r\n           default_long_duration AS l,\r\n           sequence\r\n    FROM phase_catalog\r\n    ORDER BY sequence\r\n  \");\r\n  while($r = db_fetch_array($rs)) $rows[] = $r;\r\n}\r\n\r\necho '<script>window.__isAdmin='.($role==='admin'?'true':'false').';window.__phaseDefaults='.json_encode($rows).';</script>';\r\nreturn true;\r\n\r\necho \"<!-- role=\".(isset($role)?$role:'?').\" defaults_count=\".(isset($rows)?count($rows):0).\" -->\";\r\nreturn true;\r\n"
 		},
 		{
 			"eventId": "EVENT_JS_ONLOAD",
@@ -206,29 +206,28 @@
 			"code": "// Place event code here.\n// Use \"Add Action\" button to add code snippets.\n\n//Per Page override for Compact body width\n(function () {\n  var W = 1000; // page-specific width\n\n  var css = [\n    '@media (min-width:768px){',\n      '.r-small-page[data-body-width=\"compact\"] > .container,',\n      '.r-small-page[data-body-width=\"compact\"] > .r-body,',\n      '.r-small-page[data-body-width=\"compact\"] > .r-content,',\n      '.r-small-page[data-body-width=\"compact\"] > .r-data-block,',\n      '.r-small-page[data-body-width=\"compact\"] .container{',\n        'max-width:' + W + 'px;',\n        'width:' + W + 'px;',\n        'margin-left:auto;',\n        'margin-right:auto;',\n      '}',\n\n      '.r-topbar-page .r-body .r-content .r-data-block[data-body-width=\"compact\"]{',\n        'width:' + W + 'px;',\n        'max-width:' + W + 'px;',\n        'flex:0 0 ' + W + 'px;',\n        'margin-left:auto;',\n        'margin-right:auto;',\n      '}',\n\n      '.r-topbar-page .r-body .r-content .r-data-block[data-body-width=\"compact\"] > .r-grid,',\n      '.r-small-page[data-body-width=\"compact\"] .r-grid{',\n        'width:100%;',\n        'max-width:100%;',\n      '}',\n    '}'\n  ].join('');\n\n  var style = document.createElement('style');\n  style.type = 'text/css';\n  style.id = 'compact-width-thispage';\n  if (!document.getElementById(style.id)) {\n    style.appendChild(document.createTextNode(css));\n    document.head.appendChild(style);\n  }\n})();\n"
 		}
 	],
-	"resizeColumns": true,
 	"dbTableInfo": {
 		"type": 0,
 		"foreignKeys": [
 			{
 				"name": "fk_projects_creator",
-				"refTable": "users",
+				"refTable": "eviz_users",
 				"refSchema": "",
 				"columns": [
 					{
 						"column": "created_by",
-						"ref_column": "user_id"
+						"ref_column": "ID"
 					}
 				]
 			},
 			{
 				"name": "fk_projects_designer",
-				"refTable": "users",
+				"refTable": "eviz_users",
 				"refSchema": "",
 				"columns": [
 					{
 						"column": "designer_id",
-						"ref_column": "user_id"
+						"ref_column": "ID"
 					}
 				]
 			}
@@ -1456,7 +1455,8 @@
 						"c2": {
 							"model": "c2",
 							"items": [
-								"details_found_unknown",
+								"details_found",
+								"details_found1",
 								"page_size",
 								"print_panel"
 							]
@@ -1491,8 +1491,7 @@
 						"c1": {
 							"model": "c1",
 							"items": [
-								"pagination",
-								"next_page"
+								"pagination"
 							]
 						}
 					},
@@ -1526,9 +1525,7 @@
 							"model": "c2",
 							"items": [
 								"simple_search",
-								"list_options",
-								"loginform_login",
-								"username_button"
+								"list_options"
 							]
 						}
 					},
@@ -1550,9 +1547,7 @@
 					"cells": {
 						"c1": {
 							"model": "c1",
-							"items": [
-								"search_panel"
-							]
+							"items": []
 						}
 					},
 					"deferredItems": [],
@@ -1814,21 +1809,11 @@
 				"pagination": {
 					"type": "pagination"
 				},
-				"search_panel_field1": {
-					"field": "project_name",
-					"type": "search_panel_field"
-				},
 				"export_selected": {
 					"type": "export_selected"
 				},
 				"-1": {
 					"type": "-"
-				},
-				"show_search_panel": {
-					"type": "show_search_panel"
-				},
-				"hide_search_panel": {
-					"type": "hide_search_panel"
 				},
 				"-": {
 					"type": "-"
@@ -1851,21 +1836,11 @@
 				"simple_search": {
 					"type": "simple_search"
 				},
-				"search_panel": {
-					"type": "search_panel",
-					"items": [
-						"search_panel_field1"
-					],
-					"_flexiblePanel": true
-				},
 				"list_options": {
 					"type": "list_options",
 					"items": [
 						"export_selected",
 						"-1",
-						"show_search_panel",
-						"hide_search_panel",
-						"-",
 						"export",
 						"-2",
 						"import"
@@ -1874,25 +1849,11 @@
 				"master_info": {
 					"type": "master_info",
 					"tables": {
-						"2992821450": "true"
+						"null": "true"
 					}
-				},
-				"username_button": {
-					"type": "username_button",
-					"items": [
-						"userinfo_link",
-						"logout_link"
-					]
-				},
-				"loginform_login": {
-					"type": "loginform_login",
-					"popup": false
 				},
 				"userinfo_link": {
 					"type": "userinfo_link"
-				},
-				"logout_link": {
-					"type": "logout_link"
 				},
 				"simple_grid_field1": {
 					"field": "project_name",
@@ -1903,7 +1864,7 @@
 				"simple_grid_field7": {
 					"type": "grid_field_label",
 					"field": "project_name",
-					"clickSort": true
+					"clickSort": false
 				},
 				"simple_grid_field2": {
 					"field": "contract_date",
@@ -1914,7 +1875,7 @@
 				"simple_grid_field8": {
 					"type": "grid_field_label",
 					"field": "contract_date",
-					"clickSort": true
+					"clickSort": false
 				},
 				"simple_grid_field3": {
 					"field": "designer_id",
@@ -1925,7 +1886,7 @@
 				"simple_grid_field9": {
 					"type": "grid_field_label",
 					"field": "designer_id",
-					"clickSort": true
+					"clickSort": false
 				},
 				"details_preview1": {
 					"type": "deleted",
@@ -1953,13 +1914,14 @@
 				"grid_field_label": {
 					"type": "grid_field_label",
 					"field": "notes",
-					"clickSort": true
+					"clickSort": false
 				},
-				"next_page": {
-					"type": "next_page"
+				"details_found": {
+					"type": "deleted",
+					"itemId": "details_found"
 				},
-				"details_found_unknown": {
-					"type": "details_found_unknown"
+				"details_found1": {
+					"type": "details_found"
 				}
 			},
 			"dbProps": {},
@@ -2302,7 +2264,7 @@
 				"master_info": {
 					"type": "master_info",
 					"tables": {
-						"2992821450": "true"
+						"null": "true"
 					}
 				},
 				"simple_grid_field": {

@@ -13,7 +13,7 @@
 			"asc": true
 		}
 	],
-	"sql": "SELECT\n\tp.project_id,\n\tp.project_name,\n\tu.user_id AS designer_id,\n\tu.full_name AS designer_name,\n\tph.phase_id,\n\tph.phase_code,\n\tCASE ph.phase_code\r\n    WHEN 'TF'     THEN 'Test Fit'\r\n    WHEN 'SD'     THEN 'Schematic Design'\r\n    WHEN 'QA_QC1' THEN 'QA/QC1'\r\n    WHEN 'DD'     THEN 'Design Development'\r\n    WHEN 'QA_QC2' THEN 'QA/QC2'\r\n    WHEN 'PP'     THEN 'P&P'\r\n  END AS phase_label,\n\tph.due_date,\n\tDATEDIFF(ph.due_date, CURDATE()) AS days_until_due\nFROM\n\tphases AS ph\n\tINNER JOIN projects AS p ON p.project_id = ph.project_id\n\tINNER JOIN users AS u ON u.user_id = p.designer_id\nWHERE\nph.due_date <= DATE_ADD(\r\n  CURDATE(),\r\n  INTERVAL (SELECT CAST(setting_value AS SIGNED)\r\n            FROM settings WHERE setting_key='dashboard_days_ahead') DAY\r\n)\nORDER BY\n\tu.full_name,\n\tph.due_date\n",
+	"sql": "SELECT\n\tp.project_id,\n\tp.project_name,\n\tu.id AS designer_id,\n\tu.fullname AS designer_name,\n\tph.phase_id,\n\tph.phase_code,\n\tCASE ph.phase_code\n    WHEN 'TF'     THEN 'Test Fit'\n    WHEN 'SD'     THEN 'Schematic Design'\n    WHEN 'QA_QC1' THEN 'QA/QC1'\n    WHEN 'DD'     THEN 'Design Development'\n    WHEN 'QA_QC2' THEN 'QA/QC2'\n    WHEN 'PP'     THEN 'P&P'\n  END AS phase_label,\n\tph.due_date,\n\tDATEDIFF(ph.due_date, CURDATE()) AS days_until_due\nFROM\n\tdesign_phases AS ph\n\tINNER JOIN design_projects AS p ON p.project_id = ph.project_id\n\tINNER JOIN eviz_users AS u ON u.id = p.designer_id\nWHERE\nph.due_date <= DATE_ADD(\n  CURDATE(),\n  INTERVAL (SELECT CAST(setting_value AS SIGNED)\n            FROM design_v7_settings WHERE setting_key='dashboard_days_ahead') DAY\n)\nORDER BY\n\tu.fullname,\n\tph.due_date\n",
 	"type": 1,
 	"connId": "conn",
 	"originalTable": "projects",
@@ -78,10 +78,12 @@
 			"editFormats": [
 				{
 					"format": "Lookup wizard",
-					"lookupTable": "design_users",
+					"lookupTable": "eviz_users",
 					"lookupTableConnection": "conn",
-					"lookupLinkField": "user_id",
-					"lookupDisplayField": "username"
+					"lookupLinkField": "ID",
+					"lookupDisplayField": "fullname",
+					"lookupOrderBy": "fullname",
+					"lookupWhere": "role = 'admin'"
 				}
 			],
 			"label": {
@@ -102,7 +104,15 @@
 				}
 			],
 			"editFormats": [
-				{}
+				{
+					"format": "Lookup wizard",
+					"lookupTable": "eviz_users",
+					"lookupTableConnection": "conn",
+					"lookupLinkField": "ID",
+					"lookupDisplayField": "fullname",
+					"lookupOrderBy": "fullname",
+					"lookupWhere": "role = 'admin'"
+				}
 			],
 			"label": {
 				"English": "Designer"
@@ -245,7 +255,6 @@
 			"code": "// Place event code here.\n// Use \"Add Action\" button to add code snippets.\n\n@require_once(getabspath(\"include/usercode.php\"));\nrecalc_phase_due_dates((int)$keys[\"project_id\"]);\n"
 		}
 	],
-	"resizeColumns": true,
 	"dbTableInfo": {
 		"type": 0,
 		"foreignKeys": [
@@ -1161,6 +1170,17 @@
 						{
 							"cells": [
 								{
+									"cell": "c1"
+								},
+								{
+									"cell": "c2"
+								}
+							],
+							"section": ""
+						},
+						{
+							"cells": [
+								{
 									"cell": "c3"
 								},
 								{
@@ -1180,9 +1200,19 @@
 						"c4": {
 							"model": "c4",
 							"items": [
-								"details_found_unknown",
 								"print_panel",
 								"page_size"
+							]
+						},
+						"c1": {
+							"model": "c1",
+							"items": []
+						},
+						"c2": {
+							"model": "c2",
+							"items": [
+								"details_found",
+								"details_found1"
 							]
 						}
 					},
@@ -1205,8 +1235,7 @@
 						"c1": {
 							"model": "c1",
 							"items": [
-								"pagination",
-								"next_page"
+								"pagination"
 							]
 						}
 					},
@@ -1241,8 +1270,6 @@
 							"items": [
 								"simple_search",
 								"list_options",
-								"loginform_login1",
-								"username_button1",
 								"loginform_login",
 								"username_button"
 							]
@@ -1257,14 +1284,6 @@
 						{
 							"cells": [
 								{
-									"cell": "c1"
-								}
-							],
-							"section": ""
-						},
-						{
-							"cells": [
-								{
 									"cell": "c2"
 								}
 							],
@@ -1272,10 +1291,6 @@
 						}
 					],
 					"cells": {
-						"c1": {
-							"model": "c1",
-							"items": []
-						},
 						"c2": {
 							"model": "c2",
 							"items": [
@@ -1439,7 +1454,7 @@
 						"cell_field3": {
 							"model": "cell_field",
 							"items": [
-								"simple_grid_field2"
+								"grid_field"
 							],
 							"field": "designer_name",
 							"columnName": "field"
@@ -1619,6 +1634,9 @@
 					"type": "list_options",
 					"items": [
 						"export_selected",
+						"-4",
+						"-3",
+						"hide_search_panel",
 						"-1",
 						"export",
 						"-2",
@@ -1628,7 +1646,7 @@
 				"master_info": {
 					"type": "master_info",
 					"tables": {
-						"2992821450": "true"
+						"null": "true"
 					}
 				},
 				"simple_grid_field1": {
@@ -1640,18 +1658,12 @@
 				"simple_grid_field10": {
 					"type": "grid_field_label",
 					"field": "project_name",
-					"clickSort": true
-				},
-				"simple_grid_field2": {
-					"field": "designer_name",
-					"type": "grid_field",
-					"inlineAdd": false,
-					"inlineEdit": false
+					"clickSort": false
 				},
 				"simple_grid_field12": {
 					"type": "grid_field_label",
 					"field": "designer_name",
-					"clickSort": true
+					"clickSort": false
 				},
 				"simple_grid_field5": {
 					"field": "phase_code",
@@ -1667,7 +1679,7 @@
 						"table": "projects view",
 						"type": 3
 					},
-					"clickSort": true
+					"clickSort": false
 				},
 				"simple_grid_field7": {
 					"field": "due_date",
@@ -1678,7 +1690,7 @@
 				"simple_grid_field16": {
 					"type": "grid_field_label",
 					"field": "due_date",
-					"clickSort": true
+					"clickSort": false
 				},
 				"simple_grid_field8": {
 					"field": "days_until_due",
@@ -1689,7 +1701,7 @@
 				"simple_grid_field17": {
 					"type": "grid_field_label",
 					"field": "days_until_due",
-					"clickSort": true
+					"clickSort": false
 				},
 				"details_preview": {
 					"type": "details_preview",
@@ -1726,25 +1738,6 @@
 					"type": "deleted",
 					"itemId": "username_button"
 				},
-				"username_button1": {
-					"type": "username_button",
-					"items": [
-						"logout_link"
-					]
-				},
-				"loginform_login1": {
-					"type": "loginform_login",
-					"popup": false
-				},
-				"logout_link": {
-					"type": "logout_link"
-				},
-				"next_page": {
-					"type": "next_page"
-				},
-				"details_found_unknown": {
-					"type": "details_found_unknown"
-				},
 				"filter_panel": {
 					"type": "filter_panel",
 					"items": [
@@ -1754,6 +1747,28 @@
 				"filter_panel_field": {
 					"field": "designer_name",
 					"type": "filter_panel_field"
+				},
+				"details_found": {
+					"type": "deleted",
+					"itemId": "details_found"
+				},
+				"-3": {
+					"type": "deleted",
+					"itemId": "-3"
+				},
+				"hide_search_panel": {
+					"type": "deleted",
+					"itemId": "hide_search_panel"
+				},
+				"-4": {
+					"type": "-"
+				},
+				"details_found1": {
+					"type": "details_found"
+				},
+				"grid_field": {
+					"field": "designer_id",
+					"type": "grid_field"
 				}
 			},
 			"dbProps": {},
@@ -1935,7 +1950,7 @@
 				"master_info": {
 					"type": "master_info",
 					"tables": {
-						"2992821450": "true"
+						"null": "true"
 					}
 				},
 				"details_preview": {

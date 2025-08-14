@@ -23,7 +23,7 @@ $rs = DB::Query("
          END AS label,
          default_long_duration AS l,
          sequence
-  FROM phase_catalog
+  FROM design_phase_catalog
   ORDER BY sequence
 ");
 

@@ -54,13 +54,6 @@
 				"height": 448
 			},
 			{
-				"gid": 1046987395,
-				"y": 299,
-				"x": 35,
-				"width": 117.25,
-				"height": 124
-			},
-			{
 				"gid": 3994101511,
 				"y": 410,
 				"x": 682,
@@ -68,16 +61,16 @@
 				"height": 477
 			},
 			{
-				"gid": 2992821450,
-				"y": 10,
-				"x": 20,
-				"width": 115.390625,
-				"height": 236
+				"gid": 739244158,
+				"y": 299,
+				"x": 35,
+				"width": 117.25,
+				"height": 124
 			}
 		]
 	},
 	"securitySettings": {
-		"loginDataSource": "users",
+		"loginDataSource": "eviz_users",
 		"loginForm": 0,
 		"providers": [
 			{
@@ -91,19 +84,19 @@
 				"code": "00",
 				"table": {
 					"connId": "conn",
-					"table": "design_users"
+					"table": "eviz_users"
 				},
 				"usernameField": "username",
-				"passwordField": "password_hash",
-				"emailField": null,
-				"extUserIdField": null,
-				"fullnameField": null,
-				"userpicField": null
+				"passwordField": "password",
+				"emailField": "email",
+				"extUserIdField": "ext_security_id",
+				"fullnameField": "fullname",
+				"userpicField": ""
 			},
 			{
 				"type": "%hardcoded",
 				"name": "hardcoded",
-				"active": true,
+				"active": false,
 				"label": {
 					"text": "Hardcoded",
 					"type": 0
@@ -149,10 +142,10 @@
 			"allowGuestLogin": false
 		},
 		"auditAndLocking": {
-			"loggingMode": 1,
+			"loggingMode": 0,
 			"loggingTable": {
 				"connId": "conn",
-				"table": "design__audit"
+				"table": "design v8_audit"
 			},
 			"loggingFile": "audit.log",
 			"logSecurityActions": false,
@@ -168,32 +161,28 @@
 					"logFieldValues": true
 				},
 				"586265697": {
-					"logModifications": true,
-					"logFieldValues": true
+					"logModifications": false,
+					"logFieldValues": false
 				},
-				"1046987395": {
-					"logModifications": true,
-					"logFieldValues": true
+				"739244158": {
+					"logModifications": false,
+					"logFieldValues": false
 				},
 				"2276577762": {
 					"logModifications": true,
 					"logFieldValues": true
 				},
 				"2767748195": {
-					"logModifications": true,
-					"logFieldValues": true
-				},
-				"2992821450": {
-					"logModifications": true,
-					"logFieldValues": true
+					"logModifications": false,
+					"logFieldValues": false
 				},
 				"3049847270": {
-					"logModifications": true,
-					"logFieldValues": true
+					"logModifications": false,
+					"logFieldValues": false
 				},
 				"3384939862": {
-					"logModifications": true,
-					"logFieldValues": true
+					"logModifications": false,
+					"logFieldValues": false
 				},
 				"3994101511": {
 					"logModifications": true,
@@ -270,19 +259,14 @@
 							"table": "design_projects view",
 							"restrictedPages": {}
 						},
-						"design_settings": {
-							"mask": "ADESPI",
-							"table": "design_settings",
-							"restrictedPages": {}
-						},
 						"design_subphases": {
 							"mask": "ADESPI",
 							"table": "design_subphases",
 							"restrictedPages": {}
 						},
-						"design_users": {
+						"design_v7_settings": {
 							"mask": "ADESPI",
-							"table": "design_users",
+							"table": "design_v7_settings",
 							"restrictedPages": {}
 						}
 					},
@@ -296,7 +280,7 @@
 		{
 			"id": "conn",
 			"name": "design at localhost",
-			"connString": "mysql;localhost;root;root;;design;;1"
+			"connString": "mysql;localhost;root;root;;evifs_aqqbo;;1"
 		}
 	],
 	"defaultConnID": "conn",
@@ -305,23 +289,6 @@
 			"id": "main",
 			"root": {
 				"children": [
-					{
-						"id": "1",
-						"data": {
-							"name": {
-								"table": "design_users",
-								"type": 6
-							},
-							"pageId": "list",
-							"itemType": 2,
-							"linkType": 0,
-							"iconType": 2,
-							"iconName": "glyphicon-leaf",
-							"showIconType": 2,
-							"table": 2992821450,
-							"pageType": "list"
-						}
-					},
 					{
 						"id": "2",
 						"data": {
@@ -343,7 +310,7 @@
 						"id": "3",
 						"data": {
 							"name": {
-								"table": "design_settings",
+								"table": "design_v7_settings",
 								"type": 6
 							},
 							"pageId": "list",
@@ -352,7 +319,7 @@
 							"iconType": 2,
 							"iconName": "glyphicon-camera",
 							"showIconType": 2,
-							"table": 1046987395,
+							"table": 739244158,
 							"pageType": "list"
 						}
 					},
@@ -512,10 +479,7 @@
 						},
 						"c2": {
 							"model": "c2",
-							"items": [
-								"loginform_login",
-								"username_button"
-							]
+							"items": []
 						}
 					},
 					"deferredItems": [],
@@ -601,23 +565,6 @@
 					"linkIcon": {
 						"glyph": "tasks"
 					}
-				},
-				"username_button": {
-					"type": "username_button",
-					"items": [
-						"userinfo_link",
-						"logout_link"
-					]
-				},
-				"loginform_login": {
-					"type": "loginform_login",
-					"popup": false
-				},
-				"userinfo_link": {
-					"type": "userinfo_link"
-				},
-				"logout_link": {
-					"type": "logout_link"
 				}
 			},
 			"dbProps": {},
@@ -636,7 +583,7 @@
 			"id": "login",
 			"type": "login",
 			"layoutId": "pretty1",
-			"disabled": false,
+			"disabled": true,
 			"default": 0,
 			"forms": {
 				"above-grid": {
@@ -1045,7 +992,9 @@
 						"fields": {
 							"model": "fields",
 							"items": [
-								"integrated_edit_field"
+								"integrated_edit_field",
+								"integrated_edit_field1",
+								"integrated_edit_field2"
 							]
 						}
 					},
@@ -1105,6 +1054,16 @@
 					"field": "username",
 					"type": "integrated_edit_field",
 					"orientation": 0
+				},
+				"integrated_edit_field1": {
+					"field": "fullname",
+					"type": "integrated_edit_field",
+					"orientation": 0
+				},
+				"integrated_edit_field2": {
+					"field": "email",
+					"type": "integrated_edit_field",
+					"orientation": 0
 				}
 			},
 			"dbProps": {},
@@ -1122,7 +1081,7 @@
 	"eventHandlers": [
 		{
 			"eventId": "EVENT_INIT_APP",
-			"code": "// Place event code here.\n// Use \"Add Action\" button to add code snippets.\n// Security → Login page → After successful login\nCustomQuery(\"SET @app_user_name = \".db_prepare_string($data[\"username\"]));\nCustomQuery(\"SET @app_user_full = \".db_prepare_string($data[\"full_name\"]));\n\n\n// Load helpers once, regardless of where PHPR put them\n\nif (!defined('APP_HELPERS_LOADED')) {\n    define('APP_HELPERS_LOADED', 1);\n    require_once( getabspath(\"include/usercode.php\") );\n}\n\nforeach ($paths as $p) {\n    if (file_exists($p)) { require_once $p; break; }\n}\n\n"
+			"code": "// Place event code here.\n// Use \"Add Action\" button to add code snippets.\n// Security → Login page → After successful login\nCustomQuery(\"SET @app_user_name = \".db_prepare_string($data[\"username\"]));\nCustomQuery(\"SET @app_user_full = \".db_prepare_string($data[\"fullname\"]));\n\n\n// Load helpers once, regardless of where PHPR put them\n\nif (!defined('APP_HELPERS_LOADED')) {\n    define('APP_HELPERS_LOADED', 1);\n    require_once( getabspath(\"include/usercode.php\") );\n}\n\nforeach ($paths as $p) {\n    if (file_exists($p)) { require_once $p; break; }\n}\n\n"
 		},
 		{
 			"eventId": "EVENT_JS_CUSTOM_FUNCTIONS",
@@ -1218,90 +1177,6 @@
 				"logoCustomThemeColor": "legacy",
 				"direction": "ltr",
 				"customCss": "/* Compact text */\r\n.subphase-grid .grid { font-size:13px; line-height:1.25; }\r\n\r\n/* Status badges */\r\n.subphase-badge { display:inline-block; padding:2px 8px; border-radius:999px; font-size:12px; line-height:1.2; white-space:nowrap; }\r\n.subphase--notstarted { background:#f1f3f5; color:#495057; }\r\n.subphase--progress   { background:#e7f5ff; color:#0b7285; }\r\n.subphase--blocked    { background:#fff5f5; color:#c92a2a; }\r\n.subphase--done       { background:#e6fcf5; color:#087f5b; }\r\n\r\n/* Optional: dim finished rows */\r\n.subphase-row--dim { opacity:.6; }\r\n\r\n/* Optional: sticky header if the grid is tall */\r\n.subphase-grid thead th { position:sticky; top:0; z-index:2; background:#fff; }\r\n",
-				"panelLikeGrid": false,
-				"verticalBorders": true,
-				"stripedGrid": true,
-				"condensedGrid": false,
-				"rolloverHighlight": false,
-				"gpHeaderBg": "legacy",
-				"gpHeaderColor": "legacy",
-				"gpFooterBg": "legacy",
-				"gpPanelBorder": "legacy",
-				"gpBorderColor": "legacy",
-				"gpInnerBorder": "legacy",
-				"gpInnerBorderColor": "legacy",
-				"gcOddBg": "legacy",
-				"gcOddColor": "legacy",
-				"gcEvenBg": "legacy",
-				"gcEvenColor": "legacy",
-				"gcRolloverHighlightBg": "legacy",
-				"gcRolloverHighlightColor": "legacy"
-			}
-		},
-		{
-			"table": 3994101511,
-			"page": "list",
-			"style": {
-				"theme": "cerulean",
-				"size": "small",
-				"sidebarWidth": "300px",
-				"sidebarColor": "light",
-				"sidebarTheme": "legacy",
-				"menuStyle": "rounded",
-				"sidebarCompact": false,
-				"topbarTheme": "legacy",
-				"logoTheme": "legacy",
-				"fixedSidebar": true,
-				"fixedTopbar": false,
-				"topbarGradient": false,
-				"topbarLegacy": false,
-				"sidebarCustomThemeColor": "legacy",
-				"topbarCustomThemeColor": "legacy",
-				"logoCustomThemeColor": "legacy",
-				"direction": "ltr",
-				"customCss": "\r\n",
-				"panelLikeGrid": false,
-				"verticalBorders": true,
-				"stripedGrid": true,
-				"condensedGrid": false,
-				"rolloverHighlight": false,
-				"gpHeaderBg": "legacy",
-				"gpHeaderColor": "legacy",
-				"gpFooterBg": "legacy",
-				"gpPanelBorder": "legacy",
-				"gpBorderColor": "legacy",
-				"gpInnerBorder": "legacy",
-				"gpInnerBorderColor": "legacy",
-				"gcOddBg": "legacy",
-				"gcOddColor": "legacy",
-				"gcEvenBg": "legacy",
-				"gcEvenColor": "legacy",
-				"gcRolloverHighlightBg": "legacy",
-				"gcRolloverHighlightColor": "legacy"
-			}
-		},
-		{
-			"table": 3994101511,
-			"page": "list1",
-			"style": {
-				"theme": "cerulean",
-				"size": "small",
-				"sidebarWidth": "300px",
-				"sidebarColor": "light",
-				"sidebarTheme": "legacy",
-				"menuStyle": "rounded",
-				"sidebarCompact": false,
-				"topbarTheme": "legacy",
-				"logoTheme": "legacy",
-				"fixedSidebar": true,
-				"fixedTopbar": false,
-				"topbarGradient": false,
-				"topbarLegacy": false,
-				"sidebarCustomThemeColor": "legacy",
-				"topbarCustomThemeColor": "legacy",
-				"logoCustomThemeColor": "legacy",
-				"direction": "ltr",
-				"customCss": "\r\n",
 				"panelLikeGrid": false,
 				"verticalBorders": true,
 				"stripedGrid": true,

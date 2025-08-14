@@ -1,8 +1,8 @@
 {
-	"sql": "SELECT\r\n\tsetting_key,\r\n\tsetting_value,\r\n\tupdated_at\r\nFROM\r\n\tdesign_settings",
+	"sql": "SELECT\r\n\tsetting_key,\r\n\tsetting_value,\r\n\tupdated_at\r\nFROM\r\n\tdesign_v7_settings",
 	"connId": "conn",
-	"originalTable": "design_settings",
-	"name": "design_settings",
+	"originalTable": "design_v7_settings",
+	"name": "design_v7_settings",
 	"shortTableName": "settings",
 	"dbType": 0,
 	"keyFields": [
@@ -25,7 +25,7 @@
 			"label": {
 				"English": "Setting Key"
 			},
-			"tableName": "design_settings"
+			"tableName": "design_v7_settings"
 		},
 		{
 			"name": "setting_value",
@@ -42,7 +42,7 @@
 			"label": {
 				"English": "Setting Value"
 			},
-			"tableName": "design_settings"
+			"tableName": "design_v7_settings"
 		},
 		{
 			"name": "updated_at",
@@ -64,7 +64,7 @@
 			"label": {
 				"English": "Updated At"
 			},
-			"tableName": "design_settings"
+			"tableName": "design_v7_settings"
 		}
 	],
 	"afterEditAction": 0,
@@ -110,7 +110,7 @@
 			"setting_key"
 		],
 		"uniqueFields": [],
-		"name": "design_settings"
+		"name": "design_v7_settings"
 	},
 	"pages": [
 		{

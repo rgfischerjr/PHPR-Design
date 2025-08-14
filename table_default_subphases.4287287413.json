@@ -92,7 +92,6 @@
 		}
 	],
 	"afterEditAction": 0,
-	"resizeColumns": true,
 	"dbTableInfo": {
 		"type": 0,
 		"foreignKeys": [],
@@ -940,7 +939,7 @@
 						"c2": {
 							"model": "c2",
 							"items": [
-								"details_found_unknown",
+								"details_found",
 								"page_size"
 							]
 						}
@@ -964,8 +963,7 @@
 						"c1": {
 							"model": "c1",
 							"items": [
-								"pagination",
-								"next_page"
+								"pagination"
 							]
 						}
 					},
@@ -999,9 +997,7 @@
 							"model": "c2",
 							"items": [
 								"simple_search",
-								"list_options",
-								"loginform_login",
-								"username_button"
+								"list_options"
 							]
 						}
 					},
@@ -1023,9 +1019,7 @@
 					"cells": {
 						"c1": {
 							"model": "c1",
-							"items": [
-								"search_panel"
-							]
+							"items": []
 						}
 					},
 					"deferredItems": [],
@@ -1246,22 +1240,6 @@
 				"pagination": {
 					"type": "pagination"
 				},
-				"search_panel_field": {
-					"field": "default_id",
-					"type": "search_panel_field"
-				},
-				"search_panel_field3": {
-					"field": "sort_order",
-					"type": "search_panel_field"
-				},
-				"search_panel_field2": {
-					"field": "subphase_name",
-					"type": "search_panel_field"
-				},
-				"search_panel_field1": {
-					"field": "phase_code",
-					"type": "search_panel_field"
-				},
 				"export_selected": {
 					"type": "export_selected"
 				},
@@ -1270,12 +1248,6 @@
 				},
 				"-1": {
 					"type": "-"
-				},
-				"show_search_panel": {
-					"type": "show_search_panel"
-				},
-				"hide_search_panel": {
-					"type": "hide_search_panel"
 				},
 				"-": {
 					"type": "-"
@@ -1298,40 +1270,14 @@
 				"simple_search": {
 					"type": "simple_search"
 				},
-				"search_panel": {
-					"type": "search_panel",
-					"items": [
-						"search_panel_field",
-						"search_panel_field3",
-						"search_panel_field2",
-						"search_panel_field1"
-					],
-					"_flexiblePanel": true
-				},
 				"list_options": {
 					"type": "list_options",
 					"items": [
 						"export_selected",
 						"delete_selected",
 						"-1",
-						"show_search_panel",
-						"hide_search_panel",
-						"-",
 						"export"
 					]
-				},
-				"username_button": {
-					"type": "username_button",
-					"items": [
-						"logout_link"
-					]
-				},
-				"loginform_login": {
-					"type": "loginform_login",
-					"popup": false
-				},
-				"logout_link": {
-					"type": "logout_link"
 				},
 				"simple_grid_field": {
 					"field": "default_id",
@@ -1342,7 +1288,7 @@
 				"simple_grid_field4": {
 					"type": "grid_field_label",
 					"field": "default_id",
-					"clickSort": true
+					"clickSort": false
 				},
 				"simple_grid_field1": {
 					"field": "phase_code",
@@ -1353,7 +1299,7 @@
 				"simple_grid_field5": {
 					"type": "grid_field_label",
 					"field": "phase_code",
-					"clickSort": true
+					"clickSort": false
 				},
 				"simple_grid_field2": {
 					"field": "subphase_name",
@@ -1364,7 +1310,7 @@
 				"simple_grid_field6": {
 					"type": "grid_field_label",
 					"field": "subphase_name",
-					"clickSort": true
+					"clickSort": false
 				},
 				"simple_grid_field3": {
 					"field": "sort_order",
@@ -1375,7 +1321,7 @@
 				"simple_grid_field7": {
 					"type": "grid_field_label",
 					"field": "sort_order",
-					"clickSort": true
+					"clickSort": false
 				},
 				"grid_edit": {
 					"type": "grid_edit",
@@ -1384,11 +1330,8 @@
 					},
 					"popup": false
 				},
-				"next_page": {
-					"type": "next_page"
-				},
-				"details_found_unknown": {
-					"type": "details_found_unknown"
+				"details_found": {
+					"type": "details_found"
 				}
 			},
 			"dbProps": {},

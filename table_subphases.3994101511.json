@@ -7,7 +7,7 @@
 			"asc": true
 		}
 	],
-	"sql": "SELECT\r\n\tsubphase_id,\r\n\tproject_id,\r\n\tphase_id,\r\n\tsubphase_name,\r\n\tsort_order,\r\n\tis_default,\r\n\tnotes,\r\n\tstart_date,\r\n\tstart_checked,\r\n\tcompleted_date,\r\n\tcompleted_checked\r\nFROM\r\n\tsubphases\r\nORDER BY sort_order ASC",
+	"sql": "SELECT\r\n\tsubphase_id,\r\n\tproject_id,\r\n\tphase_id,\r\n\tsubphase_name,\r\n\tsort_order,\r\n\tis_default,\r\n\tnotes,\r\n\tstart_date,\r\n\tstart_checked,\r\n\tcompleted_date,\r\n\tcompleted_checked\r\nFROM\r\n\tdesign_subphases\r\nORDER BY sort_order ASC",
 	"connId": "conn",
 	"originalTable": "design_subphases",
 	"name": "design_subphases",
@@ -47,7 +47,7 @@
 			"label": {
 				"English": "Subphase"
 			},
-			"tableName": "subphases"
+			"tableName": "design_subphases"
 		},
 		{
 			"name": "project_id",
@@ -70,7 +70,7 @@
 			"label": {
 				"English": "Project"
 			},
-			"tableName": "subphases"
+			"tableName": "design_subphases"
 		},
 		{
 			"name": "phase_id",
@@ -93,7 +93,7 @@
 			"label": {
 				"English": "Phase"
 			},
-			"tableName": "subphases"
+			"tableName": "design_subphases"
 		},
 		{
 			"name": "subphase_name",
@@ -110,7 +110,7 @@
 			"label": {
 				"English": "Task Name"
 			},
-			"tableName": "subphases"
+			"tableName": "design_subphases"
 		},
 		{
 			"name": "sort_order",
@@ -127,7 +127,7 @@
 			"label": {
 				"English": "Priority"
 			},
-			"tableName": "subphases"
+			"tableName": "design_subphases"
 		},
 		{
 			"name": "is_default",
@@ -144,7 +144,7 @@
 			"label": {
 				"English": "Is Default"
 			},
-			"tableName": "subphases"
+			"tableName": "design_subphases"
 		},
 		{
 			"name": "notes",
@@ -161,7 +161,7 @@
 			"label": {
 				"English": "Notes"
 			},
-			"tableName": "subphases"
+			"tableName": "design_subphases"
 		},
 		{
 			"name": "start_date",
@@ -190,7 +190,7 @@
 			"label": {
 				"English": "Date"
 			},
-			"tableName": "subphases"
+			"tableName": "design_subphases"
 		},
 		{
 			"name": "start_checked",
@@ -223,7 +223,7 @@
 			"label": {
 				"English": "Started"
 			},
-			"tableName": "subphases"
+			"tableName": "design_subphases"
 		},
 		{
 			"name": "completed_date",
@@ -251,7 +251,7 @@
 			"label": {
 				"English": "Date"
 			},
-			"tableName": "subphases"
+			"tableName": "design_subphases"
 		},
 		{
 			"name": "completed_checked",
@@ -278,7 +278,7 @@
 			"label": {
 				"English": "Completed"
 			},
-			"tableName": "subphases"
+			"tableName": "design_subphases"
 		}
 	],
 	"afterEditAction": 0,
@@ -319,13 +319,12 @@
 			"code": "$started   = ($data[\"start_checked\"] == 1 || $data[\"start_checked\"] === '1');\r\n$completed = ($data[\"completed_checked\"] == 1 || $data[\"completed_checked\"] === '1');\r\n\r\n$attrs = 'data-started=\"'.($started?1:0).'\" data-completed=\"'.($completed?1:0).'\"';\r\nif (!isset($record[\"rowattrs\"]) || $record[\"rowattrs\"] === '') {\r\n    $record[\"rowattrs\"] = $attrs;\r\n} elseif (strpos($record[\"rowattrs\"], 'class=\"') !== false) {\r\n    $record[\"rowattrs\"] = preg_replace('/class=\"([^\"]*)\"/', 'class=\"$1\" '.$attrs, $record[\"rowattrs\"], 1);\r\n} else {\r\n    $record[\"rowattrs\"] .= ' '.$attrs;\r\n}\r\n\r\nif ($completed)      { $record[\"css\"] = \"background-color:#c8e6c9 !important;\"; }\r\nelseif ($started)    { $record[\"css\"] = \"background-color:#e8f5e9 !important;\"; }\r\nelse                 { $record[\"css\"] = \"\"; }\r\n"
 		}
 	],
-	"resizeColumns": true,
 	"dbTableInfo": {
 		"type": 0,
 		"foreignKeys": [
 			{
 				"name": "fk_subphases_phase_project",
-				"refTable": "phases",
+				"refTable": "design_phases",
 				"refSchema": "",
 				"del_rule": 4,
 				"upd_rule": 1,
@@ -468,7 +467,7 @@
 			"subphase_id"
 		],
 		"uniqueFields": [],
-		"name": "subphases"
+		"name": "design_subphases"
 	},
 	"pages": [
 		{
@@ -1318,7 +1317,7 @@
 						"c2": {
 							"model": "c2",
 							"items": [
-								"details_found_unknown",
+								"details_found",
 								"page_size",
 								"print_panel"
 							]
@@ -1351,8 +1350,7 @@
 						"c1": {
 							"model": "c1",
 							"items": [
-								"pagination",
-								"next_page"
+								"pagination"
 							]
 						}
 					},
@@ -1387,8 +1385,6 @@
 							"items": [
 								"simple_search",
 								"list_options",
-								"loginform_login1",
-								"username_button1",
 								"loginform_login",
 								"username_button"
 							]
@@ -1403,14 +1399,6 @@
 						{
 							"cells": [
 								{
-									"cell": "c1"
-								}
-							],
-							"section": ""
-						},
-						{
-							"cells": [
-								{
 									"cell": "c2"
 								}
 							],
@@ -1418,12 +1406,6 @@
 						}
 					],
 					"cells": {
-						"c1": {
-							"model": "c1",
-							"items": [
-								"search_panel"
-							]
-						},
 						"c2": {
 							"model": "c2",
 							"items": [
@@ -1862,21 +1844,29 @@
 							"model": "headcell_checkbox",
 							"items": [
 								"grid_checkbox_head"
-							]
+							],
+							"columnName": "checkbox",
+							"field": ""
 						},
 						"cell_checkbox": {
 							"model": "cell_checkbox",
 							"items": [
 								"grid_checkbox"
-							]
+							],
+							"columnName": "checkbox",
+							"field": ""
 						},
 						"cell_checkbox1": {
 							"model": "cell_checkbox",
-							"items": []
+							"items": [],
+							"columnName": "checkbox",
+							"field": ""
 						},
 						"footcell_checkbox": {
 							"model": "footcell_checkbox",
-							"items": []
+							"items": [],
+							"columnName": "checkbox",
+							"field": ""
 						}
 					},
 					"deferredItems": [],
@@ -1912,38 +1902,8 @@
 				"pagination": {
 					"type": "pagination"
 				},
-				"search_panel_field": {
-					"field": "subphase_id",
-					"type": "search_panel_field"
-				},
-				"search_panel_field5": {
-					"field": "is_default",
-					"type": "search_panel_field"
-				},
-				"search_panel_field4": {
-					"field": "sort_order",
-					"type": "search_panel_field"
-				},
-				"search_panel_field3": {
-					"field": "subphase_name",
-					"type": "search_panel_field"
-				},
-				"search_panel_field2": {
-					"field": "phase_id",
-					"type": "search_panel_field"
-				},
-				"search_panel_field1": {
-					"field": "project_id",
-					"type": "search_panel_field"
-				},
 				"-1": {
 					"type": "-"
-				},
-				"show_search_panel": {
-					"type": "show_search_panel"
-				},
-				"hide_search_panel": {
-					"type": "hide_search_panel"
 				},
 				"-": {
 					"type": "-"
@@ -1963,30 +1923,10 @@
 				"simple_search": {
 					"type": "simple_search"
 				},
-				"search_panel": {
-					"type": "search_panel",
-					"items": [
-						"search_panel_field",
-						"search_panel_field10",
-						"search_panel_field9",
-						"search_panel_field8",
-						"search_panel_field7",
-						"search_panel_field6",
-						"search_panel_field5",
-						"search_panel_field4",
-						"search_panel_field3",
-						"search_panel_field2",
-						"search_panel_field1"
-					],
-					"_flexiblePanel": true
-				},
 				"list_options": {
 					"type": "list_options",
 					"items": [
-						"edit_selected",
-						"-1",
-						"show_search_panel",
-						"hide_search_panel"
+						"edit_selected"
 					]
 				},
 				"master_info": {
@@ -2003,19 +1943,6 @@
 					"type": "deleted",
 					"itemId": "username_button"
 				},
-				"username_button1": {
-					"type": "username_button",
-					"items": [
-						"logout_link"
-					]
-				},
-				"loginform_login1": {
-					"type": "loginform_login",
-					"popup": false
-				},
-				"logout_link": {
-					"type": "logout_link"
-				},
 				"simple_grid_field3": {
 					"field": "subphase_name",
 					"type": "grid_field",
@@ -2025,7 +1952,7 @@
 				"simple_grid_field9": {
 					"type": "grid_field_label",
 					"field": "subphase_name",
-					"clickSort": true
+					"clickSort": false
 				},
 				"simple_grid_field4": {
 					"field": "sort_order",
@@ -2041,7 +1968,7 @@
 						"table": "subphases",
 						"type": 3
 					},
-					"clickSort": true
+					"clickSort": false
 				},
 				"grid_alldetails_link": {
 					"type": "grid_alldetails_link",
@@ -2058,11 +1985,7 @@
 				"grid_field_label": {
 					"type": "grid_field_label",
 					"field": "notes",
-					"clickSort": true
-				},
-				"search_panel_field6": {
-					"field": "notes",
-					"type": "search_panel_field"
+					"clickSort": false
 				},
 				"grid_field1": {
 					"field": "start_date",
@@ -2078,7 +2001,7 @@
 						"table": "subphases",
 						"type": 3
 					},
-					"clickSort": true
+					"clickSort": false
 				},
 				"grid_field2": {
 					"field": "start_checked",
@@ -2094,7 +2017,7 @@
 						"table": "subphases",
 						"type": 3
 					},
-					"clickSort": true
+					"clickSort": false
 				},
 				"grid_field3": {
 					"field": "completed_date",
@@ -2110,7 +2033,7 @@
 						"table": "subphases",
 						"type": 3
 					},
-					"clickSort": true
+					"clickSort": false
 				},
 				"grid_field4": {
 					"field": "completed_checked",
@@ -2126,23 +2049,7 @@
 						"table": "subphases",
 						"type": 3
 					},
-					"clickSort": true
-				},
-				"search_panel_field7": {
-					"field": "start_date",
-					"type": "search_panel_field"
-				},
-				"search_panel_field8": {
-					"field": "start_checked",
-					"type": "search_panel_field"
-				},
-				"search_panel_field9": {
-					"field": "completed_date",
-					"type": "search_panel_field"
-				},
-				"search_panel_field10": {
-					"field": "completed_checked",
-					"type": "search_panel_field"
+					"clickSort": false
 				},
 				"edit_selected": {
 					"type": "edit_selected"
@@ -2176,11 +2083,8 @@
 				"grid_checkbox": {
 					"type": "grid_checkbox"
 				},
-				"next_page": {
-					"type": "next_page"
-				},
-				"details_found_unknown": {
-					"type": "details_found_unknown"
+				"details_found": {
+					"type": "details_found"
 				}
 			},
 			"dbProps": {},
@@ -2857,9 +2761,7 @@
 							"model": "c2",
 							"items": [
 								"simple_search",
-								"list_options",
-								"loginform_login",
-								"username_button"
+								"list_options"
 							]
 						}
 					},
@@ -2953,19 +2855,6 @@
 				},
 				"hide_search_panel": {
 					"type": "hide_search_panel"
-				},
-				"username_button": {
-					"type": "username_button",
-					"items": [
-						"logout_link"
-					]
-				},
-				"loginform_login": {
-					"type": "loginform_login",
-					"popup": false
-				},
-				"logout_link": {
-					"type": "logout_link"
 				},
 				"expand_menu_button": {
 					"type": "expand_menu_button"

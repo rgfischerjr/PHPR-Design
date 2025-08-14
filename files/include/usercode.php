@@ -50,14 +50,14 @@ function create_project_scaffold($projectId, $contractDate, $dur = null)
 
     // Insert phases (no short_duration column anymore)
     $sql = "
-        INSERT INTO phases (project_id, phase_code, sequence, long_duration, due_date)
+        INSERT INTO design_phases (project_id, phase_code, sequence, long_duration, due_date)
         SELECT
             ".$projectId.",
             pc.phase_code,
             pc.sequence,
             ".($useDur ? "COALESCE(dur.long_d, pc.default_long_duration)" : "pc.default_long_duration")." AS long_duration,
             c.cal_date AS due_date
-        FROM phase_catalog pc
+        FROM design_phase_catalog pc
         ".$durJoin."
         JOIN (
             SELECT cal_date, ROW_NUMBER() OVER (ORDER BY cal_date) rn
@@ -72,24 +72,15 @@ function create_project_scaffold($projectId, $contractDate, $dur = null)
 
     // Clone default subphases
     CustomQuery("
-        INSERT INTO subphases (project_id, phase_id, subphase_name, sort_order, is_default)
+        INSERT INTO design_subphases (project_id, phase_id, subphase_name, sort_order, is_default)
         SELECT ph.project_id, ph.phase_id, ds.subphase_name, ds.sort_order, 1
-        FROM phases ph
-        JOIN default_subphases ds ON ds.phase_code = ph.phase_code
+        FROM design_phases ph
+        JOIN design_default_subphases ds ON ds.phase_code = ph.phase_code
         WHERE ph.project_id = ".$projectId."
           AND ph.phase_code IN ('DSA','TF','SD','DD','PP')
         ORDER BY ph.phase_id, ds.sort_order
     ");
 
-    // // Create missing subphase_status
-    // CustomQuery("
-    //     INSERT INTO subphase_status (subphase_id)
-    //     SELECT sp.subphase_id
-    //     FROM subphases sp
-    //     LEFT JOIN subphase_status ss ON ss.subphase_id = sp.subphase_id
-    //     WHERE sp.project_id = ".$projectId."
-    //       AND ss.subphase_id IS NULL
-    // ");
 }
 
 
@@ -106,13 +97,13 @@ function recalc_phase_due_dates($projectId)
     $projectId = (int)$projectId;
 
     // --- load project + phases
-    $r = CustomQuery("SELECT contract_date FROM projects WHERE project_id=".$projectId);
+    $r = CustomQuery("SELECT contract_date FROM design_projects WHERE project_id=".$projectId);
     $p = db_fetch_array($r);
     if (!$p) return;
     $contract = $p["contract_date"];
 
     $ph = [];
-    $rs = CustomQuery("SELECT * FROM phases WHERE project_id=".$projectId." ORDER BY sequence");
+    $rs = CustomQuery("SELECT * FROM design_phases WHERE project_id=".$projectId." ORDER BY sequence");
     while ($row = db_fetch_array($rs)) $ph[$row["phase_code"]] = $row;
     foreach (["TF","SD","QA_QC1","DD","QA_QC2","PP"] as $code) if(!isset($ph[$code])) return;
 
@@ -151,7 +142,7 @@ function recalc_phase_due_dates($projectId)
     // ========== TF ==========
     $tf_due = $bdAddEx($contract, (int)$ph["TF"]["long_duration"]);
     if ($tf_due) {
-        CustomQuery("UPDATE phases SET due_date=".db_prepare_string($tf_due)." WHERE phase_id=".(int)$ph["TF"]["phase_id"]);
+        CustomQuery("UPDATE design_phases SET due_date=".db_prepare_string($tf_due)." WHERE phase_id=".(int)$ph["TF"]["phase_id"]);
         $ph["TF"]["due_date"] = $tf_due;
     }
 
@@ -159,7 +150,7 @@ function recalc_phase_due_dates($projectId)
     $sd_start = $earlierOfCompleteOrDue($ph["TF"]);
     $sd_due   = $bdAddEx($sd_start, (int)$ph["SD"]["long_duration"]);
     if ($sd_due) {
-        CustomQuery("UPDATE phases SET due_date=".db_prepare_string($sd_due)." WHERE phase_id=".(int)$ph["SD"]["phase_id"]);
+        CustomQuery("UPDATE design_phases SET due_date=".db_prepare_string($sd_due)." WHERE phase_id=".(int)$ph["SD"]["phase_id"]);
         $ph["SD"]["due_date"] = $sd_due;
     }
 
@@ -167,7 +158,7 @@ function recalc_phase_due_dates($projectId)
     $dd_start = $earlierOfCompleteOrDue($ph["SD"]);
     $dd_due   = $bdAddEx($dd_start, (int)$ph["DD"]["long_duration"]);
     if ($dd_due) {
-        CustomQuery("UPDATE phases SET due_date=".db_prepare_string($dd_due)." WHERE phase_id=".(int)$ph["DD"]["phase_id"]);
+        CustomQuery("UPDATE design_phases SET due_date=".db_prepare_string($dd_due)." WHERE phase_id=".(int)$ph["DD"]["phase_id"]);
         $ph["DD"]["due_date"] = $dd_due;
     }
 
@@ -186,7 +177,7 @@ function recalc_phase_due_dates($projectId)
         $qa1_steps = (int)$ph["QA_QC1"]["long_duration"] + 1; // add the extra "-1 day"
         $qa1_due   = $bdSubEx($ph["DD"]["due_date"], $qa1_steps);
         if ($qa1_due) {
-            CustomQuery("UPDATE phases SET due_date=".db_prepare_string($qa1_due)." WHERE phase_id=".(int)$ph["QA_QC1"]["phase_id"]);
+            CustomQuery("UPDATE design_phases SET due_date=".db_prepare_string($qa1_due)." WHERE phase_id=".(int)$ph["QA_QC1"]["phase_id"]);
             $ph["QA_QC1"]["due_date"] = $qa1_due;
         }
     }
@@ -197,7 +188,7 @@ function recalc_phase_due_dates($projectId)
         $qa2_steps = (int)$ph["QA_QC2"]["long_duration"] + 1;
         $qa2_due   = $bdSubEx($ph["PP"]["due_date"], $qa2_steps);
         if ($qa2_due) {
-            CustomQuery("UPDATE phases SET due_date=".db_prepare_string($qa2_due)." WHERE phase_id=".(int)$ph["QA_QC2"]["phase_id"]);
+            CustomQuery("UPDATE design_phases SET due_date=".db_prepare_string($qa2_due)." WHERE phase_id=".(int)$ph["QA_QC2"]["phase_id"]);
             $ph["QA_QC2"]["due_date"] = $qa2_due;
         }
     }
@@ -221,7 +212,7 @@ function db_lookup($sql)
 }
 
 function get_dashboard_days_ahead() {
-    $val = db_lookup("SELECT CAST(setting_value AS SIGNED) AS v FROM settings WHERE setting_key='dashboard_days_ahead'");
+    $val = db_lookup("SELECT CAST(setting_value AS SIGNED) AS v FROM design_settings WHERE setting_key='dashboard_days_ahead'");
     $n = (int)$val;
     if ($n <= 0) $n = 5;  // sensible default
     return $n;
