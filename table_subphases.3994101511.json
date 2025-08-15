@@ -2085,6 +2085,9 @@
 				},
 				"details_found": {
 					"type": "details_found"
+				},
+				"-3": {
+					"type": "-"
 				}
 			},
 			"dbProps": {},
@@ -2940,6 +2943,12 @@
 				"simple_grid_field4": {
 					"field": "notes",
 					"type": "simple_grid_field"
+				},
+				"-": {
+					"type": "-"
+				},
+				"-1": {
+					"type": "-"
 				}
 			},
 			"dbProps": {},
